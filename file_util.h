@@ -1,3 +1,15 @@
+/**
+  * 
+  * Author: Tom Terhune
+  * Author: Karl Miller
+  * Author: Anthony Stepich
+  * 
+  * program 1 for CSC 460.
+  * 
+  */
+
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
