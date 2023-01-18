@@ -1,0 +1,43 @@
+{
+    "tasks": [
+        {
+            "label": "compile",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "main.c", 
+                "-ansi"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            }
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "a",
+            "args": ["hello"],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            }
+        },
+        {
+            "label": "build-and-run",
+            "dependsOn": [
+                "compile", "run"
+            ],
+            "dependsOrder": "sequence",
+            "group": {
+                "kind":"build",
+                "isDefault": true
+            }
+        }
+    ],
+    "version": "2.0.0"
+}
