@@ -11,7 +11,7 @@ bool hasExtension(char* filename){
 	bool Extension_Found = false;
 	int i = 0;
 	
-	for(i; i < strlen(filename) && Extension_Found == false; i++){
+	for(i; i < strlen(filename) && !Extension_Found; i++){
 		if(filename[i] == '.'){
 			Extension_Found = true;
 		}
@@ -20,14 +20,15 @@ bool hasExtension(char* filename){
 	return Extension_Found;
 }
 
-void promptFileName(char* Input_File_Name) {
+bool promptFileName(char* Input_File_Name) {
+	bool NotEntered = false;
 	printf("Enter the input file name: ");
 	scanf("%s", Input_File_Name);
-	if (str[0] == '\0') {
-	}
+	
+	return NotEntered;
 }
 
-bool openInputFile() {
+bool openInputFile(char* Input_File_Name, FILE* Input_File) {
 	bool terminate = false;
 	//If no extension add .IN
 	if(!hasExtension(Input_File_Name)) {
@@ -35,22 +36,20 @@ bool openInputFile() {
 	}
 	
 	/*if does not exist*/
-	if(Input_File = fopen(Input_File_Name, "r") == NULL){
+	Input_File = fopen(Input_File_Name, "r");
+	if(Input_File == NULL){
 		//promptFileName();
 	}
 }
 
-void openOutputFile() {
-	//Print for testing purposeses
-	printf("The output file name is %s\n", argv[2]);
-	//Copy string from command line args
-	strcpy(Output_File_Name, argv[2]);
+void openOutputFile(char* Output_File_Name, FILE* Output_File) {
 	//If no extension add .OUT
 	if(!hasExtension(Output_File_Name)) {
 		addExtension(Output_File_Name, ".OUT");
 	}
 		
-	Output_File = fopen(Output_File_Name, r);
+	Output_File = fopen(Output_File_Name, "w");
+	//if exists choose to overwrite, enter new output file name, or terminate
 }
 
 int main(int argc, char *argv[]) {
@@ -64,10 +63,12 @@ int main(int argc, char *argv[]) {
 		//Copy string from command line args
 		strcpy(Input_File_Name, argv[1]);
 		
-		if(openInputFile()){
+		if(openInputFile(Input_File_Name, Input_File)){
 			//Copy string from command line args
 			strcpy(Input_File_Name, argv[1]);
 		}
+		
+		
 		
 	}else if(argc == 2) {
 		//Print for testing purposeses
@@ -78,14 +79,5 @@ int main(int argc, char *argv[]) {
 		
 	}
 		
-		
-		
-	
-	printf("%s", filename);
-	
-	printf("%i", isExtension(filename));
-	
-	
-	addExtension(filename);
-	printf("%s", filename);
+	return 0;
 }
