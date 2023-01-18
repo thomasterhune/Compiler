@@ -30,7 +30,7 @@ bool promptFileName(char* Input_File_Name) {
 
 bool openInputFile(char* Input_File_Name, FILE* Input_File) {
 	bool terminate = false;
-	//If no extension add .IN
+	/* If no extension add .IN */
 	if(!hasExtension(Input_File_Name)) {
 		addExtension(Input_File_Name, ".IN");
 	}
@@ -43,13 +43,13 @@ bool openInputFile(char* Input_File_Name, FILE* Input_File) {
 }
 
 void openOutputFile(char* Output_File_Name, FILE* Output_File) {
-	//If no extension add .OUT
+	/* If no extension add .OUT */
 	if(!hasExtension(Output_File_Name)) {
 		addExtension(Output_File_Name, ".OUT");
 	}
 		
 	Output_File = fopen(Output_File_Name, "w");
-	//if exists choose to overwrite, enter new output file name, or terminate
+	/* if exists choose to overwrite, enter new output file name, or terminate */
 }
 
 int main(int argc, char *argv[]) {
@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
 	
 	/*Command Line Parameters*/
 	if(argc == 3) {
-		//Copy string from command line args
+		/* Copy string from command line args */
 		strcpy(Input_File_Name, argv[1]);
 		
 		if(openInputFile(Input_File_Name, Input_File)){
@@ -71,13 +71,16 @@ int main(int argc, char *argv[]) {
 		
 		
 	}else if(argc == 2) {
-		//Print for testing purposeses
+		/* Print for testing purposeses */
 		printf("The input file name is %s\n", argv[1]);
-		//Copy string from command line args
+		/* Copy string from command line args */
 		strcpy(Input_File_Name, argv[1]);
 	}else {
 		
 	}
-		
+		/* closing files */
+	fclose(Input_File);
+  	fclose(Output_File);
+	
 	return 0;
 }
