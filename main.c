@@ -4,7 +4,7 @@
   * Author: Karl Miller
   * Author: Anthony Stepich
   * 
-  * program 1 for CSC 475.
+  * program 1 for CSC 460.
   * 
   */
 
