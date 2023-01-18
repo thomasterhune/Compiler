@@ -50,7 +50,7 @@ void openOutputFile() {
 		addExtension(Output_File_Name, ".OUT");
 	}
 		
-	Output_File = fopen(Output_File_Name, r);
+	Output_File = fopen(Output_File_Name, w);
 }
 
 int main(int argc, char *argv[]) {
@@ -88,4 +88,10 @@ int main(int argc, char *argv[]) {
 	
 	addExtension(filename);
 	printf("%s", filename);
+	
+	
+	fclose(Input_File);
+  	fclose(Output_File);
+	
+	
 }
