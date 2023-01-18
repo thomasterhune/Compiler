@@ -3,13 +3,11 @@
 #include <string.h>
 #include <stdbool.h>
 
-/* run this program using the console pauser or add your own getch, system("pause") or input loop */
-
-void addExtension(char* filename) {
-    strcat(filename, ".x");
+void addExtension(char* filename, char* extension) {
+    strcat(filename, extension);
 }
 
-bool isExtension(char* filename){
+bool hasExtension(char* filename){
 	bool Extension_Found = false;
 	int i = 0;
 	
@@ -22,33 +20,66 @@ bool isExtension(char* filename){
 	return Extension_Found;
 }
 
-int main(int argc, char *argv[]) {
-	
-	/*Command Line Parameters*/
-	switch(argc){
-		case 1:
-			break;
-			
-		case 2:
-			printf("The input file name is %s\n", argv[1]);
-			break;
-			
-		case 3:
-			printf("The input file name is %s\n", argv[1]);
-			printf("The input file name is %s\n", argv[2]);
-			break;
+void promptFileName(char* Input_File_Name) {
+	printf("Enter the input file name: ");
+	scanf("%s", Input_File_Name);
+	if (str[0] == '\0') {
+	}
+}
+
+bool openInputFile() {
+	bool terminate = false;
+	//If no extension add .IN
+	if(!hasExtension(Input_File_Name)) {
+		addExtension(Input_File_Name, ".IN");
 	}
 	
+	/*if does not exist*/
+	if(Input_File = fopen(Input_File_Name, "r") == NULL){
+		//promptFileName();
+	}
+}
+
+void openOutputFile() {
+	//Print for testing purposeses
+	printf("The output file name is %s\n", argv[2]);
+	//Copy string from command line args
+	strcpy(Output_File_Name, argv[2]);
+	//If no extension add .OUT
+	if(!hasExtension(Output_File_Name)) {
+		addExtension(Output_File_Name, ".OUT");
+	}
+		
+	Output_File = fopen(Output_File_Name, r);
+}
+
+int main(int argc, char *argv[]) {
 	
+	char Input_File_Name[100];
+	char Output_File_Name[100];
+	FILE * Input_File, Output_File;
 	
-	
-	
-	
-	
-	
-	char filename[100] = "Hello.txt";
-	
-	int size = strlen(filename);
+	/*Command Line Parameters*/
+	if(argc == 3) {
+		//Copy string from command line args
+		strcpy(Input_File_Name, argv[1]);
+		
+		if(openInputFile()){
+			//Copy string from command line args
+			strcpy(Input_File_Name, argv[1]);
+		}
+		
+	}else if(argc == 2) {
+		//Print for testing purposeses
+		printf("The input file name is %s\n", argv[1]);
+		//Copy string from command line args
+		strcpy(Input_File_Name, argv[1]);
+	}else {
+		
+	}
+		
+		
+		
 	
 	printf("%s", filename);
 	
