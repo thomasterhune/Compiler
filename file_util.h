@@ -4,7 +4,7 @@
 
 #ifndef file_util_h
 #define file_util_h
-#endif
+
 
 /**
  * function: void addExtension
@@ -68,4 +68,6 @@ bool openInputFile(char* inputFilename, FILE* inputFile);
  * 
 */
 void openOutputFile(char* outputFilename, FILE* outputFile);
+
+#endif
 
