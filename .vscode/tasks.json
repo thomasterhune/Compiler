@@ -10,33 +10,40 @@
                 "-ansi",
                 "-ofileopen"
             ],
-            "group": "build",
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared",
-                "clear": true
-            }
-        },
-        {
-            "label": "run",
-            "type": "shell",
-            "command": "fileopen",
-            "args": ["hello"],
-            "group": "build",
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared",
-                "clear": true
-            }
-        },
-        {
-            "label": "build-and-run",
-            "dependsOn": [
-                "compile", "run"
-            ],
-            "dependsOrder": "sequence",
             "group": {
-                "kind":"build",
+                "kind":"build", 
+                "default":true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            }
+        },
+        {
+            "label": "test-compile",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-Isrc",
+                "src/file_util.c",
+                "tests/CuTest.c",
+                "tests/file_util_test.c",
+                "tests/main_test.c",
+                "-otests"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "test-run",
+            "type": "shell",
+            "dependsOn": "test-compile",
+            "command": "tests",
+            "group": {
+                "kind": "test",
                 "isDefault": true
             }
         }

@@ -1,7 +1,7 @@
 /**
   * 
   * Author: Tom Terhune
-  * Author: Karl Miller
+  * Author: Karl Miller (klm127)
   * Author: Anthony Stepich
   * 
   * program 1 for CSC 460.
