@@ -5,8 +5,10 @@
             "type": "shell",
             "command": "gcc",
             "args": [
-                "main.c", 
-                "-ansi"
+                "src/main.c",
+                "src/file_util.c",
+                "-ansi",
+                "-ofileopen"
             ],
             "group": "build",
             "presentation": {
@@ -18,7 +20,7 @@
         {
             "label": "run",
             "type": "shell",
-            "command": "a",
+            "command": "fileopen",
             "args": ["hello"],
             "group": "build",
             "presentation": {
