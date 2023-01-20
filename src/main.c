@@ -1,7 +1,7 @@
 /**
   * 
   * Author: Tom Terhune
-  * Author: Karl Miller (klm127)
+  * Author: Karl Miller
   * Author: Anthony Stepich
   * 
   * program 1 for CSC 460.
@@ -30,35 +30,70 @@ bool hasExtension(char* filename){
 	return Extension_Found;
 }
 
-bool promptFileName(char* Input_File_Name) {
-	bool NotEntered = false;
-	printf("Enter the input file name: ");
-	scanf("%s", Input_File_Name);
-	
-	return NotEntered;
+bool promptFileName(char* fileName) {
+	bool flag = true;
+	size_t bufsize = 100;
+
+	/*scan for filename*/
+	getline(&fileName,&bufsize, stdin);
+	/*if filename is null*/
+	if (fileName[0] == '\0'){
+		flag = false;
+	}
+
+	printf("%c", fileName[0]);
+	return flag;
 }
 
-bool openInputFile(char* Input_File_Name, FILE* Input_File) {
-	bool terminate = false;
+bool openInputFile(char* inputFileName, FILE* inputFile) {
+	bool flag = true;
 	/* If no extension add .IN */
-	if(!hasExtension(Input_File_Name)) {
-		addExtension(Input_File_Name, ".IN");
+	if(!hasExtension(inputFileName)) {
+		addExtension(inputFileName, ".IN");
 	}
 	
 	/*if does not exist*/
-	Input_File = fopen(Input_File_Name, "r");
-	if(Input_File == NULL){
-		/*promptFileName();*/
+	inputFile = fopen(inputFileName, "r");
+	while(inputFile == NULL){
+		printf("File does not exist. /nEnter an existing input file name: ");
+		/*if filename string is not null try to open*/
+		if(promptFileName(inputFileName)){
+			inputFile = fopen(inputFileName, "r");
+		} else {
+			flag = false;
+		}
 	}
+	
+	
+	return flag;
 }
 
-void openOutputFile(char* Output_File_Name, FILE* Output_File) {
+bool openOutputFile(char* outputFileName, FILE* outputFile) {
 	/* If no extension add .OUT */
-	if(!hasExtension(Output_File_Name)) {
-		addExtension(Output_File_Name, ".OUT");
+	int userInput;
+	bool flag = true;
+	if(!hasExtension(outputFileName)) {
+		addExtension(outputFileName, ".OUT");
 	}
 		
-	Output_File = fopen(Output_File_Name, "w");
+	outputFile = fopen(outputFileName, "r");
+	if(outputFile == NULL){
+		outputFile = fopen(outputFileName, "w");
+	}else{
+		printf("File exists /nEnter 1 to overwrite/nEnter 2 to enter a new output file name/nEnter 3 to quit");
+		scanf("%i", userInput);
+		if(userInput == 1){
+			outputFile = fopen(outputFileName, "w");
+		}else if(userInput == 2){
+			if(promptFileName(outputFileName)){
+				openOutputFile(outputFileName, outputFile);
+			}
+		}else if(userInput == 3){
+			flag = false;
+		}
+	}
+
+	return flag;
 	/* if exists choose to overwrite, enter new output file name, or terminate */
 }
 
@@ -70,31 +105,50 @@ void closeFile(FILE* file){
 
 int main(int argc, char *argv[]) {
 	
-	char Input_File_Name[100];
-	char Output_File_Name[100];
-	FILE * Input_File, Output_File;
+	char inputFileName[100];
+	char outputFileName[100];
+	FILE * inputFile;
+	FILE * outputFile;
+	bool quit = false;
 	
 	/*Command Line Parameters*/
 	if(argc == 3) {
 		/* Copy string from command line args */
-		strcpy(Input_File_Name, argv[1]);
-		
-		if(openInputFile(Input_File_Name, Input_File)){
-			/*Copy string from command line args*/
-			strcpy(Input_File_Name, argv[1]);
+		strcpy(inputFileName, argv[1]);
+		/*if input file opens then try to open output file*/
+		if(openInputFile(inputFileName, inputFile)) {
+			/*Copy string from command line args */
+			strcpy(outputFileName, argv[2]);
+			openOutputFile(outputFileName, outputFile);
 		}
 		
 		
 		
 	}else if(argc == 2) {
 		/* Copy string from command line args */
-		strcpy(Input_File_Name, argv[1]);
-	}else {
+		strcpy(inputFileName, argv[1]);
 		
+		/*if input file opens then try to open output file*/
+		if(openInputFile(inputFileName, inputFile)) {
+			/*Copy string from command line args */
+			printf("Enter the output file name: ");
+			promptFileName(outputFileName);
+			openOutputFile(outputFileName, outputFile);
+		}
+		
+	}else {
+		/*prompt for input file*/
+		printf("Enter the input file name: ");
+		/*if input filename is entered*/
+		if(promptFileName(inputFileName)){
+			if(openInputFile(inputFileName, inputFile)) {
+				printf("Enter the output file name: ");
+				promptFileName(outputFileName);
+				openOutputFile(outputFileName, outputFile);
+			}
+		}
 	}
-		/* closing files */
-	fclose(Input_File_Name);
-  	fclose(Output_File_Name);
-	
+	closeFile(inputFile);
+	closeFile(outputFile);
 	return 0;
 }

@@ -3,7 +3,8 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "C:/Program Files/CodeBlocks/MinGW/include"
             ],
             "defines": [
                 "_DEBUG",
@@ -12,7 +13,7 @@
             ],
             "windowsSdkVersion": "10.0.17763.0",
             "compilerPath": "C:/Program Files/CodeBlocks/MinGW/bin/gcc.exe",
-            "cStandard": "c17",
+            "cStandard": "ansi",
             "cppStandard": "c++17",
             "intelliSenseMode": "windows-gcc-x64"
         }
