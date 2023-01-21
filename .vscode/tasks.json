@@ -30,7 +30,8 @@
                 "tests/CuTest.c",
                 "tests/file_util_test.c",
                 "tests/main_test.c",
-                "-otests"
+                "-otests",
+                "-ansi"
             ],
             "group": {
                 "kind": "test",

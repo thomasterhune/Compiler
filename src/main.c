@@ -13,9 +13,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-void addExtension(char* filename, char* extension) {
-    strcat(filename, extension);
-}
+
 
 bool hasExtension(char* filename){
 	bool Extension_Found = false;
@@ -35,7 +33,17 @@ bool promptFileName(char* fileName) {
 	size_t bufsize = 100;
 
 	/*scan for filename*/
-	getline(&fileName,&bufsize, stdin);
+	
+
+	/*
+		Note, I have commented out getline for now, but it needs to be removed.
+
+		getline was added around 2010 and, if getline is used, the code will not compile with the -ansi flag (which limits us to 1990 C).
+
+		-K
+	
+	*/
+	/*getline(&fileName,&bufsize, stdin);*/
 	/*if filename is null*/
 	if (fileName[0] == '\0'){
 		flag = false;

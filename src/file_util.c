@@ -11,9 +11,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdbool.h>
+#include <string.h>
 #include "file_util.h"
+
+
+#pragma region filenames
 
 short fileExists(const char * filename) {
     FILE * file = fopen(filename, "r");
@@ -55,6 +58,18 @@ int filenameHasExtension(const char * filename) {
     return return_value;
 }
 
+char * addExtension(const char* filename, const char* extension) {
+    /* reallocate memory for a string large enough to hold filename + '.' + extension. */
+    char * new_string = (char *) malloc (sizeof(char) * (strlen(filename) + strlen(extension) + 1));
+    strcpy(new_string, filename);
+    strcat(new_string, ".");
+    strcat(new_string, extension);
+    return new_string;
+}
+
+#pragma endregion filenames
+
+#pragma region prompts
 
 short promptUserOverwriteSelection() {
     int user_selection = 0;
@@ -74,3 +89,5 @@ short promptUserOverwriteSelection() {
         }
     return (short) user_selection;
 }
+
+#pragma endregion prompts
