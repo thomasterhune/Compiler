@@ -4,7 +4,6 @@
 - added #pragma region directives to header files. This is basically just markup for VSCode. Each of these regions can now be folded in Visual Studio or VSCode. This does not affect -ansi compilation on MinGW-W64 gcc; as far as I can tell. The purpose is to make the code much easier to navigate without relying on tab-based folding. [See Also: stackoverflow answer](https://stackoverflow.com/questions/63512637/what-is-pragma-region-in-c-and-vscode)
 - Cleaned up comments, tab-based folding, etc.
 - Fixed up the `addExtension` to use malloc to create a longer, concatenated string out of its inputs. Added unit tests for `addExtension`. 
-- Refactored std swapping test utility functions. The best way to test a prompter is now to use is to call `setSTDin3`, get the value, then dont forget to call `restoreSTD3()` _before_ making a test-based assertion. 
 
 
 1/20/2023 : All group members in collaboration
