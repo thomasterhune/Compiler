@@ -96,6 +96,7 @@ bool openOutputFile(char* outputFilename, FILE* outputFile) {
 					openOutputFile(outputFilename, outputFile);
 				} else {
 					/*generate the output file from the source file name with the .OUT*/
+
 				}
 				break;
 			case USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE:

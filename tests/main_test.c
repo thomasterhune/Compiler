@@ -11,8 +11,6 @@
 
 */
 
-CuSuite * StrUtilGetSuite();
-
 /*
     Loads all testing suites, runs the unit tests, and prints the output.
 */
