@@ -219,8 +219,6 @@ FILE * setSTDin(char * tempSTDinFilename) {
 
     It also validates that there is not a temporary stdin already in place.
     
-    This is the preferable way to set the standard input, because you typically want to provide some values to be read at the time the standard input is redirected, because that is what you are testing. This does that boilerplate before calling setSTDin.
-    
     restoreSTDInHard() should always be called after you are done redirecting stdin and before calling setSTDin again.
 
     Parameters:
