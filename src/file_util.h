@@ -187,8 +187,10 @@ bool openInputFile(char* inputFilename, FILE* inputFile);
  *   char * outputFilename -  
  *   File * outputFile - 
  * 
+ * Returns:
+ * 
 */
-void openOutputFile(char* outputFilename, FILE* outputFile);
+bool openOutputFile(char* outputFilename, FILE* outputFile);
 
 
 #endif

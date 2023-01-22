@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "file_util.h"
 
 
 
@@ -53,20 +54,20 @@ bool promptFileName(char* fileName) {
 	return flag;
 }
 
-bool openInputFile(char* inputFileName, FILE* inputFile) {
+bool openInputFile(char* inputFilename, FILE* inputFile) {
 	bool flag = true;
-	/* If no extension add .IN */
-	if(!hasExtension(inputFileName)) {
-		addExtension(inputFileName, ".IN");
+
+	if(!hasExtension(inputFilename)) {
+		addExtension(inputFilename, ".IN");
 	}
 	
-	/*if does not exist*/
-	inputFile = fopen(inputFileName, "r");
-	while(inputFile == NULL){
-		printf("File does not exist. /nEnter an existing input file name: ");
-		/*if filename string is not null try to open*/
-		if(promptFileName(inputFileName)){
-			inputFile = fopen(inputFileName, "r");
+	if(fileExists(inputFilename)) {
+		inputFile = fopen(inputFilename, "r");
+	} else {
+		printf("File does not exist.");
+		printf("Enter an existing input file name: ");
+		if(promptFileName(inputFilename)){
+			openInputFile(inputFilename, inputFile);
 		} else {
 			flag = false;
 		}
@@ -76,29 +77,39 @@ bool openInputFile(char* inputFileName, FILE* inputFile) {
 	return flag;
 }
 
-bool openOutputFile(char* outputFileName, FILE* outputFile) {
+
+bool openOutputFile(char* outputFilename, FILE* outputFile) {
 	/* If no extension add .OUT */
-	int userInput;
+	int userInput = -1;
 	bool flag = true;
-	if(!hasExtension(outputFileName)) {
-		addExtension(outputFileName, ".OUT");
+	if(!hasExtension(outputFilename)) {
+		addExtension(outputFilename, ".OUT");
 	}
-		
-	outputFile = fopen(outputFileName, "r");
-	if(outputFile == NULL){
-		outputFile = fopen(outputFileName, "w");
-	}else{
-		printf("File exists /nEnter 1 to overwrite/nEnter 2 to enter a new output file name/nEnter 3 to quit");
-		scanf("%i", userInput);
-		if(userInput == 1){
-			outputFile = fopen(outputFileName, "w");
-		}else if(userInput == 2){
-			if(promptFileName(outputFileName)){
-				openOutputFile(outputFileName, outputFile);
-			}
-		}else if(userInput == 3){
-			flag = false;
+
+	if(fileExists(outputFilename)) {
+		while(userInput == USER_OUTPUT_TERMINATE_INVALID_ENTRY){
+			userInput = promptUserOverwriteSelection();
 		}
+		switch(userInput) {
+			case USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED:
+				if(promptFileName(outputFilename)){
+					openOutputFile(outputFilename, outputFile);
+				} else {
+					/*generate the output file from the source file name with the .OUT*/
+				}
+				break;
+			case USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE:
+				outputFile = fopen(outputFilename, "w");
+				break;
+			case USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME:
+
+				break;
+			case USER_OUTPUT_TERMINATE_PROGRAM:
+				flag = false;
+				break;
+		}
+	} else {
+		outputFile = fopen(outputFilename, "w");
 	}
 
 	return flag;
