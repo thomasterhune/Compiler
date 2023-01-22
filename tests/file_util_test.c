@@ -5,95 +5,6 @@
 #include <stdlib.h>
 
 /* 
--------------------------------------------------------------------------------
-                Test Assistance Utility Functions                                 
--------------------------------------------------------------------------------
-*/
-#pragma region tests_util
-
-/* The saved position in stdout */
-fpos_t stdout_file_position;
-/* The saved reference to original stdout */
-int saved_stdout;
-
-/* 
-    setSTDout sets the standard output to a new file. This is useful when testing printing functions. Instead of writing to the console, they will write to this new file after this function has been called. 
-
-    Parameters:
-        - char * tempSTDoutFilename : the name of the file that should be created which will be written to instead of stdout.
-    
-    Returns FILE * : a pointer to the new file which was created.
-
-                    Authors:    klm127
-                    Created On: 1/20/2023
-
-                    Additional credit to StackOverflow answer: https://stackoverflow.com/questions/1720535/practical-examples-use-dup-or-dup2
-
-*/
-FILE * setSTDout(char * tempSTDoutFilename) {
-    fflush(stdout);
-    fgetpos(stdout, &stdout_file_position);
-    saved_stdout = dup(fileno(stdout));
-    return freopen(tempSTDoutFilename, "w+", stdout);
-}
-/*
-    restoreSTDout restores standard output to the console. It should be called after all tests on some set of printing functions have been conducted so that output can return to the console.
-
-                    Authors:    klm127
-                    Created On: 1/20/2023
-
-                    Additional credit to StackOverflow answer: https://stackoverflow.com/questions/1720535/practical-examples-use-dup-or-dup2
-*/
-void restoreSTDout() {
-    fflush(stdout);
-    dup2(saved_stdout, fileno(stdout));
-    clearerr(stdout);
-    fsetpos(stdout, &stdout_file_position);
-}
-
-/* The saved position in stdin */
-fpos_t stdin_file_position;
-/* The saved reference to original stdin */
-int saved_stdin;
-
-/* 
-    setSTDout sets the standard input to a new file. This is useful when testing scanning and reading functions. Instead of reading from the console, they will read from this new file after this function has been called. 
-
-    Parameters:
-        - char * tempSTDinFilename : the name of the file that should be created which will be read from instead of stdin.
-    
-    Returns FILE * : a pointer to the new file which was created.
-
-                    Authors:    klm127
-                    Created On: 1/20/2023
-
-                    Additional credit to StackOverflow answer: https://stackoverflow.com/questions/1720535/practical-examples-use-dup-or-dup2
-
-*/
-FILE * setSTDin(char * tempSTDinFilename) {
-    fflush(stdin);
-    fgetpos(stdin, &stdin_file_position);
-    saved_stdin = dup(fileno(stdin));
-    return freopen(tempSTDinFilename, "r", stdin);
-}
-
-/*
-    restoreSTDin restores standard input to the console / user functions. It should be called after all tests on some set of scanning functions have been conducted so that input can return to the console.
-
-                    Authors:    klm127
-                    Created On: 1/20/2023
-
-                    Additional credit to StackOverflow answer: https://stackoverflow.com/questions/1720535/practical-examples-use-dup-or-dup2
-*/
-void restoreSTDin() {
-    fflush(stdin);
-    dup2(saved_stdin, fileno(stdin));
-    clearerr(stdin);
-    fsetpos(stdin, &stdin_file_position);
-}
-#pragma endregion tests_util
-
-/* 
 ------------------------------------------------------------------------------
                 Test Filename-related functions                                   
 ------------------------------------------------------------------------------
@@ -199,6 +110,211 @@ void test_addExtension(CuTest *tc) {
 #pragma endregion test_filenames
 
 /* 
+-------------------------------------------------------------------------------
+                Test Assistance Utility Functions 
+                - STD in/out replacement                         
+-------------------------------------------------------------------------------
+*/
+#pragma region tests_util
+
+
+struct _TStdReplacer {
+    /* The saved position in stdout */
+    fpos_t stdout_file_position;
+    /* The saved reference to original stdout */
+    int saved_stdout;
+    /* The saved position in stdin */
+    fpos_t stdin_file_position;
+    /* The saved reference to original stdin */
+    int saved_stin; /* likely only ever to be 0 or 1, but just in case. Actually a pointer */
+    /* The temporary stdin being read from while the test is conducted. */
+    FILE * temporary_stdin;
+    /* The temporary stdout being written to while the test is conducted. */
+    FILE * temporary_stdout;
+    /* The filename of the temporary file to be deleted when tests are done. */
+    char * temporary_stdin_filename;
+    /* The filename of the temporary out file to be deleted when tests are done. */
+    char * temporary_stdout_filename;
+};
+
+/* A singleton which holds the state of STDin replacement. */
+struct _TStdReplacer StdR;
+
+
+/* 
+    setSTDout sets the standard output to a new file. This is useful when testing printing functions. Instead of writing to the console, they will write to this new file after this function has been called. 
+
+    Parameters:
+        - char * tempSTDoutFilename : the name of the file that should be created which will be written to instead of stdout.
+    
+    Returns FILE * : a pointer to the new file which was created.
+
+                    Authors:    klm127
+                    Created On: 1/20/2023
+
+                    Additional credit to StackOverflow answer: https://stackoverflow.com/questions/1720535/practical-examples-use-dup-or-dup2
+
+*/
+FILE * setSTDout(char * tempSTDoutFilename) {
+    if(StdR.temporary_stdout != 0) {
+        perror("error! setSTDout was called twice in a row!");
+    } else {
+        fflush(stdout);
+        fgetpos(stdout, &StdR.stdout_file_position);
+        StdR.saved_stdout = dup(fileno(stdout));
+        StdR.temporary_stdout_filename = malloc(sizeof(char) * strlen(tempSTDoutFilename));
+        strcpy(StdR.temporary_stdout_filename, tempSTDoutFilename);
+        StdR.temporary_stdout = freopen(tempSTDoutFilename, "w", stdout);
+    }
+    return StdR.temporary_stdout;
+}
+/*
+    restoreSTDout restores standard output to the console. It should be called after all tests on some set of printing functions have been conducted so that output can return to the console.
+
+                    Authors:    klm127
+                    Created On: 1/20/2023
+
+                    Additional credit to StackOverflow answer: https://stackoverflow.com/questions/1720535/practical-examples-use-dup-or-dup2
+*/
+void restoreSTDout() {
+    fflush(stdout);
+    fclose(StdR.temporary_stdout);
+    dup2(StdR.saved_stdout, fileno(stdout));
+    clearerr(stdout);
+    fsetpos(stdout, &StdR.stdout_file_position);
+    StdR.temporary_stdout = 0;
+    remove(StdR.temporary_stdout_filename);
+    free(StdR.temporary_stdout_filename);
+}
+
+
+
+/* 
+    setSTDin sets the standard input to a new file. This is useful when testing scanning and reading functions. Instead of reading from the console, they will read from this new file after this function has been called. 
+
+    restoreSTDIn() should always be called after you are done redirecting stdin and before calling setSTDin again.
+
+    Parameters:
+        - char * tempSTDinFilename : the name of the file that should be created which will be read from instead of stdin.
+    
+    Returns FILE * : a pointer to the new file which was created.
+
+                    Authors:    klm127
+                    Created On: 1/20/2023
+
+                    Additional credit to StackOverflow answer: https://stackoverflow.com/questions/1720535/practical-examples-use-dup-or-dup2
+
+*/
+FILE * setSTDin(char * tempSTDinFilename) {
+    fflush(stdin);
+    fgetpos(stdin, &StdR.stdin_file_position);
+    StdR.saved_stin = dup(fileno(stdin));
+    StdR.temporary_stdin_filename = malloc(sizeof(char) * strlen(tempSTDinFilename));
+    strcpy(StdR.temporary_stdin_filename, tempSTDinFilename);
+    StdR.temporary_stdin = freopen(tempSTDinFilename, "r", stdin);
+    return StdR.temporary_stdin;
+}
+/* 
+    setSTDin2 prints a string to a file, then sets that file to be the standard input until restoreSTDin() is called.
+
+    It also validates that there is not a temporary stdin already in place.
+    
+    restoreSTDInHard() should always be called after you are done redirecting stdin and before calling setSTDin again.
+
+    Parameters:
+        - char * tempSTDinFilename : the name of the file that should be created which will be read from instead of stdin.
+        - char * inputToWirte : a string to write to the file.
+    
+    Returns FILE * : a pointer to the new file which was created.
+
+                    Authors:    klm127
+                    Created On: 1/21/2023
+*/
+FILE * setSTDin2(char * tempSTDinFilename, char * inputToWrite) {
+    FILE * result;
+    if(StdR.temporary_stdin != NULL) {
+        perror("Restore STDin before attempting to set it again! Call restoreSTDinHard()!");
+        result = NULL;
+    } else {
+        FILE * tempInWriter = fopen(tempSTDinFilename, "w+");
+        fputs(inputToWrite, tempInWriter);
+        fclose(tempInWriter);
+        result = setSTDin(tempSTDinFilename);
+    }
+    return result;    
+}
+
+/*
+    restoreSTDin restores standard input to the console / user functions. It should be called after all tests on some set of scanning functions have been conducted so that input can return to the console.
+
+                    Authors:    klm127
+                    Created On: 1/20/2023
+
+                    Additional credit to StackOverflow answer: https://stackoverflow.com/questions/1720535/practical-examples-use-dup-or-dup2
+*/
+void restoreSTDin() {
+    fflush(stdin);
+    dup2(StdR.saved_stin, fileno(stdin));
+    clearerr(stdin);
+    fsetpos(stdin, &StdR.stdin_file_position);
+}
+
+/*
+    restoreSTDinHard restores standard input to console / user functions. It also closes and deletes the temporary input file that was being used. It re-enables setSTDin2.
+
+    Best practice is to use this and setSTDin2 to minimize memory leak risk.
+
+                    Authors:    klm127
+                    Created On: 1/21/2023
+*/
+void restoreSTDinHard() {
+    restoreSTDin();
+    fclose(StdR.temporary_stdin);
+    remove(StdR.temporary_stdin_filename);
+    StdR.temporary_stdin = NULL;
+    free(StdR.temporary_stdin_filename);
+    StdR.temporary_stdin_filename = NULL;
+}
+
+/*
+    setSTDin3 calls both setSTDin2 and setSTDout. 
+
+    It is the most compact way of redirecting both stds for input tests.
+
+    It creates a file containing the input given by the std_input_text parameter. It also redirects stdout to a dump file. 
+    It restoreStd3() should be called after using this.
+    
+    IMPORTANT: BOTH functions should be called before using any assertions that may change control in order to get your regular std ins and outs back and see the test results!
+
+    parameters:
+        char * std_input_text : some text to set to be read next in the standard input (e.g., scanf )
+                    Authors:    klm127
+                    Created On: 1/21/2023
+
+*/
+char * _stdin3_temp_out = "_stdin3_temp_out.txt";
+char * _stdin3_temp_in = "_stdin3_temp_in.txt";
+void setSTDin3(char * std_input_text) {
+    setSTDout(_stdin3_temp_out);
+    setSTDin2(_stdin3_temp_in, std_input_text);
+}
+
+/*
+    restoreSTD3 calls restoreSTDout and restoreSTDin. It sets both back to regular standard input/output. 
+
+    IMPORTANT: BOTH functions should be called before using any assertions that may change control in order to get your regular std ins and outs back and see the test results!
+                    Authors:    klm127
+                    Created On: 1/21/2023
+*/
+void restoreSTD3() {
+    restoreSTDinHard();
+    restoreSTDout();
+}
+
+#pragma endregion tests_util
+
+
+/* 
 ------------------------------------------------------------------------------
                 Test prompts                                                      
 ------------------------------------------------------------------------------
@@ -216,89 +332,44 @@ void test_addExtension(CuTest *tc) {
 
 */
 void test_promptUserOverwriteSelection(CuTest *tc) {
-    char * infile = "temp_testIn.txt";
-    char * outfile = "temp_testOut.txt";
 
-    FILE * tempOut = setSTDout(outfile);
-    FILE * tempIn;
-    FILE * tempInWriter;
     short test_result;
 
     /* If the user enters a "1", it should return USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED*/
-    tempInWriter = fopen(infile, "w");
-    fputc('1', tempInWriter);
-    fclose(tempInWriter);
-    tempIn = setSTDin(infile);
+    setSTDin3("1");
     test_result = promptUserOverwriteSelection();
+    restoreSTD3();
     CuAssertIntEquals(tc, USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED, test_result);
-    restoreSTDin();
-    fclose(tempInWriter);
-    fclose(tempIn);
-    remove(infile);
 
     /* If the user enters a "2", it should return USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE*/
-    tempInWriter = fopen(infile, "w");
-    fputc('2', tempInWriter);
-    fclose(tempInWriter);
-    tempIn = setSTDin(infile);
+    setSTDin3("2");
     test_result = promptUserOverwriteSelection();
+    restoreSTD3();
     CuAssertIntEquals(tc, USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE, test_result);
-    restoreSTDin();
-    fclose(tempInWriter);
-    fclose(tempIn);
-    remove(infile);
 
-    /* If the user enters a "3", it should return USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE*/
-    tempInWriter = fopen(infile, "w");
-    fputc('3', tempInWriter);
-    fclose(tempInWriter);
-    tempIn = setSTDin(infile);
+    /* If the user enters a "3", it should return USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME*/
+    setSTDin3("3");
     test_result = promptUserOverwriteSelection();
+    restoreSTD3();
     CuAssertIntEquals(tc, USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME, test_result);
-    restoreSTDin();
-    fclose(tempInWriter);
-    fclose(tempIn);
-    remove(infile);
 
-    /* If the user enters a "4", it should return USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE*/
-    tempInWriter = fopen(infile, "w");
-    fputc('4', tempInWriter);
-    fclose(tempInWriter);
-    tempIn = setSTDin(infile);
+    /* If the user enters a "4", it should return USER_OUTPUT_TERMINATE_PROGRAM*/
+    setSTDin3("4");
     test_result = promptUserOverwriteSelection();
+    restoreSTD3();
     CuAssertIntEquals(tc, USER_OUTPUT_TERMINATE_PROGRAM, test_result);
-    restoreSTDin();
-    fclose(tempInWriter);
-    fclose(tempIn);
-    remove(infile);
 
     /* If the user enters a "9", it should return USER_OUTPUT_TERMINATE_INVALID_ENTRY*/
-    tempInWriter = fopen(infile, "w");
-    fputc('9', tempInWriter);
-    fclose(tempInWriter);
-    tempIn = setSTDin(infile);
+    setSTDin3("8");
     test_result = promptUserOverwriteSelection();
+    restoreSTD3();
     CuAssertIntEquals(tc, USER_OUTPUT_TERMINATE_INVALID_ENTRY, test_result);
-    restoreSTDin();
-    fclose(tempInWriter);
-    fclose(tempIn);
-    remove(infile);
 
-    /* If the user enters a "a", it should return USER_OUTPUT_TERMINATE_INVALID_ENTRY*/
-    tempInWriter = fopen(infile, "w");
-    fputc('a', tempInWriter);
-    fclose(tempInWriter);
-    tempIn = setSTDin(infile);
+    /* If the user enters the char "a", it should return USER_OUTPUT_TERMINATE_INVALID_ENTRY*/
+    setSTDin3("a");
     test_result = promptUserOverwriteSelection();
+    restoreSTD3();
     CuAssertIntEquals(tc, USER_OUTPUT_TERMINATE_INVALID_ENTRY, test_result);
-    restoreSTDin();
-    fclose(tempInWriter);
-    fclose(tempIn);
-    remove(infile);
-
-
-    restoreSTDout();
-    remove(outfile);
 }
 
 #pragma endregion test_prompts
