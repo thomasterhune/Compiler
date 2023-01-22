@@ -3,13 +3,14 @@
 #include "file_util.h"
 #include <unistd.h>
 #include <stdlib.h>
+#include <dirent.h>
 
-/* 
-------------------------------------------------------------------------------
-                Test Filename-related functions                                   
-------------------------------------------------------------------------------
+/*
+-------------------------------
+Test File-op related functions                                   
+-------------------------------
 */
-#pragma region test_filenames
+#pragma region test_fileops
 
 /*
     test_FileExists tests the fileExists function in file_util.c.
@@ -24,8 +25,8 @@
                     Created On: 1/19/2023
 
 */
-const char* test_filepath_create = "__temp_test_in.in";
-const char* test_filepath_fake = "__temp_test_notHere.in";
+const char* test_filepath_create = "tests/__temp_test_in.in";
+const char* test_filepath_fake = "tests/__temp_test_notHere.in";
 void test_FileExists(CuTest *tc) {
     FILE * file = fopen(test_filepath_create, "w");
     fclose(file);
@@ -40,6 +41,35 @@ void test_FileExists(CuTest *tc) {
 
     remove(test_filepath_create);
 }
+
+/*
+    test_backupFile confirms that backupFile() renames an extant file.
+
+                    Authors:    klm127
+                    Created On: 1/22/2023
+*/
+void test_backupFile(CuTest *tc) {
+    char * fname = "tests/prevOut.out";
+    FILE * file = fopen(fname, "w");
+    fclose(file);
+    backupFile(fname);
+    char * newname = "tests/prevOut.out.bak";
+    short exists = fileExists(newname);
+    CuAssertIntEquals_Msg(tc, "A file with a .bak extension should exist.", FILE_EXISTS, exists);
+    exists = fileExists(fname);
+    CuAssertIntEquals_Msg(tc, "The original file should no longer exist.", FILE_DOES_NOT_EXIST, exists);
+    remove(newname);
+}
+
+#pragma endregion test_fileops
+
+/* 
+-------------------------------
+Test Filename-related functions                                   
+-------------------------------
+*/
+#pragma region test_filenames
+
 
 /*
     test_filenameHasExtension tests the filenameHasExtension function in file_util.c.
@@ -67,22 +97,86 @@ void test_filenameHasExtension(CuTest *tc) {
     /* it should return that a filename is invalid if it starts with a period even if it also has a valid extension after*/
     test_case = ".myFile.ext";
     result = filenameHasExtension(test_case);
-    CuAssert(tc, "filename starts with a period", result == FILENAME_STARTS_WITH_PERIOD);
+    CuAssertIntEquals_Msg(tc, "filename can start with a period", 7, result);
 
     /* it should return negative if the string begins with a period. */
     test_case = ".ext";
     result = filenameHasExtension(test_case);
-    CuAssertIntEquals(tc, FILENAME_STARTS_WITH_PERIOD, result);
+    CuAssertIntEquals_Msg(tc, "filename can start with a period", 0, result);
     
     /* it should return negative if the string ends with a period. */
     test_case = "ext.";
     result = filenameHasExtension(test_case);
-    CuAssertIntEquals(tc, FILENAME_ENDS_IN_PERIOD, result);
+    CuAssertIntEquals_Msg(tc, "filename cannot end with a period", FILENAME_ENDS_IN_PERIOD, result);
 
     /* it should return negative if there is no file extension. */
     test_case = "myfile";
     result = filenameHasExtension(test_case);
     CuAssertIntEquals(tc, FILENAME_HAS_NO_PERIOD, result);
+
+    test_case = "tests/myfile";
+    result = filenameHasExtension(test_case);
+    CuAssertIntEquals_Msg(tc, 
+        "\n\tIt should be able to check a file in a folder.",
+        FILENAME_HAS_NO_PERIOD, result
+    );
+
+    test_case = "tests/my.subfolder/out";
+    result = filenameHasExtension(test_case);
+    CuAssertIntEquals_Msg(tc, 
+        "\n\tIt should be able to tell that a file in a folder has no extension, even if the folder name has a period.",
+        FILENAME_HAS_NO_PERIOD, result
+    );
+
+    test_case = "tests\\my.subfolder\\out";
+    result = filenameHasExtension(test_case);
+    CuAssertIntEquals_Msg(tc, 
+        "\n\tIt should be able to tell that a file in a folder has no extension, even if the folder name has a period and it uses backslashes.(\\).",
+        FILENAME_HAS_NO_PERIOD, result
+    );
+
+    test_case = "tests/my.subfolder/out.bak";
+    result = filenameHasExtension(test_case);
+    CuAssertIntEquals_Msg(tc, 
+        "\n\tIt should be able to tell that a file in a folder has an extension, even if the folder name has a period.",
+        22, result
+    );
+
+    test_case = ".vscode/out.hi";
+    result = filenameHasExtension(test_case);
+    CuAssertIntEquals_Msg(tc, 
+        "\n\tIt should be able to check files within folders which start with an extension.",
+        11, result
+    );
+
+    test_case = ".vscode/out";
+    result = filenameHasExtension(test_case);
+    CuAssertIntEquals_Msg(tc, 
+        "\n\tIt should be able to check files within folders which start with an extension.",
+        FILENAME_HAS_NO_PERIOD, result
+    );
+
+    test_case = "./tests/";
+    result = filenameHasExtension(test_case);
+    CuAssertIntEquals_Msg(tc, 
+        "\n\tIt should be able to check whether a file is actually a directory.",
+        FILENAME_IS_DIRECTORY, result
+    );
+
+    test_case = "tests/";
+    result = filenameHasExtension(test_case);
+    CuAssertIntEquals_Msg(tc, 
+        "\n\tIt should be able to check whether a file is actually a directory.",
+        FILENAME_IS_DIRECTORY, result
+    );
+
+    test_case = ".vscode/";
+    result = filenameHasExtension(test_case);
+    CuAssertIntEquals_Msg(tc, 
+        "\n\tIt should be able to check whether a file is actually a directory.",
+        FILENAME_IS_DIRECTORY, result
+    );
+
 }
 
 /*
@@ -107,13 +201,42 @@ void test_addExtension(CuTest *tc) {
 
 }
 
+void test_removeExtension(CuTest *tc) {
+    char * test_filename;
+    char * test_filename_removed_extension;
+    int test = 0;
+    
+    test_filename = "mytestfile.in";
+
+    /*it should remove the extension from the filename*/
+    test_filename_removed_extension = removeExtension(test_filename);
+    test = strcmp(test_filename_removed_extension, "mytestfile");
+    CuAssertIntEquals(tc, 0, test);
+    free(test_filename_removed_extension);
+
+    /*it should remove the last extension from the filename*/
+    test_filename = "mytestfile.in.in";
+    test_filename_removed_extension = removeExtension(test_filename);
+    test = strcmp(test_filename_removed_extension, "mytestfile.in");
+    CuAssertIntEquals(tc, 0, test);
+    free(test_filename_removed_extension);
+
+    /*it should remove the last extension from the filename*/
+    test_filename = "m.a";
+    test_filename_removed_extension = removeExtension(test_filename);
+    test = strcmp(test_filename_removed_extension, "m");
+    CuAssertIntEquals(tc, 0, test);
+    free(test_filename_removed_extension);
+
+}
+
 #pragma endregion test_filenames
 
 /* 
--------------------------------------------------------------------------------
-                Test Assistance Utility Functions 
+-----------------------------------------
+Testing Assistance Utility Functions 
                 - STD in/out replacement                         
--------------------------------------------------------------------------------
+-----------------------------------------
 */
 #pragma region tests_util
 
@@ -313,11 +436,10 @@ void restoreSTD3() {
 
 #pragma endregion tests_util
 
-
 /* 
-------------------------------------------------------------------------------
-                Test prompts                                                      
-------------------------------------------------------------------------------
+-------------
+Test prompts                                                      
+-------------
 */
 #pragma region test_prompts
 /*
@@ -339,40 +461,103 @@ void test_promptUserOverwriteSelection(CuTest *tc) {
     setSTDin3("1");
     test_result = promptUserOverwriteSelection();
     restoreSTD3();
-    CuAssertIntEquals(tc, USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED, test_result);
+    CuAssertIntEquals_Msg(tc, "\n\tIf the user enters a '1', it should return USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED", USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED, test_result);
+
+    /* If the user enters a "n", it should return USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED*/
+    setSTDin3("n");
+    test_result = promptUserOverwriteSelection();
+    restoreSTD3();
+    CuAssertIntEquals_Msg(tc, "\n\tIf the user enters a 'n', it should return USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED", USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED, test_result);
 
     /* If the user enters a "2", it should return USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE*/
     setSTDin3("2");
     test_result = promptUserOverwriteSelection();
     restoreSTD3();
-    CuAssertIntEquals(tc, USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE, test_result);
+    CuAssertIntEquals_Msg(tc, "\n\tIf the user enters a '2', it should return USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE", USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE, test_result);
+
+    /* If the user enters a "o", it should return USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE*/
+    setSTDin3("o");
+    test_result = promptUserOverwriteSelection();
+    restoreSTD3();
+    CuAssertIntEquals_Msg(tc, "\n\tIf the user enters a 'o', it should return USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE", USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE, test_result);
 
     /* If the user enters a "3", it should return USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME*/
     setSTDin3("3");
     test_result = promptUserOverwriteSelection();
     restoreSTD3();
-    CuAssertIntEquals(tc, USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME, test_result);
+    CuAssertIntEquals_Msg(tc, "\n\tIf the user enters a '3', it should return USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME", USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME, test_result);
+
+    /* If the user enters a "\n", it should return USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME*/
+    setSTDin3("\n");
+    test_result = promptUserOverwriteSelection();
+    restoreSTD3();
+    CuAssertIntEquals_Msg(tc, "\n\tIf the user enters a '\\n', it should return USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME", USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME, test_result);
 
     /* If the user enters a "4", it should return USER_OUTPUT_TERMINATE_PROGRAM*/
     setSTDin3("4");
     test_result = promptUserOverwriteSelection();
     restoreSTD3();
-    CuAssertIntEquals(tc, USER_OUTPUT_TERMINATE_PROGRAM, test_result);
+    CuAssertIntEquals_Msg(tc, "\n\tIf the user enters a '4', it should return USER_OUTPUT_TERMINATE_PROGRAM", USER_OUTPUT_TERMINATE_PROGRAM, test_result);
 
-    /* If the user enters a "9", it should return USER_OUTPUT_TERMINATE_INVALID_ENTRY*/
+    /* If the user enters a "q", it should return USER_OUTPUT_TERMINATE_PROGRAM*/
+    setSTDin3("q");
+    test_result = promptUserOverwriteSelection();
+    restoreSTD3();
+    CuAssertIntEquals_Msg(tc, "\n\tIf the user enters a 'q', it should return USER_OUTPUT_TERMINATE_PROGRAM", USER_OUTPUT_TERMINATE_PROGRAM, test_result);
+
+    /* If the user enters a "8", it should return USER_OUTPUT_TERMINATE_INVALID_ENTRY*/
     setSTDin3("8");
     test_result = promptUserOverwriteSelection();
     restoreSTD3();
-    CuAssertIntEquals(tc, USER_OUTPUT_TERMINATE_INVALID_ENTRY, test_result);
+    CuAssertIntEquals_Msg(tc, "\n\tIf the user enters a '8', it should return USER_OUTPUT_TERMINATE_INVALID_ENTRY", USER_OUTPUT_TERMINATE_INVALID_ENTRY, test_result);
 
     /* If the user enters the char "a", it should return USER_OUTPUT_TERMINATE_INVALID_ENTRY*/
     setSTDin3("a");
     test_result = promptUserOverwriteSelection();
     restoreSTD3();
-    CuAssertIntEquals(tc, USER_OUTPUT_TERMINATE_INVALID_ENTRY, test_result);
+    CuAssertIntEquals_Msg(tc, "\n\tIf the user enters a 'a', it should return USER_OUTPUT_TERMINATE_INVALID_ENTRY", USER_OUTPUT_TERMINATE_INVALID_ENTRY, test_result);
 }
 
 #pragma endregion test_prompts
+
+/* 
+-------------
+Sanity Tests                                                     
+-------------
+*/
+#pragma region test_sanity
+
+void test_getc(CuTest *tc) {
+    char result;
+    printf("\nLet's test getc.\n\tPress 'Enter'!\n");
+    result = getchar();
+    CuAssertIntEquals_Msg(tc, "The result should be '\n'.", '\n', result);
+}
+
+void test_directory_validation(CuTest *tc) {
+    DIR* dir = opendir("tests");
+    CuAssertIntEquals_Msg(tc,"\n\t'tests' directory should exist.", 1, dir != NULL);
+    closedir(dir);
+
+    dir = opendir("./tests");
+    CuAssertIntEquals_Msg(tc,"\n\t'/tests' directory should exist.", 1, dir != NULL);
+    closedir(dir);
+
+    dir = opendir(".\\tests");
+    CuAssertIntEquals_Msg(tc,"\n\t'\\tests' directory should exist.", 1, dir != NULL);
+    closedir(dir);
+
+    dir = opendir("tests/__noexist");
+    CuAssertIntEquals_Msg(tc,"\n\t'tests/__noexist' directory should not exist.", 1, dir == NULL);
+    closedir(dir);
+
+    dir = opendir("./tests/CuTest.h");
+    CuAssertIntEquals_Msg(tc,"\n\t'tests/CuTest.h' directory should not exist even though the file does.", 1, dir == NULL);
+    closedir(dir);
+}
+
+
+#pragma endregion test_sanity
 
 /* 
     fileUtilGetSuite provides the suite of tests for the file_util module.
@@ -388,9 +573,12 @@ void test_promptUserOverwriteSelection(CuTest *tc) {
 CuSuite* fileUtilGetSuite(){
     CuSuite* suite = CuSuiteNew();
     SUITE_ADD_TEST(suite, test_FileExists);
+    SUITE_ADD_TEST(suite, test_backupFile);
     SUITE_ADD_TEST(suite, test_filenameHasExtension);
+    SUITE_ADD_TEST(suite, test_removeExtension);
+    /* SUITE_ADD_TEST(suite, test_directory_validation); <--- a sanity test only */
+    /* SUITE_ADD_TEST(suite, test_getc);  <--- a sanity test only */
     SUITE_ADD_TEST(suite, test_promptUserOverwriteSelection);
     SUITE_ADD_TEST(suite, test_addExtension);
-
     return suite;
 }

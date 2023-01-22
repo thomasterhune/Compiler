@@ -1,5 +1,14 @@
 
 
+1/22/2023 : thomas and klm127
+ - added removeExtension function and tests
+ - confirmed getchar will read an 'enter'. 
+ - thomas fixed prompting function to accept alternate inputs
+ - added backupFile function and tests
+ - Included tests for filepaths with directories
+ - redid filenameHasExtension. It now allows for filenames like ".bob" and doesnt allow filenames that end in slashes. It does allow folders to have '.'s in them.
+
+
 1/21/2023 : klm127
 - added #pragma region directives to header files. This is basically just markup for VSCode. Each of these regions can now be folded in Visual Studio or VSCode. This does not affect -ansi compilation on MinGW-W64 gcc; as far as I can tell. The purpose is to make the code much easier to navigate without relying on tab-based folding. [See Also: stackoverflow answer](https://stackoverflow.com/questions/63512637/what-is-pragma-region-in-c-and-vscode)
 - Cleaned up comments, tab-based folding, etc.
