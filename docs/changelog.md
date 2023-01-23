@@ -1,4 +1,7 @@
-
+1/23/2023 : Thomas and klm127
+ - changed Author comment to include e-mail and class name.
+ - removed old addExtension function, old promptFilename function, and closeFile function.
+ - added promptFilename and getString function(not yet covered by unit tests)
 
 1/22/2023 : thomas and klm127
  - added removeExtension function and tests

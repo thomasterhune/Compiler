@@ -1,11 +1,14 @@
 /**
   * 
-  * Author: Tom Terhune
+  * Author: Tom Terhune 
+  * 	E-mail: ter1023@pennwest.edu
   * Author: Karl Miller
-  * Author: Anthony Stepich  
+  * 	E-mail: mil7865@pennnwest.edu
+  * Author: Anthony Stepich
+  * 	E-mail: ste4864@pennwest.edu
   * 
-  * program 1 for CSC 460.
-  * 
+  * Program 1 - fileopen
+  * CSC 460 - Language Translation
   */
 
 #ifndef file_util_h
@@ -189,6 +192,36 @@ enum USER_OUTPUT_OVERWRITE_SELECTION {
 
 */
 short promptUserOverwriteSelection();
+/*
+    function: char * getString()
+    
+    getString scans a string character by character until recieving a null termination character or a new line
+
+    parameters: none
+
+    returns: a pointer to a new character array given by the user. This string is allocated with `malloc`. When you are done with it, the memory should be cleared with `free` to avoid memory leaks.
+
+                    Authors:    thomaserh99
+                    Created On: 1/23/2023
+                    NOT Covered by Unit Tests
+*/
+char * getString();
+/*
+    function: promptFilename(char * filename)
+    
+    promptFilename calls the function getString to recieve a filename from the user
+
+    parameters: char * filename - the character array to modify
+
+    returns: a boolean value where false is quit the program when the user enters nothing
+
+                    Authors:    thomaserh99
+                    Created On: 1/23/2023
+                    NOT Covered by Unit Tests
+*/
+bool promptFilename(char* filename);
+
+
 #pragma endregion prompts
 
 

@@ -30,6 +30,8 @@
                 "tests/CuTest.c",
                 "tests/file_util_test.c",
                 "tests/main_test.c",
+                "tests/test_assistance_test.c",
+                "tests/test_assistance.c",
                 "-otests",
                 "-ansi"
             ],

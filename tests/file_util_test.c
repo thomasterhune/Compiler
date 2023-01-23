@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include "file_util_test.h"
 #include "file_util.h"
-#include <unistd.h>
 #include <stdlib.h>
-#include <dirent.h>
+#include <string.h>
 
 /*
 -------------------------------
@@ -399,6 +398,9 @@ void restoreSTDinHard() {
     StdR.temporary_stdin_filename = NULL;
 }
 
+
+char * _stdin3_temp_out = "_stdin3_temp_out.txt";
+char * _stdin3_temp_in = "_stdin3_temp_in.txt";
 /*
     setSTDin3 calls both setSTDin2 and setSTDout. 
 
@@ -415,8 +417,6 @@ void restoreSTDinHard() {
                     Created On: 1/21/2023
 
 */
-char * _stdin3_temp_out = "_stdin3_temp_out.txt";
-char * _stdin3_temp_in = "_stdin3_temp_in.txt";
 void setSTDin3(char * std_input_text) {
     setSTDout(_stdin3_temp_out);
     setSTDin2(_stdin3_temp_in, std_input_text);
@@ -518,6 +518,18 @@ void test_promptUserOverwriteSelection(CuTest *tc) {
     CuAssertIntEquals_Msg(tc, "\n\tIf the user enters a 'a', it should return USER_OUTPUT_TERMINATE_INVALID_ENTRY", USER_OUTPUT_TERMINATE_INVALID_ENTRY, test_result);
 }
 
+void test_getString(CuTest *tc) {
+    char* test_result;
+    printf("testing");
+
+    /* If the user enters a "\n", it should return previous characters*/
+    setSTDin3("hello.txt\n");
+    test_result = getString();
+    restoreSTD3();
+    CuAssertStrEquals_Msg(tc, "\n\tIf the user enters a 'hello.txt', it should return hello.txt", "hello.txt", test_result);
+
+}
+
 #pragma endregion test_prompts
 
 /* 
@@ -532,28 +544,6 @@ void test_getc(CuTest *tc) {
     printf("\nLet's test getc.\n\tPress 'Enter'!\n");
     result = getchar();
     CuAssertIntEquals_Msg(tc, "The result should be '\n'.", '\n', result);
-}
-
-void test_directory_validation(CuTest *tc) {
-    DIR* dir = opendir("tests");
-    CuAssertIntEquals_Msg(tc,"\n\t'tests' directory should exist.", 1, dir != NULL);
-    closedir(dir);
-
-    dir = opendir("./tests");
-    CuAssertIntEquals_Msg(tc,"\n\t'/tests' directory should exist.", 1, dir != NULL);
-    closedir(dir);
-
-    dir = opendir(".\\tests");
-    CuAssertIntEquals_Msg(tc,"\n\t'\\tests' directory should exist.", 1, dir != NULL);
-    closedir(dir);
-
-    dir = opendir("tests/__noexist");
-    CuAssertIntEquals_Msg(tc,"\n\t'tests/__noexist' directory should not exist.", 1, dir == NULL);
-    closedir(dir);
-
-    dir = opendir("./tests/CuTest.h");
-    CuAssertIntEquals_Msg(tc,"\n\t'tests/CuTest.h' directory should not exist even though the file does.", 1, dir == NULL);
-    closedir(dir);
 }
 
 
@@ -578,7 +568,8 @@ CuSuite* fileUtilGetSuite(){
     SUITE_ADD_TEST(suite, test_removeExtension);
     /* SUITE_ADD_TEST(suite, test_directory_validation); <--- a sanity test only */
     /* SUITE_ADD_TEST(suite, test_getc);  <--- a sanity test only */
-    SUITE_ADD_TEST(suite, test_promptUserOverwriteSelection);
-    SUITE_ADD_TEST(suite, test_addExtension);
+    /*SUITE_ADD_TEST(suite, test_promptUserOverwriteSelection); */
+    SUITE_ADD_TEST(suite, test_getString);
+    /*SUITE_ADD_TEST(suite, test_addExtension);*/
     return suite;
 }

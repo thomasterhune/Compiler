@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "dirent.h": "c"
+        "dirent.h": "c",
+        "test_assistance_test.h": "c",
+        "stdio.h": "c"
     }
 }

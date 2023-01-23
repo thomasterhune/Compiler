@@ -1,11 +1,14 @@
 /**
   * 
-  * Author: Tom Terhune
+  * Author: Tom Terhune 
+  * 	E-mail: ter1023@pennwest.edu
   * Author: Karl Miller
+  * 	E-mail: mil7865@pennnwest.edu
   * Author: Anthony Stepich
+  * 	E-mail: ste4864@pennwest.edu
   * 
-  * program 1 for CSC 460.
-  * 
+  * Program 1 - fileopen
+  * CSC 460 - Language Translation
   */
 
 #include <stdio.h>
@@ -14,45 +17,6 @@
 #include <stdbool.h>
 #include "file_util.h"
 
-
-
-bool hasExtension(char* filename){
-	bool Extension_Found = false;
-	int i = 0;
-	
-	for(i; i < strlen(filename) && !Extension_Found; i++){
-		if(filename[i] == '.'){
-			Extension_Found = true;
-		}
-	}
-	
-	return Extension_Found;
-}
-
-bool promptFileName(char* fileName) {
-	bool flag = true;
-	size_t bufsize = 100;
-
-	/*scan for filename*/
-	
-
-	/*
-		Note, I have commented out getline for now, but it needs to be removed.
-
-		getline was added around 2010 and, if getline is used, the code will not compile with the -ansi flag (which limits us to 1990 C).
-
-		-K
-	
-	*/
-	/*getline(&fileName,&bufsize, stdin);*/
-	/*if filename is null*/
-	if (fileName[0] == '\0'){
-		flag = false;
-	}
-
-	printf("%c", fileName[0]);
-	return flag;
-}
 
 bool openInputFile(char* inputFilename, FILE* inputFile) {
 	bool flag = true;
@@ -115,12 +79,6 @@ bool openOutputFile(char* outputFilename, FILE* outputFile) {
 
 	return flag;
 	/* if exists choose to overwrite, enter new output file name, or terminate */
-}
-
-void closeFile(FILE* file){
-	if(file != NULL){
-		fclose(file);
-	}
 }
 
 int main(int argc, char *argv[]) {

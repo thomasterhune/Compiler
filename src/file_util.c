@@ -1,12 +1,15 @@
 /**
- * 
- * Author: Tom Terhune
- * Author: Karl Miller
- * Author: Anthony Stepich
- * 
- * program 1 for CSC 460.
- * 
- */
+  * 
+  * Author: Tom Terhune 
+  * 	E-mail: ter1023@pennwest.edu
+  * Author: Karl Miller
+  * 	E-mail: mil7865@pennnwest.edu
+  * Author: Anthony Stepich
+  * 	E-mail: ste4864@pennwest.edu
+  * 
+  * Program 1 - fileopen
+  * CSC 460 - Language Translation
+  */
 
 
 #include <stdio.h>
@@ -191,6 +194,47 @@ short promptUserOverwriteSelection() {
         user_pick = USER_OUTPUT_TERMINATE_PROGRAM;
     }
     return (short) user_pick;
+}
+
+bool promptFilename(char* inputFilename) {
+    bool flag = true;
+    inputFilename = getString();
+
+    if(inputFilename[0] == '\0') {
+        flag = false;
+    }
+
+    return flag;
+    
+}
+
+char * getString() {
+    short max_characters = 49;
+    short counter = 0;
+    char * temp_string = (char *) malloc (sizeof(char) * max_characters + 1);
+    char temp_char;
+
+    printf("Get string was called");
+    
+    do{
+        temp_char = getchar();
+        if(temp_char != '\n') {
+            temp_string[counter] = temp_char;
+            counter = counter + 1;
+        } else {
+            temp_string[counter] = '\0';
+            counter = counter + 1;
+        }
+    }while(
+       temp_char != '\n' &&
+       temp_char != '\0' &&
+       counter <= max_characters ); 
+
+    char * new_string = (char *) malloc (sizeof(char) * counter);
+    strcpy(new_string, temp_string);
+    free(temp_string);
+
+    return new_string;
 }
 
 #pragma endregion prompts
