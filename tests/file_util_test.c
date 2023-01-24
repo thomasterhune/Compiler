@@ -333,6 +333,26 @@ void test_getString(CuTest *tc) {
 
 }
 
+void test_promptFilename(CuTest *tc) {
+    char * test_result;
+    CompFiles_Init();
+    StdSwapper_Init();
+
+    StdSwapper_SetAllStdWithInputOf("nada.txt\n");
+    test_result = promptFilename();
+    StdSwapper_RestoreAllStd();
+    CuAssertStrEquals_Msg(tc, "Our string should be the result of the user input.", "nada.txt", test_result);
+
+    StdSwapper_SetAllStdWithInputOf("\n");
+    test_result = promptFilename();
+    StdSwapper_RestoreAllStd();
+    CuAssertIntEquals_Msg(tc, "Our string should be the result of the user input.", CompFiles.terminate_requested, 1);
+
+    StdSwapper_DeInit();
+    CompFiles_DeInit();
+
+}
+
 #pragma endregion test_prompts
 
 /* 
@@ -348,6 +368,7 @@ void test_getc(CuTest *tc) {
     result = getchar();
     CuAssertIntEquals_Msg(tc, "The result should be '\n'.", '\n', result);
 }
+
 
 
 #pragma endregion test_sanity
@@ -373,6 +394,7 @@ CuSuite* fileUtilGetSuite(){
     /* SUITE_ADD_TEST(suite, test_getc);  <--- a sanity test only */
     SUITE_ADD_TEST(suite, test_promptUserOverwriteSelection); 
     SUITE_ADD_TEST(suite, test_getString);
-    /*SUITE_ADD_TEST(suite, test_addExtension);*/
+    SUITE_ADD_TEST(suite, test_promptFilename);
+    SUITE_ADD_TEST(suite, test_addExtension);
     return suite;
 }

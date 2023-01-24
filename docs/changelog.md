@@ -1,3 +1,8 @@
+1/24/2023 : All group members
+ - worked on main logic
+ - changed CompFiles struct to be a state machine
+ - created promptFilename
+
 1/23/2023 : Thomas and klm127
  - changed Author comment to include e-mail and class name.
  - removed old addExtension function, old promptFilename function, and closeFile function.

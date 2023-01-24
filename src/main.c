@@ -8,6 +8,7 @@
   * 	E-mail: ste4864@pennwest.edu
   * 
   * Program 1 - fileopen
+  * Group 3
   * CSC 460 - Language Translation
   */
 
@@ -23,7 +24,6 @@
     strcpy(new_string, "\nTOMPILER :: ");
     strcat(new_string, __format);
     printf(new_string);
-    free(new_string);
  }
 
  void requireInputFile() {
@@ -82,7 +82,9 @@
 
  int main(int argc, char *argv[]) {
     if(argc < 2) {
-        requireInputFile();
+        short result = CompFiles_ValidateInputFile(NULL);
+        printf("result was %d", result);
+        /*requireInputFile();*/
     } else if(argc < 3) {
         /*validateInputFile(argv[1]);*/
     } else {
