@@ -196,15 +196,15 @@ short promptUserOverwriteSelection() {
     return (short) user_pick;
 }
 
-bool promptFilename(char* inputFilename) {
-    bool flag = true;
-    inputFilename = getString();
+char * promptFilename() {
+
+    char * inputFilename = getString();
 
     if(inputFilename[0] == '\0') {
-        flag = false;
+        CompFiles.terminate_requested = 1;
     }
 
-    return flag;
+    return inputFilename;
     
 }
 
@@ -213,8 +213,6 @@ char * getString() {
     short counter = 0;
     char * temp_string = (char *) malloc (sizeof(char) * max_characters + 1);
     char temp_char;
-
-    printf("Get string was called");
     
     do{
         temp_char = getchar();
@@ -230,7 +228,7 @@ char * getString() {
        temp_char != '\0' &&
        counter <= max_characters ); 
 
-    char * new_string = (char *) malloc (sizeof(char) * counter);
+    char * new_string = (char *) malloc (sizeof(char) * (counter + 4));
     strcpy(new_string, temp_string);
     free(temp_string);
 
@@ -241,6 +239,135 @@ char * getString() {
 
 
 #pragma region structs
+
+void CompFiles_Init() {
+    CompFiles.in = NULL;
+    CompFiles.out = NULL;
+    CompFiles.temp = NULL;
+    CompFiles.listing = NULL;
+    CompFiles.input_file_state = COMPFILES_STATE_NO_NAME_PROVIDED;
+    CompFiles.output_file_state = COMPFILES_STATE_NO_NAME_PROVIDED;
+    CompFiles.terminate_requested = 0;
+    CompFiles.input_file_name = NULL;
+    CompFiles.lastUserProvidedFilename = NULL;
+}
+
+void CompFiles_DeInit() {
+    if(CompFiles.in != NULL) {
+        fclose(CompFiles.in);
+    }
+    if(CompFiles.out != NULL) {
+        fclose(CompFiles.out);
+    }
+    if(CompFiles.temp != NULL) {
+        fclose(CompFiles.temp);
+    }
+    if(CompFiles.listing != NULL) {
+        fclose(CompFiles.in);
+    }
+    if(CompFiles.input_file_name != NULL) {
+        free(CompFiles.input_file_name);
+    }
+    CompFiles_Init();
+}
+
+short CompFiles_ValidateInputFile(const char * filename) {
+    short file_extension_parse;
+    char * tempfilename = NULL; 
+    if(filename != NULL) {
+        char * tempfilename = malloc(sizeof(char) * (strlen(filename) + 4));
+        strcpy(tempfilename, filename);
+    } else {
+        printf("\nPlease provide an input filename: ");
+        tempfilename = promptFilename();
+    }
+    while(CompFiles.input_file_state != COMPFILES_STATE_NAME_VALIDATED && CompFiles.terminate_requested != 1) {
+
+        file_extension_parse = filenameHasExtension(tempfilename);
+
+
+        if(file_extension_parse == FILENAME_HAS_NO_PERIOD) {
+            printf("\n\t- Your input file has no extension. Defaulting to .in. \n");
+            char * tnewfile = addExtension(tempfilename, "in");
+            free(tempfilename);
+            tempfilename = tnewfile;
+            file_extension_parse = filenameHasExtension(tempfilename);
+        }
+
+        if(file_extension_parse < 0 ) {
+            printf("\n\t- That is not a valid filename. Input a new filename: ");
+            free(tempfilename);
+            tempfilename = getString();
+            if(tempfilename[0] == '\0') {
+                printf("\n\t - Terminate program request received.\n");
+                CompFiles.terminate_requested = 1;
+            }
+        } else {
+            short file_exists = fileExists(tempfilename);
+            if(!file_exists) {
+                printf("\n\t - That file doesn't exist. Please provide a new filename: ");
+                free(tempfilename);
+                tempfilename = getString();
+                if(tempfilename[0] == '\0') {
+                    printf("\n\t - Terminate program request received.\n");
+                    CompFiles.terminate_requested = 1;
+                }
+            } else {
+                CompFiles.input_file_state = COMPFILES_STATE_NAME_VALIDATED;
+                CompFiles_LoadInputFile(fopen(tempfilename, "r"));
+                CompFiles.input_file_name = tempfilename;
+            }
+        }
+    }
+    return CompFiles.terminate_requested;
+}
+
+
+
+short CompFiles_ValidateOutputFile(const char * filename){
+    /*short file_extension_parse;*/
+    /* char * tempfilename; 
+    if(filename != NULL) {
+
+        char * tempfilename = malloc(sizeof(char) * (strlen(filename) + 4));
+        strcpy(tempfilename, filename);
+    } else {
+        printf("\nPlease provide an output filename: ");
+        short user_wants_to_exit = promptFilename(tempfilename);
+        if(user_wants_to_exit) {
+            CompFiles.terminate_requested = 1;
+        }
+    }
+    while(CompFiles.output_file_state != COMPFILES_STATE_NAME_NEEDS_VALIDATION && CompFiles.terminate_requested != 1)
+    {
+        file_extension_parse = filenameHasExtension(filename);
+        if(file_extension_parse == FILENAME_HAS_NO_PERIOD)
+        {
+            printf("\t- Your output file has no extension. Defaulting to .out.\n");
+            char * tnewfile = addExtension(tempfilename,"out");
+            free(tempfilename);
+            tempfilename = tnewfile;
+            file_extension_parse = filenameHasExtension(tempfilename);
+        }
+        if(file_extension_parse < 0)
+        {
+            printf("\n\t- That file doesn't exist. Please Provide valid filename: \n");
+
+        }else {
+                short file_exists = fileExists(tempfilename);
+                if(!file_exists) {
+                    printf("\n\t - That file doesn't exist. Please provide a new filename: ");
+                    free(tempfilename);
+                    tempfilename = getString();
+                } else {
+                    CompFiles.output_file_state = COMPFILES_STATE_NAME_VALIDATED;
+                    CompFiles_LoadOutputFile(fopen(tempfilename, "w"));
+                    /*CompFiles.output_file_name = tempfilename;*/
+
+               /* } */
+
+   /* } */
+}
 
 void CompFiles_LoadInputFile(FILE * newInputFile) {
     if(CompFiles.in != NULL) {

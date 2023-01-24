@@ -16,6 +16,7 @@
 
 
 #include <stdbool.h>
+#include <stdio.h>
 
 /* 
 -------------------------------------------------------------------------------
@@ -23,6 +24,12 @@
 -------------------------------------------------------------------------------
 */
 #pragma region structs
+/* Describing the states of the machine */
+enum COMPFILES_STATE {
+    COMPFILES_STATE_NO_NAME_PROVIDED = 0,
+    COMPFILES_STATE_NAME_NEEDS_VALIDATION = 1,
+    COMPFILES_STATE_NAME_VALIDATED = 2
+};
 
 /*
     CompFile is a globally accesible struct which maintains references to the loaded files.
@@ -30,13 +37,56 @@
     It has a number of functions closely associated to it. In that way it is a class-like, but a singleton. There is only one CompFile that ever should exist.
 */
 struct TCompFiles {
+    /* A file pointer to an open input file. */
     FILE * in;
+    /* A file pointer to an open output file. */
     FILE * out;
+    /* A file pointer to an open tmp file. */
     FILE * temp;
+    /* A file pointer to an open listing file. */
     FILE * listing;
-    char * defaultFilename;
+    /* Determines the status of input file validation. */
+    short input_file_state;
+    /* Determines the status of output file validation. */
+    short output_file_state;
+    /* 1 indicates that a user requested to terminate the program. */
+    short terminate_requested;
+    /* The default filename. */
+    char * input_file_name;
+    /* the last filename provided by the user */
+    char * lastUserProvidedFilename;
 };
 struct TCompFiles CompFiles;
+
+/* 
+
+    Initializes CompFiles struct to default values. 
+
+*/
+void CompFiles_Init();
+
+
+void CompFiles_DeInit();
+
+/* 
+    Validates an input file name and sets the value in the struct.
+
+    Returns:
+        0 if an input file was validated and loaded into the struct.
+        1 if the user requested to terminate the program. 
+*/
+short CompFiles_ValidateInputFile(const char * filename);
+
+/*
+    Validates an output file name and sets the value in the struct.
+
+    Returns:
+        0 if an output file was validated and loaded into the struct.
+        1 if the user requested to terminate the program.
+*/
+short CompFiles_ValidateOutputFile(const char * filename);
+
+
 
 /* CompFiles_LoadInputFile loads a new file pointer as the input file. If there is a file already loaded, it closes that file first. */
 void CompFiles_LoadInputFile(FILE * newInputFile);
@@ -50,11 +100,13 @@ void CompFiles_LoadTempFile(FILE * newTempFile);
 /* CompFiles_LoadListingFile loads a new file pointer as the listing file. If there is a file already loaded, it closes that file first. */
 void CompFiles_LoadListingFile(FILE * newListingFile);
 
+
+
 #pragma endregion structs
 
 /* 
 -------------------------------------------------------------------------------
-                file operations                                                
+ file operations                                                
 -------------------------------------------------------------------------------
 */
 #pragma region fileops
@@ -166,6 +218,8 @@ char * addExtension(const char* filename, const char* extension);
 */
 char * removeExtension(const char * filename);
 
+
+
 #pragma endregion filenames
 
 /* 
@@ -199,7 +253,9 @@ short promptUserOverwriteSelection();
 
     parameters: none
 
-    returns: a pointer to a new character array given by the user. This string is allocated with `malloc`. When you are done with it, the memory should be cleared with `free` to avoid memory leaks.
+    returns: a pointer to a new character array given by the user with a size of the number of characters + 4 for the possible extension
+    This string is allocated with `malloc`. 
+    When you are done with it, the memory should be cleared with `free` to avoid memory leaks.
 
                     Authors:    thomaserh99
                     Created On: 1/23/2023
@@ -209,9 +265,11 @@ char * getString();
 /*
     function: promptFilename(char * filename)
     
-    promptFilename calls the function getString to recieve a filename from the user
+    promptFilename frees the passed characters array, calls the function getString to recieve a filename from the user and returns whether to terminate
 
     parameters: char * filename - the character array to modify
+
+    mutates: Will set the 'terminate requested' flag in CompFiles if the user inputs only a \\n. 
 
     returns: a boolean value where false is quit the program when the user enters nothing
 
@@ -219,7 +277,8 @@ char * getString();
                     Created On: 1/23/2023
                     NOT Covered by Unit Tests
 */
-bool promptFilename(char* filename);
+char * promptFilename();
+
 
 
 #pragma endregion prompts
@@ -248,20 +307,6 @@ bool hasExtension(char* filename);
  * 
  * Parameters:
  *   char * filename - 
- * 
- * Returns:
- *   ...
-*/
-bool promptFilename(char* inputFilename);
-
-/**
- * function: bool openInputFile
- * 
- * // todo: describe function
- * 
- * Parameters:
- *   char * inputFilename -  
- *   File * inputFile - 
  * 
  * Returns:
  *   ...

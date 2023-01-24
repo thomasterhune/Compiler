@@ -1,3 +1,8 @@
+1/24/2023 : All group members
+ - worked on main logic
+ - changed CompFiles struct to be a state machine
+ - created promptFilename
+
 1/23/2023 : Thomas and klm127
  - changed Author comment to include e-mail and class name.
  - removed old addExtension function, old promptFilename function, and closeFile function.
@@ -5,6 +10,8 @@
  - removed all of the stdin swapping to a [separate repo](https://github.com/klm127/std-swapper/), and tested it, due to nagging bugs. 
     - NOTE: It turned out that the bug was that [dup2](https://www.ibm.com/docs/en/zos/2.3.0?topic=functions-dup2-duplicate-open-file-descriptor-another) closes a file and `fclose` was being called afterwards.
 - moved test dependencies to a sub folder `lib` and updated compilation commands to use this on the include path
+
+TODO: filenameHasExtension does allow for double periods! Need to fix that. e.g "abc..in" should not work.
 
 1/22/2023 : thomas and klm127
  - added removeExtension function and tests
