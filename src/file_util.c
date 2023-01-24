@@ -213,8 +213,6 @@ char * getString() {
     short counter = 0;
     char * temp_string = (char *) malloc (sizeof(char) * max_characters + 1);
     char temp_char;
-
-    printf("Get string was called");
     
     do{
         temp_char = getchar();

@@ -6,6 +6,8 @@
     - NOTE: It turned out that the bug was that [dup2](https://www.ibm.com/docs/en/zos/2.3.0?topic=functions-dup2-duplicate-open-file-descriptor-another) closes a file and `fclose` was being called afterwards.
 - moved test dependencies to a sub folder `lib` and updated compilation commands to use this on the include path
 
+TODO: filenameHasExtension does allow for double periods! Need to fix that. e.g "abc..in" should not work.
+
 1/22/2023 : thomas and klm127
  - added removeExtension function and tests
  - confirmed getchar will read an 'enter'. 

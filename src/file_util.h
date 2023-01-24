@@ -16,6 +16,7 @@
 
 
 #include <stdbool.h>
+#include <stdio.h>
 
 /* 
 -------------------------------------------------------------------------------
@@ -165,6 +166,8 @@ char * addExtension(const char* filename, const char* extension);
 
 */
 char * removeExtension(const char * filename);
+
+
 
 #pragma endregion filenames
 

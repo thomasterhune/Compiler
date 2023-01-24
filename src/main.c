@@ -11,122 +11,81 @@
   * CSC 460 - Language Translation
   */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include "file_util.h"
+ #include "file_util.h"
+ #include <stdio.h>
+ #include <string.h>
+ #include <stdbool.h>
+ #include <stdlib.h>
 
 
-bool openInputFile(char* inputFilename, FILE* inputFile) {
-	bool flag = true;
+ void printCmp (const char *__format, ...) {
+    char * new_string = malloc(sizeof(char) * strlen(__format)+20);
+    strcpy(new_string, "\nTOMPILER :: ");
+    strcat(new_string, __format);
+    printf(new_string);
+    free(new_string);
+ }
 
-	if(!hasExtension(inputFilename)) {
-		addExtension(inputFilename, ".IN");
-	}
-	
-	if(fileExists(inputFilename)) {
-		inputFile = fopen(inputFilename, "r");
-	} else {
-		printf("File does not exist.");
-		printf("Enter an existing input file name: ");
-		if(promptFileName(inputFilename)){
-			openInputFile(inputFilename, inputFile);
-		} else {
-			flag = false;
-		}
-	}
-	
-	
-	return flag;
-}
+ void requireInputFile() {
+    short good_file = false;
 
+    short file_extension_parse = 0;
+    bool file_exists;
+    char * userInput;
+    printCmp("An input file is required. Please enter a valid filename: ");
+    while(!good_file) {
+        userInput = getString();
+        file_extension_parse = filenameHasExtension(userInput);
+        if(file_extension_parse == FILENAME_HAS_NO_PERIOD) {
+                printCmp("\t- Your input file has no extension. Defaulting to '.in.'");
+                char * newInput = addExtension(userInput, "in");
+                free(userInput);
+                userInput = newInput;
+                file_extension_parse = filenameHasExtension(userInput);
+        } 
 
-bool openOutputFile(char* outputFilename, FILE* outputFile) {
-	/* If no extension add .OUT */
-	int userInput = -1;
-	bool flag = true;
-	if(!hasExtension(outputFilename)) {
-		addExtension(outputFilename, ".OUT");
-	}
+        if(file_extension_parse > 0) {
+            file_exists = fileExists(userInput);
+            while(file_exists) {
+                file_exists = fileExists(userInput);
+                short user_decision;
+                printf("\n");
+                user_decision = promptUserOverwriteSelection();
+                while (user_decision == USER_OUTPUT_TERMINATE_INVALID_ENTRY) {
+                    printf("\nThat is not a valid selection.\n");
+                    user_decision = promptUserOverwriteSelection();
+                }
 
-	if(fileExists(outputFilename)) {
-		while(userInput == USER_OUTPUT_TERMINATE_INVALID_ENTRY){
-			userInput = promptUserOverwriteSelection();
-		}
-		switch(userInput) {
-			case USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED:
-				if(promptFileName(outputFilename)){
-					openOutputFile(outputFilename, outputFile);
-				} else {
-					/*generate the output file from the source file name with the .OUT*/
+                if(user_decision == USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE) {
 
-				}
-				break;
-			case USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE:
-				outputFile = fopen(outputFilename, "w");
-				break;
-			case USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME:
+                    backupFile(userInput);
+                    printf("\tSaved backup: %s", addExtension(userInput, "bak"));
+                    good_file = true;
+                    file_exists = false;
+                } else if(user_decision == USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME) {
+                    char * newInput = addExtension("default", "in");
+                    free(userInput);
+                    userInput = newInput;
+                    file_exists = fileExists(userInput);
+                } else if(user_decision == USER_OUTPUT_TERMINATE_PROGRAM) {
+                    printCmp("We cannot terminate the program at this time!");
+                }
+            }
+            good_file = true;
+        } else {
+            printCmp("Your filename was poorly formatted. \n\n");
+            printCmp("An input file is required. Please enter a valid filename: ");
+        }
+    }
+    printf("\n\nYour filename %s was well formatted and didn't exist.\n\n", userInput);
+ }
 
-				break;
-			case USER_OUTPUT_TERMINATE_PROGRAM:
-				flag = false;
-				break;
-		}
-	} else {
-		outputFile = fopen(outputFilename, "w");
-	}
-
-	return flag;
-	/* if exists choose to overwrite, enter new output file name, or terminate */
-}
-
-int main(int argc, char *argv[]) {
-	
-	char inputFileName[100];
-	char outputFileName[100];
-	FILE * inputFile;
-	FILE * outputFile;
-	bool quit = false;
-	
-	/*Command Line Parameters*/
-	if(argc == 3) {
-		/* Copy string from command line args */
-		strcpy(inputFileName, argv[1]);
-		/*if input file opens then try to open output file*/
-		if(openInputFile(inputFileName, inputFile)) {
-			/*Copy string from command line args */
-			strcpy(outputFileName, argv[2]);
-			openOutputFile(outputFileName, outputFile);
-		}
-		
-		
-		
-	}else if(argc == 2) {
-		/* Copy string from command line args */
-		strcpy(inputFileName, argv[1]);
-		
-		/*if input file opens then try to open output file*/
-		if(openInputFile(inputFileName, inputFile)) {
-			/*Copy string from command line args */
-			printf("Enter the output file name: ");
-			promptFileName(outputFileName);
-			openOutputFile(outputFileName, outputFile);
-		}
-		
-	}else {
-		/*prompt for input file*/
-		printf("Enter the input file name: ");
-		/*if input filename is entered*/
-		if(promptFileName(inputFileName)){
-			if(openInputFile(inputFileName, inputFile)) {
-				printf("Enter the output file name: ");
-				promptFileName(outputFileName);
-				openOutputFile(outputFileName, outputFile);
-			}
-		}
-	}
-	closeFile(inputFile);
-	closeFile(outputFile);
-	return 0;
-}
+ int main(int argc, char *argv[]) {
+    if(argc < 2) {
+        requireInputFile();
+    } else if(argc < 3) {
+        /*validateInputFile(argv[1]);*/
+    } else {
+        /*validateInputOutputFiles(argv[1], argv[2]);*/
+    }
+ }
