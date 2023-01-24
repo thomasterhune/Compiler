@@ -1,6 +1,5 @@
 #include "CuTest.h"
 #include "file_util_test.h"
-#include "test_assistance_test.h"
 #include <stdio.h>
 
 /*
@@ -19,8 +18,7 @@ void RunAllTests(void) {
     CuString *output = CuStringNew();
     CuSuite * suite = CuSuiteNew();
 
-    /*CuSuiteAddSuite(suite, fileUtilGetSuite());*/
-    CuSuiteAddSuite(suite, testAssistanceTestsGetSuite());
+    CuSuiteAddSuite(suite, fileUtilGetSuite());
 
     CuSuiteRun(suite);
     CuSuiteSummary(suite, output);

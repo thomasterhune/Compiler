@@ -26,12 +26,12 @@
             "command": "gcc",
             "args": [
                 "-Isrc",
+                "-Itests/lib",
                 "src/file_util.c",
-                "tests/CuTest.c",
+                "tests/lib/CuTest.c",
                 "tests/file_util_test.c",
                 "tests/main_test.c",
-                "tests/test_assistance_test.c",
-                "tests/test_assistance.c",
+                "tests/lib/std_swapper.c",
                 "-otests",
                 "-ansi"
             ],
