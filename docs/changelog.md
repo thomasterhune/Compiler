@@ -1,3 +1,9 @@
+1/25/2023 : Thomas
+ - Removed old main functions from header
+ - Made seperate functions for Input and Output file prompts + modified functions to accomodate
+ - Added unit test for promptOutputFile()
+ - Modified getString() to use realloc
+
 1/24/2023 : All group members
  - worked on main logic
  - changed CompFiles struct to be a state machine

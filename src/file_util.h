@@ -8,6 +8,7 @@
   * 	E-mail: ste4864@pennwest.edu
   * 
   * Program 1 - fileopen
+  * Group 3
   * CSC 460 - Language Translation
   */
 
@@ -259,73 +260,45 @@ short promptUserOverwriteSelection();
 
                     Authors:    thomaserh99
                     Created On: 1/23/2023
-                    NOT Covered by Unit Tests
+                    Covered by Unit Tests
 */
 char * getString();
 /*
-    function: promptFilename(char * filename)
+    function: promptInputFilename()
     
-    promptFilename frees the passed characters array, calls the function getString to recieve a filename from the user and returns whether to terminate
+    promptFilename calls the function getString to recieve a filename from the user and returns it
 
-    parameters: char * filename - the character array to modify
+    parameters:
 
     mutates: Will set the 'terminate requested' flag in CompFiles if the user inputs only a \\n. 
 
-    returns: a boolean value where false is quit the program when the user enters nothing
+    returns: char * inputfilename to be verified
+
+                    Authors:    thomaserh99
+                    Created On: 1/23/2023
+                    Covered by Unit Tests
+*/
+char * promptInputFilename();
+/*
+    function: promptOutputFilename()
+    
+    promptFilename calls the function getString to recieve an output filename from the user and returns
+        the user entered filename or the default filename (inputfilename + .out)
+
+    parameters:
+
+
+    returns: char * output filename to be verified
 
                     Authors:    thomaserh99
                     Created On: 1/23/2023
                     NOT Covered by Unit Tests
 */
-char * promptFilename();
+char * promptOutputFilename();
 
 
 
 #pragma endregion prompts
-
-
-
-/**
- * function: bool hasExtension
- * 
- * addExtension modifies the string given by filename by concatenating the string given by extension.
- * 
- * Parameters:
- *   char * filename - the char array to check
- * 
- * Returns:
- *   true if the filename has an extension.
- * 
- * DEPRECATED BY filenameHasExtension
-*/
-bool hasExtension(char* filename);
-
-/**
- * function: bool promptFilename
- * 
- * // todo: describe function
- * 
- * Parameters:
- *   char * filename - 
- * 
- * Returns:
- *   ...
-*/
-bool openInputFile(char* inputFilename, FILE* inputFile);
-
-/*
- * function: void openOutputFile
- * 
- * // todo: describe function
- * 
- * Parameters:
- *   char * outputFilename -  
- *   File * outputFile - 
- * 
- * Returns:
- * 
-*/
-bool openOutputFile(char* outputFilename, FILE* outputFile);
 
 
 #endif

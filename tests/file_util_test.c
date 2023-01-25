@@ -333,20 +333,43 @@ void test_getString(CuTest *tc) {
 
 }
 
-void test_promptFilename(CuTest *tc) {
+void test_promptInputFilename(CuTest *tc) {
     char * test_result;
     CompFiles_Init();
     StdSwapper_Init();
 
     StdSwapper_SetAllStdWithInputOf("nada.txt\n");
-    test_result = promptFilename();
+    test_result = promptInputFilename();
     StdSwapper_RestoreAllStd();
     CuAssertStrEquals_Msg(tc, "Our string should be the result of the user input.", "nada.txt", test_result);
 
     StdSwapper_SetAllStdWithInputOf("\n");
-    test_result = promptFilename();
+    test_result = promptInputFilename();
     StdSwapper_RestoreAllStd();
     CuAssertIntEquals_Msg(tc, "Our string should be the result of the user input.", CompFiles.terminate_requested, 1);
+
+    StdSwapper_DeInit();
+    CompFiles_DeInit();
+
+}
+
+void test_promptOutputFilename(CuTest *tc) {
+    char * test_result;
+    CompFiles_Init();
+    StdSwapper_Init();
+
+    StdSwapper_SetAllStdWithInputOf("nada.txt\n");
+    test_result = promptOutputFilename();
+    StdSwapper_RestoreAllStd();
+    CuAssertStrEquals_Msg(tc, "Our string should be the result of the user input.", "nada.txt", test_result);
+
+    CompFiles.input_file_name = "test";
+    StdSwapper_SetAllStdWithInputOf("\n");
+    printf("got here\n");
+    test_result = promptOutputFilename();
+    printf("got here\n");
+    StdSwapper_RestoreAllStd();
+    CuAssertStrEquals_Msg(tc, "Our string should be the result of the user input.", "test.out", test_result);
 
     StdSwapper_DeInit();
     CompFiles_DeInit();
@@ -394,7 +417,8 @@ CuSuite* fileUtilGetSuite(){
     /* SUITE_ADD_TEST(suite, test_getc);  <--- a sanity test only */
     SUITE_ADD_TEST(suite, test_promptUserOverwriteSelection); 
     SUITE_ADD_TEST(suite, test_getString);
-    SUITE_ADD_TEST(suite, test_promptFilename);
+    SUITE_ADD_TEST(suite, test_promptInputFilename);
+    SUITE_ADD_TEST(suite, test_promptOutputFilename);
     SUITE_ADD_TEST(suite, test_addExtension);
     return suite;
 }
