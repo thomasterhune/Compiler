@@ -36,6 +36,9 @@ void backupFile(const char * filename) {
     short doesFileExist = fileExists(filename);
     if(doesFileExist == FILE_EXISTS) {
         char * new_name = addExtension(filename, "bak");
+        if(fileExists(new_name)) {
+            backupFile(new_name);
+        }
         rename(filename, new_name);
         free(new_name);
         remove(filename);
@@ -45,6 +48,8 @@ void backupFile(const char * filename) {
 #pragma endregion fileops
 
 #pragma region filenames
+
+
 
 int filenameHasExtension(const char * filename) {
     int return_v;
@@ -104,53 +109,6 @@ int filenameHasExtension(const char * filename) {
 
 }
 
-int filenameHasExtension2(const char * filename) {
-    char * pointer_to_last_period = strrchr(filename, '.');
-    int return_value = 0;
-    if(pointer_to_last_period == NULL) {
-        return_value = FILENAME_HAS_NO_PERIOD;
-    } else {
-        if(pointer_to_last_period == filename) {
-            /* If they have the same address, the filename string starts with '.' and is invalid. */
-            return_value = FILENAME_IS_ONLY_PERIOD;
-            
-            /* if the string starts with a period, we need to make sure that it's not part of a folder name. */
-
-        } else {
-            char * first_occurence;
-            first_occurence = strchr(filename, '.');
-            if(first_occurence == filename) {
-                return_value = FILENAME_IS_ONLY_PERIOD;                
-            } else {
-                int period_index = pointer_to_last_period - filename;
-                int string_length = strlen(filename);
-                if(period_index == string_length - 1) {
-                    /* If the string ended with a period, it is invalid. */
-                    return_value = FILENAME_ENDS_IN_PERIOD;
-                } else {
-                    return_value = period_index;
-                    /* Ensure that the last '.' was not in a parent folder's name. */
-                    char * pointer_to_slash = strrchr(filename, '/');
-                    if(pointer_to_slash != NULL) {
-                        int forward_slash_index = pointer_to_slash - filename;
-                        if(forward_slash_index > period_index) {
-                            return_value = FILENAME_HAS_NO_PERIOD;
-                        }
-                    }
-                    pointer_to_slash = strrchr(filename, '\\');
-                    if(pointer_to_slash != NULL) {
-                        int back_slash_index = pointer_to_slash - filename;
-                        if(back_slash_index > period_index) {
-                            return_value = FILENAME_HAS_NO_PERIOD;
-                        }
-                    }
-                    /* Otherwise, the filename is well formed and we can return the index of the period. */
-                }
-            }
-        }
-    }
-    return return_value;
-}
 
 char * addExtension(const char* filename, const char* extension) {
     /* reallocate memory for a string large enough to hold filename + '.' + extension. */

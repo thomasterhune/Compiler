@@ -9,8 +9,10 @@
 
 /*
 
-    CompFiles is a struct which holds...
+    CompFiles is a struct which holds pointers to the compilation input and output files. It also tracks their names and their validation status. It provides methods for prompting the user for valid file names until terminate is requested or all files are validated.
     
+        Created: January, 2023
+        Authors: Karl, Thomas, Anthony
 */
 
 
@@ -45,12 +47,18 @@ struct TCompFiles {
     short input_file_state;
     /* Determines the status of output file validation. */
     short output_file_state;
+    /* Determines the status of listing file validation. */
+    short listing_file_state; 
     /* 1 indicates that a user requested to terminate the program. */
     short terminate_requested;
     /* The input filename. */
     char * input_file_name;
     /* The output filename, */
     char * output_file_name;
+    /* The listing filename */
+    char * listing_file_name;
+    /* The temp filename */
+    char * temp_file_name;
     /* the last filename provided by the user */
     char * lastUserProvidedFilename;
 };
@@ -64,10 +72,19 @@ CompFiles lifecycle
 -------------------
 */
 #pragma region lifecycle
+
 /* Initializes CompFiles struct to default values. */
 void CompFiles_Init();
 /* Closes any open files and returns CompFiles to the default values. */
 void CompFiles_DeInit();
+/* 
+    Generates a temporary file with a unique name.
+
+        Author: klm127
+        Created On: 1/26/2023
+        Not Covered By Unit Tests
+*/
+void CompFiles_GenerateTempFile();
 
 #pragma endregion lifecycle
 
@@ -99,6 +116,22 @@ CompFiles prompts
 */
 #pragma region prompts
 
+/*
+    Loops and prompts until all input and output files are set correctly or until terminate is requested.
+
+    Parameters:
+        inputFilename : a filename with which to begin input validation with or NULL
+        outputFilename: a filename with which to begin output validation with or NULL
+
+    Returns:
+        1 if terminate was requested. Otherwise, 0.
+
+        Author: klm127
+        Date: 1/26/2023
+*/
+short CompFiles_ValidateFiles(char * inputFilename, const char * outputFilename);
+
+
 /* 
     Validates an input file name and sets the value in the struct.
 
@@ -106,7 +139,7 @@ CompFiles prompts
         0 if an input file was validated and loaded into the struct.
         1 if the user requested to terminate the program. 
 */
-short CompFiles_ValidateInputFile(const char * filename);
+short CompFiles_ValidateInputFile(char * filename);
 
 /*
     Validates an output file name and sets the value in the struct.
@@ -117,6 +150,16 @@ short CompFiles_ValidateInputFile(const char * filename);
 */
 short CompFiles_ValidateOutputFile(const char * filename);
 
+/*
+    Validates a listing file name and sets the value in the struct.
+
+    Called by CompFiles_ValidateOutputFile after an output file has been fully validated. The parameter passed will be the name of the output file with the extension 'list' instead.
+
+    Returns:
+        0 if an output file was validated and loaded into the struct.
+        1 if the user requested to terminate the program.
+*/
+short CompFiles_ValidateListingFile(const char * filename);
 
 /*
     function: CompFiles_promptInputFilename()
@@ -176,6 +219,15 @@ short CompFiles_promptUserOverwriteSelection();
 
 #pragma endregion prompts
 
+/*
+--------------------
+CompFiles operations
+--------------------
+*/
+#pragma region operations
 
+void CompFiles_CopyInputToOutputs();
+
+#pragma endregion operations
 
 #endif

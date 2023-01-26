@@ -32,6 +32,8 @@ file operations
 
     backupFile renames an existing file, adding the extension '.bak' to the end of it. For example 'outFile.out' will become 'outFile.out.bak'.
 
+    If the backup file exists, the function will recurse, backing up that file as well. 
+
                     Authors:    klm127
                     Created On: 1/22/2023
                     Covered by Unit Tests
@@ -66,6 +68,7 @@ filename functions
 ------------------
 */
 #pragma region filenames
+
 
 /*
     The enum FILENAME_EXTENSION_PARSE describes possible return values from filenameHasExtension which indicate different ways which a filename may be invalid.
@@ -140,9 +143,9 @@ char * removeExtension(const char * filename);
 #pragma endregion filenames
 
 /* 
-----------------
+---------------------------
 prompt assistance functions                                                
-----------------
+---------------------------
 */
 #pragma region prompts
 
