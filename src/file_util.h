@@ -21,12 +21,10 @@
 
 
 
-#pragma endregion structs
-
 /* 
--------------------------------------------------------------------------------
- file operations                                                
--------------------------------------------------------------------------------
+----------------
+file operations
+----------------
 */
 #pragma region fileops
 
@@ -143,28 +141,11 @@ char * removeExtension(const char * filename);
 
 /* 
 ----------------
-prompt functions                                                
+prompt assistance functions                                                
 ----------------
 */
 #pragma region prompts
-enum USER_OUTPUT_OVERWRITE_SELECTION {
-    USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED = 1,
-    USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE = 2,
-    USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME = 3,
-    USER_OUTPUT_TERMINATE_PROGRAM = 4,
-    USER_OUTPUT_TERMINATE_INVALID_ENTRY = -1
-};
-/*
-    promptUserOverwriteSelection prompts the user as to what they want to do about an output file already existing. It prints a prompt and parses the user response to one of the USER_OUTPUT_OVERWRITE_SELECTION enums. It does NOT loop.
 
-    returns short corresponding to one of the enums of USER_OTUPUT_OVERWRITE_SELECTION
-
-                    Authors:    klm127, thomasterh99, anthony91501
-                    Created On: 1/20/2023
-                    Covered by Unit Tests
-
-*/
-short promptUserOverwriteSelection();
 /*
     function: char * getString()
     

@@ -1,6 +1,6 @@
 1/26/2023
  - refactored file_util into two files: compfiles and file_util
- 
+ - worked on logic for validating an output file name
 
 
 

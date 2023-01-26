@@ -41,6 +41,7 @@ void backupFile(const char * filename) {
         remove(filename);
     }
 }
+
 #pragma endregion fileops
 
 #pragma region filenames
@@ -174,32 +175,6 @@ char * removeExtension(const char* filename) {
 
 #pragma region prompts
 
-short promptUserOverwriteSelection() {
-
-    char user_selection;
-    printf("That file already exists. What would you like to do?\n");
-    printf("(1)/(n)     : Reenter a filename.\n");
-    printf("(2)/(o)     : Overwrite the file.\n");
-    printf("(3)/(enter) : Use the default filename.\n");
-    printf("(4)/(q)     : Terminate the program.\n");
-    short user_pick = USER_OUTPUT_TERMINATE_INVALID_ENTRY;
-    user_selection = getchar();
-
-    if(user_selection == '1' || user_selection == 'n') {
-        user_pick = USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED;
-    } else if(user_selection == '2' || user_selection == 'o') {
-        user_pick = USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE;
-    } else if(user_selection == '3' || user_selection == '\n') {
-        user_pick = USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME;
-    } else if(user_selection == '4' || user_selection == 'q') {
-        user_pick = USER_OUTPUT_TERMINATE_PROGRAM;
-    }
-    return (short) user_pick;
-}
-
-
-
-
 char * getString() {
     short max_characters = 49;
     short counter = 0;
@@ -225,13 +200,3 @@ char * getString() {
 }
 
 #pragma endregion prompts
-
-
-#pragma region structs
-
-
-
-
-
-
-#pragma endregion structs

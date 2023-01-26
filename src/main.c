@@ -51,10 +51,10 @@
                 file_exists = fileExists(userInput);
                 short user_decision;
                 printf("\n");
-                user_decision = promptUserOverwriteSelection();
+                user_decision = CompFiles_promptUserOverwriteSelection();
                 while (user_decision == USER_OUTPUT_TERMINATE_INVALID_ENTRY) {
                     printf("\nThat is not a valid selection.\n");
-                    user_decision = promptUserOverwriteSelection();
+                    user_decision = CompFiles_promptUserOverwriteSelection();
                 }
 
                 if(user_decision == USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE) {
@@ -85,6 +85,7 @@
     if(argc < 2) {
         short result = CompFiles_ValidateInputFile(NULL);
         printf("result was %d", result);
+        short result2 = CompFiles_ValidateOutputFile(NULL);
         /*requireInputFile();*/
     } else if(argc < 3) {
         /*validateInputFile(argv[1]);*/
