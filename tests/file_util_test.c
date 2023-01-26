@@ -279,7 +279,6 @@ void test_getc(CuTest *tc) {
 }
 
 
-
 #pragma endregion test_sanity
 
 /* 

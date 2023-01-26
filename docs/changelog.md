@@ -1,6 +1,9 @@
-1/26/2023
+1/26/2023 : All group members
  - refactored file_util into two files: compfiles and file_util
  - worked on logic for validating an output file name
+ - auto-generate temp file
+ - validate listing file in a similar way to output file
+ - combined validation functions into one validate func; just pass it the command line arguments
 
 
 
