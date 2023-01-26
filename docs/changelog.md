@@ -1,7 +1,10 @@
-1/25/2023 : Thomas
- - Removed old main functions from header
- - Made seperate functions for Input and Output file prompts + modified functions to accomodate
- - Added unit test for promptOutputFile()
+1/26/2023
+ - refactored file_util into two files: compfiles and file_util
+ 
+
+
+
+omptOutputFile()
  - Modified getString() to use realloc
 
 1/24/2023 : All group members

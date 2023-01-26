@@ -7,6 +7,7 @@
             "args": [
                 "src/main.c",
                 "src/file_util.c",
+                "src/compfiles.c",
                 "-ansi",
                 "-ofileopen"
             ],
@@ -28,10 +29,12 @@
                 "-Isrc",
                 "-Itests/lib",
                 "src/file_util.c",
+                "src/compfiles.c",
                 "tests/lib/CuTest.c",
-                "tests/file_util_test.c",
-                "tests/main_test.c",
                 "tests/lib/std_swapper.c",
+                "tests/file_util_test.c",
+                "tests/compfiles_test.c",
+                "tests/main_test.c",
                 "-otests",
                 "-ansi"
             ],

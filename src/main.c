@@ -13,6 +13,7 @@
   */
 
  #include "file_util.h"
+ #include "compfiles.h"
  #include <stdio.h>
  #include <string.h>
  #include <stdbool.h>

@@ -1,5 +1,6 @@
 #include "CuTest.h"
 #include "file_util_test.h"
+#include "compfiles_test.h"
 #include <stdio.h>
 
 /*
@@ -19,6 +20,7 @@ void RunAllTests(void) {
     CuSuite * suite = CuSuiteNew();
 
     CuSuiteAddSuite(suite, fileUtilGetSuite());
+    CuSuiteAddSuite(suite, CompfilesGetSuite());
 
     CuSuiteRun(suite);
     CuSuiteSummary(suite, output);
