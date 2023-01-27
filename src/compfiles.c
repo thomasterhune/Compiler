@@ -33,7 +33,7 @@ void CompFiles_GenerateTempFile() {
         if(does_exist) {
             testnum++;
         } else {
-            CompFiles.temp = fopen(temp_name, "w");
+            CompFiles_LoadTempFile(fopen(temp_name, "w"));
             CompFiles.temp_file_name = temp_name;
         }
     }
@@ -127,12 +127,20 @@ char * CompFiles_promptInputFilename() {
 CompFiles operations
 ---------------------
 */
+#pragma region operations
 
 void CompFiles_CopyInputToOutputs() {
-    printf("\n\nCOPY INPUTS NOT IMPLEMENTED\n\n");
+    int next_char = 'x';
+    next_char = fgetc(CompFiles.in);
+    while(next_char != EOF){
+        fputc(next_char, CompFiles.out);
+        fputc(next_char, CompFiles.listing);
+        fputc(next_char, CompFiles.temp);
+        next_char = fgetc(CompFiles.in);
+    }
 }
 
-
+#pragma endregion operations
 /*
 -----------------
 CompFiles prompts

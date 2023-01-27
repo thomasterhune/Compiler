@@ -1,3 +1,6 @@
+1/27/2023: Thomas, Karl
+ - wrote copy inputs to outputs function
+
 1/26/2023 : All group members
  - refactored file_util into two files: compfiles and file_util
  - worked on logic for validating an output file name

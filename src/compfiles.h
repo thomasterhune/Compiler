@@ -7,7 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-/*
+/**
 
     CompFiles is a struct which holds pointers to the compilation input and output files. It also tracks their names and their validation status. It provides methods for prompting the user for valid file names until terminate is requested or all files are validated.
     
@@ -22,14 +22,14 @@ CompFies typedef
 -----------------
 */
 #pragma region structs
-/* Describing the states of the machine */
+/** Describing the states of the machine */
 enum COMPFILES_STATE {
     COMPFILES_STATE_NO_NAME_PROVIDED = 0,
     COMPFILES_STATE_NAME_NEEDS_VALIDATION = 1,
     COMPFILES_STATE_NAME_VALIDATED = 2
 };
 
-/*
+/**
     CompFile is a globally accesible struct which maintains references to the loaded files.
 
     It has a number of functions closely associated to it. In that way it is a class-like, but a singleton. There is only one CompFile that ever should exist.
@@ -73,11 +73,11 @@ CompFiles lifecycle
 */
 #pragma region lifecycle
 
-/* Initializes CompFiles struct to default values. */
+/** Initializes CompFiles struct to default values. */
 void CompFiles_Init();
-/* Closes any open files and returns CompFiles to the default values. */
+/** Closes any open files and returns CompFiles to the default values. */
 void CompFiles_DeInit();
-/* 
+/** 
     Generates a temporary file with a unique name.
 
         Author: klm127
@@ -95,13 +95,13 @@ CompFiles setters
 */
 #pragma region setters
 
-/* CompFiles_LoadInputFile loads a new file pointer as the input file. If there is a file already loaded, it closes that file first. */
+/** CompFiles_LoadInputFile loads a new file pointer as the input file. If there is a file already loaded, it closes that file first. */
 void CompFiles_LoadInputFile(FILE * newInputFile);
 
-/* CompFiles_LoadOutputFile loads a new file pointer as the output file. If there is a file already loaded, it closes that file first. */
+/** CompFiles_LoadOutputFile loads a new file pointer as the output file. If there is a file already loaded, it closes that file first. */
 void CompFiles_LoadOutputFile(FILE * newOutputFile);
 
-/* CompFiles_LoadTempFile loads a new file pointer as the temp file. If there is a file already loaded, it closes that file first. */
+/** CompFiles_LoadTempFile loads a new file pointer as the temp file. If there is a file already loaded, it closes that file first. */
 void CompFiles_LoadTempFile(FILE * newTempFile);
 
 /* CompFiles_LoadListingFile loads a new file pointer as the listing file. If there is a file already loaded, it closes that file first. */
@@ -110,9 +110,9 @@ void CompFiles_LoadListingFile(FILE * newListingFile);
 #pragma endregion setters
 
 /*
---------------------
+------------------
 CompFiles prompts
---------------------
+------------------
 */
 #pragma region prompts
 
@@ -226,6 +226,19 @@ CompFiles operations
 */
 #pragma region operations
 
+/*
+    CompFiles_CopyInputToOutputs copies all the data from the input file to each of the output files.
+
+    Preconditions: CompFiles.in, CompFiles.out, CompFiles.list, CompFiles.temp are all loaded and open.
+
+    PostConditions: All the output files will have the text that was in the input file.
+
+        Authors: Thomas
+        Date: 1/27/2023
+
+        Not Covered by Unit Tests
+
+*/
 void CompFiles_CopyInputToOutputs();
 
 #pragma endregion operations

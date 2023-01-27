@@ -19,7 +19,6 @@
  #include <stdbool.h>
  #include <stdlib.h>
 
-
  void printCmp (const char *__format, ...) {
     char * new_string = malloc(sizeof(char) * strlen(__format)+20);
     strcpy(new_string, "\nTOMPILER :: ");
@@ -39,8 +38,9 @@
     }
     if(terminate_requested != 1) {
         CompFiles_GenerateTempFile();
+        printf("\nCopying input file to all output files.");
         CompFiles_CopyInputToOutputs();
     }
-    printf("\n\ndone running... for now.");
+    printf("\n\nDone running... for now.");
     CompFiles_DeInit();
  }
