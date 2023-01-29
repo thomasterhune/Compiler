@@ -1,32 +1,44 @@
-/**
+/*! \file main.c
+  * \brief Program entry point.
   * 
-  * Author: Tom Terhune 
-  * 	E-mail: ter1023@pennwest.edu
-  * Author: Karl Miller
-  * 	E-mail: mil7865@pennnwest.edu
-  * Author: Anthony Stepich
-  * 	E-mail: ste4864@pennwest.edu
+  * \authors Anthony Stepich
+  * \authors Tom Terhune 
+  * \authors Karl Miller
   * 
-  * Program 1 - fileopen
-  * Group 3
-  * CSC 460 - Language Translation
+  * # Program 1 - fileopen
+  * ## Group 3
+  * ### CSC 460 - Language Translation
+  * 
+  * \mainpage TomPiler 
+  * \version 0.2.5
+  * 
+  * ## Useful Pages
+  * 
+  * - compfiles.h
+  * 
+  * - file_util.h
+  * 
+  * - ::TCompFiles
+  * 
+  * ## About
+  * 
+  * Created by Group 3 for CSC-460, Language Translations with Dr. Pyzdrowski, at PennWest California. 
+  * 
+  * 
   */
 
- #include "file_util.h"
- #include "compfiles.h"
- #include <stdio.h>
- #include <string.h>
- #include <stdbool.h>
- #include <stdlib.h>
 
- void printCmp (const char *__format, ...) {
-    char * new_string = malloc(sizeof(char) * strlen(__format)+20);
-    strcpy(new_string, "\nTOMPILER :: ");
-    strcat(new_string, __format);
-    printf(new_string);
- }
+#include "file_util.h"
+#include "compfiles.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
- int main(int argc, char *argv[]) {
+/*!
+   Program entry point.
+*/
+int main(int argc, char *argv[]) {
     CompFiles_Init();
     short terminate_requested = 0;
     if(argc < 2) {

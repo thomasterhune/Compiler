@@ -15,7 +15,8 @@
             "compilerPath": "C:/Program Files/CodeBlocks/MinGW/bin/gcc.exe",
             "cStandard": "c89",
             "cppStandard": "c++17",
-            "intelliSenseMode": "windows-gcc-x64"
+            "intelliSenseMode": "windows-gcc-x64",
+            "configurationProvider": "ms-vscode.makefile-tools"
         }
     ],
     "version": 4

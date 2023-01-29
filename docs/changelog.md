@@ -1,3 +1,6 @@
+1/28/2023: Karl
+ - used doxygen to generate documentation
+
 1/27/2023: Thomas, Karl
  - wrote copy inputs to outputs function
 
@@ -8,9 +11,8 @@
  - validate listing file in a similar way to output file
  - combined validation functions into one validate func; just pass it the command line arguments
 
-
-
-omptOutputFile()
+1/25/2023 : Thomas
+ - promptOutputFile()
  - Modified getString() to use realloc
 
 1/24/2023 : All group members
@@ -25,8 +27,6 @@ omptOutputFile()
  - removed all of the stdin swapping to a [separate repo](https://github.com/klm127/std-swapper/), and tested it, due to nagging bugs. 
     - NOTE: It turned out that the bug was that [dup2](https://www.ibm.com/docs/en/zos/2.3.0?topic=functions-dup2-duplicate-open-file-descriptor-another) closes a file and `fclose` was being called afterwards.
 - moved test dependencies to a sub folder `lib` and updated compilation commands to use this on the include path
-
-TODO: filenameHasExtension does allow for double periods! Need to fix that. e.g "abc..in" should not work.
 
 1/22/2023 : thomas and klm127
  - added removeExtension function and tests

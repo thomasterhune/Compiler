@@ -9,7 +9,7 @@
                 "src/file_util.c",
                 "src/compfiles.c",
                 "-ansi",
-                "-ofileopen"
+                "-obin/fileopen"
             ],
             "group": {
                 "kind":"build", 
