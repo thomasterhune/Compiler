@@ -35,7 +35,7 @@
                 "tests/file_util_test.c",
                 "tests/compfiles_test.c",
                 "tests/main_test.c",
-                "-obin/tests",
+                "-otests",
                 "-ansi"
             ],
             "group": {
