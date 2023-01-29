@@ -1,18 +1,3 @@
-/**
-  * 
-  * Author: Tom Terhune 
-  * 	E-mail: ter1023@pennwest.edu
-  * Author: Karl Miller
-  * 	E-mail: mil7865@pennnwest.edu
-  * Author: Anthony Stepich
-  * 	E-mail: ste4864@pennwest.edu
-  * 
-  * Program 1 - fileopen
-  * Group 3
-  * CSC 460 - Language Translation
-  */
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>

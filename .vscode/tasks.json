@@ -9,7 +9,7 @@
                 "src/file_util.c",
                 "src/compfiles.c",
                 "-ansi",
-                "-ofileopen"
+                "-obin/fileopen"
             ],
             "group": {
                 "kind":"build", 
@@ -35,7 +35,7 @@
                 "tests/file_util_test.c",
                 "tests/compfiles_test.c",
                 "tests/main_test.c",
-                "-otests",
+                "-obin/tests",
                 "-ansi"
             ],
             "group": {

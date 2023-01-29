@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['saved_5fstdin_0',['saved_stdin',['../struct___type___std_swapper.html#aad76e66c0ef24b23b0b4ae50543eae39',1,'_Type_StdSwapper']]],
+  ['saved_5fstdout_1',['saved_stdout',['../struct___type___std_swapper.html#abc860612bcc3ce0f446f60f8314195d0',1,'_Type_StdSwapper']]],
+  ['set_5fcolor_2',['SET_COLOR',['../terminal_8h.html#a68108461458bb83e59295f4c68385aaf',1,'terminal.h']]],
+  ['size_3',['size',['../struct_cu_string.html#a439227feff9d7f55384e8780cfc2eb82',1,'CuString']]],
+  ['std_5fswapper_2ec_4',['std_swapper.c',['../std__swapper_8c.html',1,'']]],
+  ['std_5fswapper_2eh_5',['std_swapper.h',['../std__swapper_8h.html',1,'']]],
+  ['stdin_5ffpos_6',['stdin_fpos',['../struct___type___std_swapper.html#aedbeb1cf0720548e37e49116347ae543',1,'_Type_StdSwapper']]],
+  ['stdout_5ffpos_7',['stdout_fpos',['../struct___type___std_swapper.html#ac2b1c3f120ea1a3b7db03386c436696a',1,'_Type_StdSwapper']]],
+  ['stdswapper_5fdeinit_8',['StdSwapper_DeInit',['../std__swapper_8c.html#a845fb686aa7657f49a6e4f70325008e3',1,'StdSwapper_DeInit():&#160;std_swapper.c'],['../std__swapper_8h.html#a845fb686aa7657f49a6e4f70325008e3',1,'StdSwapper_DeInit():&#160;std_swapper.c']]],
+  ['stdswapper_5finit_9',['StdSwapper_Init',['../std__swapper_8c.html#aa6d9f7512521221134be1e6d6dcdb1d8',1,'StdSwapper_Init():&#160;std_swapper.c'],['../std__swapper_8h.html#aa6d9f7512521221134be1e6d6dcdb1d8',1,'StdSwapper_Init():&#160;std_swapper.c']]],
+  ['stdswapper_5frestoreallstd_10',['StdSwapper_RestoreAllStd',['../std__swapper_8c.html#ada0f0d7ab8e54660cab36bc21f39d86c',1,'StdSwapper_RestoreAllStd():&#160;std_swapper.c'],['../std__swapper_8h.html#ada0f0d7ab8e54660cab36bc21f39d86c',1,'StdSwapper_RestoreAllStd():&#160;std_swapper.c']]],
+  ['stdswapper_5frestorestdin_11',['StdSwapper_RestoreStdIn',['../std__swapper_8c.html#a942904bbf45dfd998ba7e144bdae1795',1,'StdSwapper_RestoreStdIn(short deleteFile):&#160;std_swapper.c'],['../std__swapper_8h.html#a942904bbf45dfd998ba7e144bdae1795',1,'StdSwapper_RestoreStdIn(short deleteFile):&#160;std_swapper.c']]],
+  ['stdswapper_5frestorestdout_12',['StdSwapper_RestoreStdOut',['../std__swapper_8c.html#a562c0dffbe0a5b5222459d99584752d8',1,'StdSwapper_RestoreStdOut(short deleteFile):&#160;std_swapper.c'],['../std__swapper_8h.html#a562c0dffbe0a5b5222459d99584752d8',1,'StdSwapper_RestoreStdOut(short deleteFile):&#160;std_swapper.c']]],
+  ['stdswapper_5fsetallstdwithinputof_13',['StdSwapper_SetAllStdWithInputOf',['../std__swapper_8c.html#a010cb686d33a769e4b8364aef36ed346',1,'StdSwapper_SetAllStdWithInputOf(char *inputForInputFile):&#160;std_swapper.c'],['../std__swapper_8h.html#a010cb686d33a769e4b8364aef36ed346',1,'StdSwapper_SetAllStdWithInputOf(char *inputForInputFile):&#160;std_swapper.c']]],
+  ['stdswapper_5fsetdefaultstdinfile_14',['StdSwapper_SetDefaultStdinFile',['../std__swapper_8c.html#a148b57b01374ff2bc874a3fc25034a2c',1,'StdSwapper_SetDefaultStdinFile(const char *newDefaultFilename):&#160;std_swapper.c'],['../std__swapper_8h.html#a148b57b01374ff2bc874a3fc25034a2c',1,'StdSwapper_SetDefaultStdinFile(const char *newDefaultFilename):&#160;std_swapper.c']]],
+  ['stdswapper_5fsetdefaultstdoutfile_15',['StdSwapper_SetDefaultStdoutFile',['../std__swapper_8c.html#a872cab5ad79293f5033f2ff68b9fa10a',1,'StdSwapper_SetDefaultStdoutFile(const char *newDefaultFilename):&#160;std_swapper.c'],['../std__swapper_8h.html#a872cab5ad79293f5033f2ff68b9fa10a',1,'StdSwapper_SetDefaultStdoutFile(const char *newDefaultFilename):&#160;std_swapper.c']]],
+  ['stdswapper_5fsetstdin_16',['StdSwapper_SetStdIn',['../std__swapper_8c.html#a30efb71cd4055a1cb3196c62b0a2f60e',1,'StdSwapper_SetStdIn(const char *filename):&#160;std_swapper.c'],['../std__swapper_8h.html#a30efb71cd4055a1cb3196c62b0a2f60e',1,'StdSwapper_SetStdIn(const char *filename):&#160;std_swapper.c']]],
+  ['stdswapper_5fsetstdout_17',['StdSwapper_SetStdOut',['../std__swapper_8c.html#aa10f7acc7d3c974afffe4b5a97dc5f36',1,'StdSwapper_SetStdOut(const char *filename):&#160;std_swapper.c'],['../std__swapper_8h.html#aa10f7acc7d3c974afffe4b5a97dc5f36',1,'StdSwapper_SetStdOut(const char *filename):&#160;std_swapper.c']]],
+  ['string_5finc_18',['STRING_INC',['../_cu_test_8h.html#aebbf25c57ad1257fe25ae880888213df',1,'CuTest.h']]],
+  ['string_5fmax_19',['STRING_MAX',['../_cu_test_8h.html#a41f16f17393bc7dfd8c3a44a6ba595ba',1,'CuTest.h']]],
+  ['suite_5fadd_5ftest_20',['SUITE_ADD_TEST',['../_cu_test_8h.html#a9d9dfb4e9970c9a775ae3ff1aff9da92',1,'CuTest.h']]],
+  ['swapper_21',['swapper',['../std__swapper_8c.html#ad2852e60cd8354ec963ad9348c6a6deb',1,'std_swapper.c']]],
+  ['swapper_5fhas_5fapplied_5fdefaults_22',['swapper_has_applied_defaults',['../std__swapper_8c.html#a335275f45bb91d0035c8f34fe5c70c67',1,'std_swapper.c']]]
+];
