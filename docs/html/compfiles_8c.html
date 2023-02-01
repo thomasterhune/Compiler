@@ -94,20 +94,140 @@ Functions</h2></td></tr>
 <tr class="separator:acf7859327083319dfdc48468b4d24839"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a331a984a5bcfd0ee8bcbf275b91a1265"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#a331a984a5bcfd0ee8bcbf275b91a1265">CompFiles_CopyInputToOutputs</a> ()</td></tr>
 <tr class="separator:a331a984a5bcfd0ee8bcbf275b91a1265"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e6b40e2ad0622943c79c7b39bc37ba8"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#a3e6b40e2ad0622943c79c7b39bc37ba8">CompFiles_ValidateFiles</a> (char *inputFilename, const char *outputFilename)</td></tr>
-<tr class="separator:a3e6b40e2ad0622943c79c7b39bc37ba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abeb241b21a6b6e091fea88eacf596c39"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#abeb241b21a6b6e091fea88eacf596c39">CompFiles_ValidateInputFile</a> (char *filename)</td></tr>
-<tr class="separator:abeb241b21a6b6e091fea88eacf596c39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d54bac351eaec522e9a8d95857a85a2"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#a8d54bac351eaec522e9a8d95857a85a2">CompFiles_ValidateOutputFile</a> (const char *filename)</td></tr>
-<tr class="separator:a8d54bac351eaec522e9a8d95857a85a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a60b5b6736de25dab1d600beec862af"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#a3a60b5b6736de25dab1d600beec862af">CompFiles_ValidateListingFile</a> (const char *filename)</td></tr>
-<tr class="separator:a3a60b5b6736de25dab1d600beec862af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43b30bf86345564683b090b567d85054"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#a43b30bf86345564683b090b567d85054">CompFiles_AcquireValidatedFiles</a> (char *inputFilename, const char *outputFilename)</td></tr>
+<tr class="separator:a43b30bf86345564683b090b567d85054"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d2b3e6e781d67ec86bcd80d268d7e12"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#a8d2b3e6e781d67ec86bcd80d268d7e12">CompFiles_AcquireValidatedInputFile</a> (char *filename)</td></tr>
+<tr class="separator:a8d2b3e6e781d67ec86bcd80d268d7e12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabe8889ad63478c4c7291cde59ad57f0"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#aabe8889ad63478c4c7291cde59ad57f0">CompFiles_AcquireValidatedOutputFile</a> (const char *filename)</td></tr>
+<tr class="separator:aabe8889ad63478c4c7291cde59ad57f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aede0f552bffad81f36f335782a3fe989"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#aede0f552bffad81f36f335782a3fe989">CompFiles_AcquireValidatedListingFile</a> (const char *filename)</td></tr>
+<tr class="separator:aede0f552bffad81f36f335782a3fe989"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a394edaa258595989a249317d58dff4b4"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#a394edaa258595989a249317d58dff4b4">CompFiles_promptOutputFilename</a> ()</td></tr>
 <tr class="separator:a394edaa258595989a249317d58dff4b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1adbf3ab85a923a8e133e558ac34825f"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#a1adbf3ab85a923a8e133e558ac34825f">CompFiles_promptUserOverwriteSelection</a> ()</td></tr>
 <tr class="separator:a1adbf3ab85a923a8e133e558ac34825f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a43b30bf86345564683b090b567d85054" name="a43b30bf86345564683b090b567d85054"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43b30bf86345564683b090b567d85054">&#9670;&nbsp;</a></span>CompFiles_AcquireValidatedFiles()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">short CompFiles_AcquireValidatedFiles </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>inputFilename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>outputFilename</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Loops and prompts until all input and output files are set correctly or until terminate is requested.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">inputFilename</td><td>a filename with which to begin input validation with or NULL </td></tr>
+    <tr><td class="paramname">outputFilename</td><td>a filename with which to begin output validation with or NULL </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if terminate was requested. Otherwise, 0. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>klm127 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>1/26/2023 </dd></dl>
+
+</div>
+</div>
+<a id="a8d2b3e6e781d67ec86bcd80d268d7e12" name="a8d2b3e6e781d67ec86bcd80d268d7e12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d2b3e6e781d67ec86bcd80d268d7e12">&#9670;&nbsp;</a></span>CompFiles_AcquireValidatedInputFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">short CompFiles_AcquireValidatedInputFile </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Validates an input file name and sets the value in the struct. It will continue looping until the user has supplied a valid filename or elected to quit the program.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>a filename with which to begin input validation with or NULL </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 if the input file was validated and loaded into the struct. 1 if the user requested to terminate the program. </dd></dl>
+
+</div>
+</div>
+<a id="aede0f552bffad81f36f335782a3fe989" name="aede0f552bffad81f36f335782a3fe989"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aede0f552bffad81f36f335782a3fe989">&#9670;&nbsp;</a></span>CompFiles_AcquireValidatedListingFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">short CompFiles_AcquireValidatedListingFile </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Validates a listing file name and sets the value in the struct.</p>
+<p >Called by CompFiles_ValidateOutputFile after an output file has been fully validated. The parameter passed will be the name of the output file with the extension 'list' instead.</p>
+<p >If this file happens to exist, a similar loop will occur as when a user attempts to load an extant output file. The user will be prompted to enter a new file until one is validated or they elect to exit the program.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>a filename with which to begin input validation with or NULL </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 if an output file was validated and loaded into the struct. 1 if the user requested to terminate the program. </dd></dl>
+
+</div>
+</div>
+<a id="aabe8889ad63478c4c7291cde59ad57f0" name="aabe8889ad63478c4c7291cde59ad57f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabe8889ad63478c4c7291cde59ad57f0">&#9670;&nbsp;</a></span>CompFiles_AcquireValidatedOutputFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">short CompFiles_AcquireValidatedOutputFile </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Validates an output file name and sets the value in the struct. It will continue looping until the user has supplied a valid filename or elected to quit the program. <br  />
+</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>a filename with which to begin input validation with or NULL </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 if an output file was validated and loaded into the struct. 1 if the user requested to terminate the program. </dd></dl>
+
+</div>
+</div>
 <a id="a331a984a5bcfd0ee8bcbf275b91a1265" name="a331a984a5bcfd0ee8bcbf275b91a1265"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a331a984a5bcfd0ee8bcbf275b91a1265">&#9670;&nbsp;</a></span>CompFiles_CopyInputToOutputs()</h2>
 
@@ -346,126 +466,6 @@ Functions</h2></td></tr>
 <dl class="section author"><dt>Author</dt><dd>klm127, thomasterh99, anthony91501 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>1/20/2023 </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Covered by Unit Tests </dd></dl>
-
-</div>
-</div>
-<a id="a3e6b40e2ad0622943c79c7b39bc37ba8" name="a3e6b40e2ad0622943c79c7b39bc37ba8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e6b40e2ad0622943c79c7b39bc37ba8">&#9670;&nbsp;</a></span>CompFiles_ValidateFiles()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">short CompFiles_ValidateFiles </td>
-          <td>(</td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>inputFilename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>outputFilename</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p >Loops and prompts until all input and output files are set correctly or until terminate is requested.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">inputFilename</td><td>a filename with which to begin input validation with or NULL </td></tr>
-    <tr><td class="paramname">outputFilename</td><td>a filename with which to begin output validation with or NULL </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>1 if terminate was requested. Otherwise, 0. </dd></dl>
-<dl class="section author"><dt>Author</dt><dd>klm127 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>1/26/2023 </dd></dl>
-
-</div>
-</div>
-<a id="abeb241b21a6b6e091fea88eacf596c39" name="abeb241b21a6b6e091fea88eacf596c39"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abeb241b21a6b6e091fea88eacf596c39">&#9670;&nbsp;</a></span>CompFiles_ValidateInputFile()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">short CompFiles_ValidateInputFile </td>
-          <td>(</td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>filename</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p >Validates an input file name and sets the value in the struct. It will continue looping until the user has supplied a valid filename or elected to quit the program.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">filename</td><td>a filename with which to begin input validation with or NULL </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>0 if the input file was validated and loaded into the struct. 1 if the user requested to terminate the program. </dd></dl>
-
-</div>
-</div>
-<a id="a3a60b5b6736de25dab1d600beec862af" name="a3a60b5b6736de25dab1d600beec862af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a60b5b6736de25dab1d600beec862af">&#9670;&nbsp;</a></span>CompFiles_ValidateListingFile()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">short CompFiles_ValidateListingFile </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>filename</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p >Validates a listing file name and sets the value in the struct.</p>
-<p >Called by CompFiles_ValidateOutputFile after an output file has been fully validated. The parameter passed will be the name of the output file with the extension 'list' instead.</p>
-<p >If this file happens to exist, a similar loop will occur as when a user attempts to load an extant output file. The user will be prompted to enter a new file until one is validated or they elect to exit the program.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">filename</td><td>a filename with which to begin input validation with or NULL </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>0 if an output file was validated and loaded into the struct. 1 if the user requested to terminate the program. </dd></dl>
-
-</div>
-</div>
-<a id="a8d54bac351eaec522e9a8d95857a85a2" name="a8d54bac351eaec522e9a8d95857a85a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d54bac351eaec522e9a8d95857a85a2">&#9670;&nbsp;</a></span>CompFiles_ValidateOutputFile()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">short CompFiles_ValidateOutputFile </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>filename</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p >Validates an output file name and sets the value in the struct. It will continue looping until the user has supplied a valid filename or elected to quit the program. <br  />
-</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">filename</td><td>a filename with which to begin input validation with or NULL </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>0 if an output file was validated and loaded into the struct. 1 if the user requested to terminate the program. </dd></dl>
 
 </div>
 </div>
