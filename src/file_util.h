@@ -19,7 +19,7 @@ file operations
 /*!
     Renames an existing file, adding the extension '.bak' to the end of it. For example 'outFile.out' will become 'outFile.out.bak'.
 
-    If the backup file exists, the function will recurse, backing up that file as well. 
+    If the backup file exists already, the new file will have additional '.bak's appended until a name is found that does not collide. 
 
     \author klm127
     \date 1/22/2023

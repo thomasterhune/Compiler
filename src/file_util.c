@@ -22,10 +22,13 @@ void backupFile(const char * filename) {
     short doesFileExist = fileExists(filename);
     if(doesFileExist == FILE_EXISTS) {
         char * new_name = addExtension(filename, "bak");
-        if(fileExists(new_name)) {
-            backupFile(new_name);
+        while(fileExists(new_name)) {
+            char * another_back = addExtension(new_name, "bak");
+            free(new_name);
+            new_name = another_back;
         }
         rename(filename, new_name);
+        printf("\n\t- Renamed %s to %s.", filename, new_name);
         free(new_name);
         remove(filename);
     }

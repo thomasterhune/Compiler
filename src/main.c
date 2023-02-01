@@ -42,17 +42,17 @@ int main(int argc, char *argv[]) {
     CompFiles_Init();
     short terminate_requested = 0;
     if(argc < 2) {
-        terminate_requested = CompFiles_ValidateFiles(NULL, NULL);
+        terminate_requested = CompFiles_AcquireValidatedFiles(NULL, NULL);
     } else if(argc < 3) {
-        terminate_requested = CompFiles_ValidateFiles(argv[1], NULL);
+        terminate_requested = CompFiles_AcquireValidatedFiles(argv[1], NULL);
     } else {
-        terminate_requested = CompFiles_ValidateFiles(argv[1], argv[2]);
+        terminate_requested = CompFiles_AcquireValidatedFiles(argv[1], argv[2]);
     }
     if(terminate_requested != 1) {
         CompFiles_GenerateTempFile();
-        printf("\nCopying input file to all output files.");
         CompFiles_CopyInputToOutputs();
+        printf("\n\t- Copied input file to all output files.");
     }
-    printf("\n\nDone running... for now.");
+    printf("\n\nDone running... for now.\n");
     CompFiles_DeInit();
  }

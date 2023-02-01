@@ -49,6 +49,8 @@ void test_FileExists(CuTest *tc) {
                     Created On: 1/22/2023
 */
 void test_backupFile(CuTest *tc) {
+    StdSwapper_Init();
+    StdSwapper_SetAllStdWithInputOf(".");
     char * fname = "tests/prevOut.out";
     FILE * file = fopen(fname, "w");
     fclose(file);
@@ -59,6 +61,8 @@ void test_backupFile(CuTest *tc) {
     exists = fileExists(fname);
     CuAssertIntEquals_Msg(tc, "The original file should no longer exist.", FILE_DOES_NOT_EXIST, exists);
     remove(newname);
+    StdSwapper_RestoreAllStd();
+    StdSwapper_DeInit();
 }
 
 #pragma endregion test_fileops

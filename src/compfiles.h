@@ -20,7 +20,7 @@
 
 /*
 -----------------
-CompFies typedef
+CompFiles typedef
 -----------------
 */
 #pragma region structs
@@ -138,7 +138,7 @@ CompFiles prompts
     \author klm127
     \date 1/26/2023
 */
-short CompFiles_ValidateFiles(char * inputFilename, const char * outputFilename);
+short CompFiles_AcquireValidatedFiles(char * inputFilename, const char * outputFilename);
 
 
 /*!
@@ -147,7 +147,7 @@ short CompFiles_ValidateFiles(char * inputFilename, const char * outputFilename)
     \param filename a filename with which to begin input validation with or NULL
     \returns 0 if the input file was validated and loaded into the struct. 1 if the user requested to terminate the program. 
 */
-short CompFiles_ValidateInputFile(char * filename);
+short CompFiles_AcquireValidatedInputFile(char * filename);
 
 /*!
     Validates an output file name and sets the value in the struct. It will continue looping until the user has supplied a valid filename or elected to quit the program.  
@@ -155,7 +155,7 @@ short CompFiles_ValidateInputFile(char * filename);
     \param filename a filename with which to begin input validation with or NULL
     \returns 0 if an output file was validated and loaded into the struct. 1 if the user requested to terminate the program.
 */
-short CompFiles_ValidateOutputFile(const char * filename);
+short CompFiles_AcquireValidatedOutputFile(const char * filename);
 
 /*!
     Validates a listing file name and sets the value in the struct.
@@ -167,7 +167,7 @@ short CompFiles_ValidateOutputFile(const char * filename);
     \param filename a filename with which to begin input validation with or NULL
     \returns 0 if an output file was validated and loaded into the struct. 1 if the user requested to terminate the program.
 */
-short CompFiles_ValidateListingFile(const char * filename);
+short CompFiles_AcquireValidatedListingFile(const char * filename);
 
 /*!
     Calls the function getString() to recieve a filename from the user and returns it. It will set the 'terminate requested' flag in CompFiles if the user inputs only a \\n. 

@@ -149,19 +149,19 @@ CompFiles prompts
 #pragma region prompts
 
 
-short CompFiles_ValidateFiles(char * inputFilename, const char * outputFilename) {
+short CompFiles_AcquireValidatedFiles(char * inputFilename, const char * outputFilename) {
     while(CompFiles.terminate_requested != 1 && CompFiles.input_file_state != COMPFILES_STATE_NAME_VALIDATED && CompFiles.output_file_state != COMPFILES_STATE_NAME_VALIDATED) {
         if(CompFiles.input_file_state != COMPFILES_STATE_NAME_VALIDATED && CompFiles.terminate_requested != 1) {
-            CompFiles_ValidateInputFile(inputFilename);
+            CompFiles_AcquireValidatedInputFile(inputFilename);
         }
         if(CompFiles.output_file_state != COMPFILES_STATE_NAME_VALIDATED && CompFiles.terminate_requested != 1) {
-            CompFiles_ValidateOutputFile(outputFilename);
+            CompFiles_AcquireValidatedOutputFile(outputFilename);
         }
     }
     return CompFiles.terminate_requested;
 }
 
-short CompFiles_ValidateInputFile(char * filename) {
+short CompFiles_AcquireValidatedInputFile(char * filename) {
     short file_extension_parse;
     char * tempfilename = NULL; 
     if(filename != NULL) {
@@ -197,6 +197,7 @@ short CompFiles_ValidateInputFile(char * filename) {
                 CompFiles.input_file_state = COMPFILES_STATE_NAME_VALIDATED;
                 CompFiles_LoadInputFile(fopen(tempfilename, "r"));
                 CompFiles.input_file_name = tempfilename;
+                printf("\n\t- Loaded input file %s.\n", tempfilename);
             }
         }
     }
@@ -208,7 +209,7 @@ short CompFiles_ValidateInputFile(char * filename) {
 }
 
 
-short CompFiles_ValidateOutputFile(const char * filename)
+short CompFiles_AcquireValidatedOutputFile(const char * filename)
 {
     short file_extension_parse;
     char * tempfilename = NULL;
@@ -227,13 +228,13 @@ short CompFiles_ValidateOutputFile(const char * filename)
         file_extension_parse = filenameHasExtension(tempfilename);
         if(file_extension_parse == FILENAME_HAS_NO_PERIOD)
         {
-            printf("\nYour output file has no extension. Defaulting to .out.\n");
+            printf("\nYour output file has no extension. Defaulting to .out.");
             char * tnewfile = addExtension(tempfilename,"out");
             free(tempfilename);
             tempfilename = tnewfile;
         } else if(file_extension_parse < 0)
         {
-            printf("\nThat is not a valid filename. \n");
+            printf("\nThat is not a valid filename.");
             printf("\nPlease provide an output filename: ");
             free(tempfilename);
             tempfilename = CompFiles_promptOutputFilename();
@@ -285,16 +286,16 @@ short CompFiles_ValidateOutputFile(const char * filename)
         char * listfile_nx = removeExtension(tempfilename);
         char * listfile_ex = addExtension(listfile_nx, "list");
         free(listfile_nx);
-        CompFiles_ValidateListingFile(listfile_ex);
+        CompFiles_AcquireValidatedListingFile(listfile_ex);
         free(listfile_ex);
 
     } else {
-        printf("\n\t- Terminate program request received.\n");
+        printf("\n\t - Terminate program request received.\n");
     }
 
 }
 
-short CompFiles_ValidateListingFile(const char * filename)
+short CompFiles_AcquireValidatedListingFile(const char * filename)
 {
     short file_extension_parse;
     char * tempfilename = NULL;
@@ -351,8 +352,8 @@ short CompFiles_ValidateListingFile(const char * filename)
                             free(tempfilename);
                             char * tempfilename_no_ext = removeExtension(CompFiles.output_file_name);
                             tempfilename = addExtension(tempfilename_no_ext, "list");
-                            printf("Checking %s.", tempfilename);
                             free(tempfilename_no_ext);
+                            printf("Checking %s.", tempfilename);
                         } else if(user_selection == USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED) {
                             printf("\nRenter filename selected. ");
                             printf("\nPlease provide a listing filename: ");
@@ -383,7 +384,6 @@ short CompFiles_ValidateListingFile(const char * filename)
 
 char * CompFiles_promptOutputFilename() {
     char * outputFilename = getString();
-    printf(outputFilename);
     if(outputFilename[0] == '\0') {
         free(outputFilename);
         char * ext_removed = removeExtension(CompFiles.input_file_name);
