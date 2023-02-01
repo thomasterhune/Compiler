@@ -176,7 +176,7 @@ short CompFiles_ValidateInputFile(char * filename) {
         file_extension_parse = filenameHasExtension(tempfilename);
 
         if(file_extension_parse == FILENAME_HAS_NO_PERIOD) {
-            printf("\n\t- Your input file has no extension. Defaulting to .in. \n");
+            printf("\nYour input file has no extension. Defaulting to .in. \n");
             char * tnewfile = addExtension(tempfilename, "in");
             free(tempfilename);
             tempfilename = tnewfile;
@@ -184,13 +184,13 @@ short CompFiles_ValidateInputFile(char * filename) {
         }
 
         if(file_extension_parse < 0 ) {
-            printf("\n\t- That is not a valid filename. Input a new filename: ");
+            printf("\nThat is not a valid filename. Input a new filename: ");
             free(tempfilename);
             tempfilename = CompFiles_promptInputFilename();
         } else {
             short file_exists = fileExists(tempfilename);
             if(!file_exists) {
-                printf("\n\t - That file doesn't exist. Please provide a new filename: ");
+                printf("\nThat file doesn't exist. Please provide a new filename: ");
                 free(tempfilename);
                 tempfilename = CompFiles_promptInputFilename();
             } else {
@@ -227,56 +227,61 @@ short CompFiles_ValidateOutputFile(const char * filename)
         file_extension_parse = filenameHasExtension(tempfilename);
         if(file_extension_parse == FILENAME_HAS_NO_PERIOD)
         {
-            printf("\t- Your output file has no extension. Defaulting to .out.\n");
+            printf("\nYour output file has no extension. Defaulting to .out.\n");
             char * tnewfile = addExtension(tempfilename,"out");
             free(tempfilename);
             tempfilename = tnewfile;
         } else if(file_extension_parse < 0)
         {
-            printf("\n\t- That is not a valid filename. \n");
-            printf("\n\t- Please enter an output filename: ");
+            printf("\nThat is not a valid filename. \n");
+            printf("\nPlease provide an output filename: ");
             free(tempfilename);
             tempfilename = CompFiles_promptOutputFilename();
         }else {
                 short file_exists = fileExists(tempfilename);
                 if(file_exists) {
-                    short user_selection;
-                    printf("\n\nAttempting to load output file: %s.", tempfilename);
-                    user_selection = CompFiles_promptUserOverwriteSelection();
-                    while(user_selection == USER_OUTPUT_TERMINATE_INVALID_ENTRY) {
-                        printf("\n\t That is not a valid selection.");
-                        user_selection = CompFiles_promptUserOverwriteSelection();
-                    }
-                    if(user_selection == USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME) {
-                        printf("\n\t You've selected to use the name from the input file for the output file.");
+                    short is_same_as_input_file = checkIfSamePaths(tempfilename, CompFiles.input_file_name);
+                    if(is_same_as_input_file) {
+                        printf("\nThe output file must be different from the input file!");
+                        printf("\nPlease provide an output filename: ");
                         free(tempfilename);
-                        char * tempfilename_no_ext = removeExtension(CompFiles.input_file_name);
-                        tempfilename = addExtension(tempfilename_no_ext, "out");
-                        free(tempfilename_no_ext);
-                        CompFiles.output_file_state = COMPFILES_STATE_NAME_VALIDATED;
-                    } else if(user_selection == USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED) {
-                        free(tempfilename);
-                        printf("\n\tReenter your filename: ");
                         tempfilename = CompFiles_promptOutputFilename();
-                    } else if(user_selection == USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE) {
-                        CompFiles.output_file_state = COMPFILES_STATE_NAME_VALIDATED;
-                        backupFile(tempfilename);
-                        
-                        CompFiles.output_file_name = tempfilename;
-                    } else if(user_selection == USER_OUTPUT_TERMINATE_PROGRAM) {
-                        CompFiles.terminate_requested = 1;
-                    }
+                    } else {
+                        short user_selection;
+                        printf("\n\nAttempting to load output file: %s.", tempfilename);
+                        user_selection = CompFiles_promptUserOverwriteSelection();
+                        while(user_selection == USER_OUTPUT_TERMINATE_INVALID_ENTRY) {
+                            printf("\nThat is not a valid selection.");
+                            user_selection = CompFiles_promptUserOverwriteSelection();
+                        }
+                        if(user_selection == USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME) {
+                            printf("\nAttempting to generate output file from input file name. ");
+                            free(tempfilename);
+                            char * tempfilename_no_ext = removeExtension(CompFiles.input_file_name);
+                            tempfilename = addExtension(tempfilename_no_ext, "out");
+                            printf("Checking %s.", tempfilename);
+                            free(tempfilename_no_ext);
+                        } else if(user_selection == USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED) {
+                            free(tempfilename);
+                            printf("\nRenter filename selected. ");
+                            printf("\nPlease provide an output filename: ");
+                            tempfilename = CompFiles_promptOutputFilename();
+                        } else if(user_selection == USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE) {
+                            backupFile(tempfilename);
+                        } else if(user_selection == USER_OUTPUT_TERMINATE_PROGRAM) {
+                            CompFiles.terminate_requested = 1;
+                        }
+                    }                    
                 } else {
                     CompFiles.output_file_state = COMPFILES_STATE_NAME_VALIDATED;
                     CompFiles.output_file_name = tempfilename;
                 }
         }
-
     }
 
     if(CompFiles.terminate_requested != 1) {
         CompFiles_LoadOutputFile(fopen(tempfilename, "w"));
-        printf("\n\t- Loaded output file: %s.", tempfilename);
+        printf("\n\t- Loaded output file: %s.\n", tempfilename);
         char * listfile_nx = removeExtension(tempfilename);
         char * listfile_ex = addExtension(listfile_nx, "list");
         free(listfile_nx);
@@ -295,7 +300,7 @@ short CompFiles_ValidateListingFile(const char * filename)
     char * tempfilename = NULL;
     if(filename == NULL) 
     {
-        printf("\n\t- Please enter a listing filename: ");
+        printf("\nPlease enter a listing filename: ");
         tempfilename = getString();
     } else
     {
@@ -308,44 +313,56 @@ short CompFiles_ValidateListingFile(const char * filename)
         file_extension_parse = filenameHasExtension(tempfilename);
         if(file_extension_parse == FILENAME_HAS_NO_PERIOD)
         {
-            printf("\t- Your listing file has no extension. Defaulting to .list.\n");
+            printf("\nYour listing file has no extension. Defaulting to .list.\n");
             char * tnewfile = addExtension(tempfilename,"list");
             free(tempfilename);
             tempfilename = tnewfile;
         } else if(file_extension_parse < 0)
         {
-            printf("\n\t- That is not a valid filename. \n");
-            printf("\n\t- Please enter a listing filename: ");
+            printf("\nThat is not a valid filename. \n");
+            printf("\nPlease provide an output filename: ");
             free(tempfilename);
             tempfilename = getString();
         }else {
                 short file_exists = fileExists(tempfilename);
                 if(file_exists) {
-                    short user_selection;
-                    printf("\n\nAttempting to load listing file: %s.", tempfilename);
-                    user_selection = CompFiles_promptUserOverwriteSelection();
-                    while(user_selection == USER_OUTPUT_TERMINATE_INVALID_ENTRY) {
-                        printf("\n\t That is not a valid selection.");
+                    short is_same_as_input_file = checkIfSamePaths(tempfilename, CompFiles.input_file_name);
+                    short is_same_as_out_file = checkIfSamePaths(tempfilename, CompFiles.output_file_name);
+                    if(is_same_as_input_file) {
+                        printf("\nThe listing file must be different from the input file!");
+                        printf("\nPlease provide a listing filename: ");
+                        free(tempfilename);
+                        tempfilename = CompFiles_promptOutputFilename();
+                    } else if(is_same_as_out_file) {
+                        printf("\nThe listing file must be different from the output file!");
+                        printf("\nPlease provide a listing filename: ");
+                        free(tempfilename);
+                        tempfilename = CompFiles_promptOutputFilename();
+                    } else {
+                        short user_selection;
+                        printf("\nAttempting to load listing file: %s.", tempfilename);
                         user_selection = CompFiles_promptUserOverwriteSelection();
-                    }
-                    if(user_selection == USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME) {
-                        printf("\n\t You've selected to use the name from the output file for the listing file.");
-                        free(tempfilename);
-                        char * tempfilename_no_ext = removeExtension(CompFiles.output_file_name);
-                        tempfilename = addExtension(tempfilename_no_ext, "list");
-                        free(tempfilename_no_ext);
-                        CompFiles.listing_file_state = COMPFILES_STATE_NAME_VALIDATED;
-                    } else if(user_selection == USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED) {
-                        free(tempfilename);
-                        printf("\n\tReenter your filename: ");
-                        tempfilename = getString();
-                    } else if(user_selection == USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE) {
-                        CompFiles.listing_file_state = COMPFILES_STATE_NAME_VALIDATED;
-                        backupFile(tempfilename);
-                        
-                        CompFiles.listing_file_name = tempfilename;
-                    } else if(user_selection == USER_OUTPUT_TERMINATE_PROGRAM) {
-                        CompFiles.terminate_requested = 1;
+                        while(user_selection == USER_OUTPUT_TERMINATE_INVALID_ENTRY) {
+                            printf("\nThat is not a valid selection.");
+                            user_selection = CompFiles_promptUserOverwriteSelection();
+                        }
+                        if(user_selection == USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME) {
+                            printf("\nAttempting to generate listing file from output file name. ");
+                            free(tempfilename);
+                            char * tempfilename_no_ext = removeExtension(CompFiles.output_file_name);
+                            tempfilename = addExtension(tempfilename_no_ext, "list");
+                            printf("Checking %s.", tempfilename);
+                            free(tempfilename_no_ext);
+                        } else if(user_selection == USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED) {
+                            printf("\nRenter filename selected. ");
+                            printf("\nPlease provide a listing filename: ");
+                            free(tempfilename);
+                            tempfilename = getString();
+                        } else if(user_selection == USER_OUTPUT_OVERWRITE_OVERWRITE_EXISTING_FILE) {
+                            backupFile(tempfilename);
+                        } else if(user_selection == USER_OUTPUT_TERMINATE_PROGRAM) {
+                            CompFiles.terminate_requested = 1;
+                        }
                     }
                 } else {
                     CompFiles.listing_file_state = COMPFILES_STATE_NAME_VALIDATED;
@@ -356,7 +373,7 @@ short CompFiles_ValidateListingFile(const char * filename)
 
     if(CompFiles.terminate_requested != 1) {
         CompFiles_LoadListingFile(fopen(tempfilename, "w"));
-        printf("\n\t- Loaded listing file %s.", tempfilename);
+        printf("\n\t- Loaded listing file %s.\n", tempfilename);
     } else {
         printf("\n\t- Terminate program request received.\n");
     }
@@ -370,7 +387,7 @@ char * CompFiles_promptOutputFilename() {
     if(outputFilename[0] == '\0') {
         free(outputFilename);
         char * ext_removed = removeExtension(CompFiles.input_file_name);
-        printf("No file name was entered. Defaulting to %s", ext_removed);
+        printf("\nNo file name was entered. Defaulting to %s", ext_removed);
         outputFilename = addExtension(ext_removed, "out");
         free(ext_removed);
     }
