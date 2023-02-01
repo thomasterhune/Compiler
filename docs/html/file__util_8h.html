@@ -106,6 +106,10 @@ Functions</h2></td></tr>
 <tr class="separator:a85bef24e97e6c2132aca7cbc5d5ce5cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49526f1da9e23e86123c02cd9fb53192"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="file__util_8h.html#a49526f1da9e23e86123c02cd9fb53192">removeExtension</a> (const char *filename)</td></tr>
 <tr class="separator:a49526f1da9e23e86123c02cd9fb53192"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad08cbe46db7fff259ae5c0df627321f2"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="file__util_8h.html#ad08cbe46db7fff259ae5c0df627321f2">generateAbsolutePath</a> (const char *filename)</td></tr>
+<tr class="separator:ad08cbe46db7fff259ae5c0df627321f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61bd4e10f9961a39371116eeceed1ac1"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="file__util_8h.html#a61bd4e10f9961a39371116eeceed1ac1">checkIfSamePaths</a> (const char *filename1, const char *filename2)</td></tr>
+<tr class="separator:a61bd4e10f9961a39371116eeceed1ac1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad44c1d6100c8292003fb4c47bee6be6a"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="file__util_8h.html#ad44c1d6100c8292003fb4c47bee6be6a">getString</a> ()</td></tr>
 <tr class="separator:ad44c1d6100c8292003fb4c47bee6be6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -210,10 +214,50 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p >Renames an existing file, adding the extension '.bak' to the end of it. For example 'outFile.out' will become 'outFile.out.bak'.</p>
-<p >If the backup file exists, the function will recurse, backing up that file as well.</p>
+<p >If the backup file exists already, the new file will have additional '.bak's appended until a name is found that does not collide.</p>
 <dl class="section author"><dt>Author</dt><dd>klm127 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>1/22/2023 </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Covered by Unit Tests </dd></dl>
+
+</div>
+</div>
+<a id="a61bd4e10f9961a39371116eeceed1ac1" name="a61bd4e10f9961a39371116eeceed1ac1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61bd4e10f9961a39371116eeceed1ac1">&#9670;&nbsp;</a></span>checkIfSamePaths()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">short checkIfSamePaths </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filename1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filename2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >checkIfSamePaths uses generateAbsolutePath to see if two filenames have the same resulting path.</p>
+<dl class="section pre"><dt>Precondition</dt><dd>both filenames should be validated to be possible filenames.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename1</td><td>the first filename to check. </td></tr>
+    <tr><td class="paramname">filename2</td><td>the second filename to check.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if they are the same path, 0 otherwise. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>karl </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2/1/2023 </dd></dl>
 
 </div>
 </div>
@@ -285,6 +329,36 @@ Functions</h2></td></tr>
 <dl class="section author"><dt>Author</dt><dd>klm127 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>1/19/2023 </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Covered by Unit Tests </dd></dl>
+
+</div>
+</div>
+<a id="ad08cbe46db7fff259ae5c0df627321f2" name="ad08cbe46db7fff259ae5c0df627321f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad08cbe46db7fff259ae5c0df627321f2">&#9670;&nbsp;</a></span>generateAbsolutePath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * generateAbsolutePath </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >generateAbsolutePath uses a fileapi.h call to generate the absolute path for a given filename.</p>
+<dl class="section pre"><dt>Precondition</dt><dd>filename has already been validated to have an extension </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>the filename to create an absolute path for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a malloced string for a full path name </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>ensure the returned string is freed when you are done to avoid memory leaks </dd></dl>
+<dl class="section author"><dt>Authors</dt><dd>karl, anthony, thomas </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2/1/2023 </dd></dl>
 
 </div>
 </div>

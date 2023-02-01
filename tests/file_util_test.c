@@ -49,6 +49,8 @@ void test_FileExists(CuTest *tc) {
                     Created On: 1/22/2023
 */
 void test_backupFile(CuTest *tc) {
+    StdSwapper_Init();
+    StdSwapper_SetAllStdWithInputOf(".");
     char * fname = "tests/prevOut.out";
     FILE * file = fopen(fname, "w");
     fclose(file);
@@ -59,6 +61,8 @@ void test_backupFile(CuTest *tc) {
     exists = fileExists(fname);
     CuAssertIntEquals_Msg(tc, "The original file should no longer exist.", FILE_DOES_NOT_EXIST, exists);
     remove(newname);
+    StdSwapper_RestoreAllStd();
+    StdSwapper_DeInit();
 }
 
 #pragma endregion test_fileops
@@ -230,6 +234,26 @@ void test_removeExtension(CuTest *tc) {
 
 }
 
+void test_generateAbsolutePath(CuTest *tc) {
+    char * infile = "in.txt";
+    char * testpath = generateAbsolutePath("./");
+    char expected[200];
+    strcpy(expected, testpath);
+    strcat(expected, infile);
+    char * actual = generateAbsolutePath("in.txt");
+    CuAssertStrEquals_Msg(tc, "gen absolute path should produce expected path name", expected, actual);
+}
+
+void test_checkIfSamePaths(CuTest *tc) {
+    short result;
+    result = checkIfSamePaths("a.in", "a.out");
+    CuAssertIntEquals_Msg(tc, "if names are different, result should be 0", 0, result);
+    result = checkIfSamePaths("a.in", "a.in");
+    CuAssertIntEquals_Msg(tc, "if same should return 1 ", 1, result);
+    result = checkIfSamePaths("./a.in", "a.in");
+    CuAssertIntEquals_Msg(tc, "if some path names, but refering to same file, should return 1 ", 1, result);
+}
+
 #pragma endregion test_filenames
 
 /* 
@@ -302,5 +326,7 @@ CuSuite* fileUtilGetSuite(){
     /* SUITE_ADD_TEST(suite, test_getc);  <--- a sanity test only */ 
     SUITE_ADD_TEST(suite, test_getString);
     SUITE_ADD_TEST(suite, test_addExtension);
+    SUITE_ADD_TEST(suite, test_generateAbsolutePath);
+    SUITE_ADD_TEST(suite, test_checkIfSamePaths);
     return suite;
 }

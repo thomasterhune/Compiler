@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <fileapi.h>
 #include "file_util.h"
 
 
@@ -21,10 +22,13 @@ void backupFile(const char * filename) {
     short doesFileExist = fileExists(filename);
     if(doesFileExist == FILE_EXISTS) {
         char * new_name = addExtension(filename, "bak");
-        if(fileExists(new_name)) {
-            backupFile(new_name);
+        while(fileExists(new_name)) {
+            char * another_back = addExtension(new_name, "bak");
+            free(new_name);
+            new_name = another_back;
         }
         rename(filename, new_name);
+        printf("\n\t- Renamed %s to %s.", filename, new_name);
         free(new_name);
         remove(filename);
     }
@@ -111,6 +115,26 @@ char * removeExtension(const char* filename) {
     strncpy(new_string, filename, index);
     new_string[index] = '\0';
     return new_string;
+}
+
+
+char * generateAbsolutePath(const char * filename) {
+    char buffer[150];
+    int n_chars;
+    n_chars = GetFullPathNameA(filename, 150, buffer, NULL);
+    n_chars += 1; /* for null-terminator */
+    char * result = malloc(sizeof(char) * n_chars);
+    strcpy(result, buffer);
+    return result;
+}
+
+short checkIfSamePaths(const char* filename1, const char * filename2) {
+    char * first_path = generateAbsolutePath(filename1);
+    char * second_path = generateAbsolutePath(filename2);
+    short are_equal = strcmp(first_path, second_path) == 0;
+    free(first_path);
+    free(second_path);
+    return are_equal;
 }
 
 

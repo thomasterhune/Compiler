@@ -19,7 +19,7 @@ file operations
 /*!
     Renames an existing file, adding the extension '.bak' to the end of it. For example 'outFile.out' will become 'outFile.out.bak'.
 
-    If the backup file exists, the function will recurse, backing up that file as well. 
+    If the backup file exists already, the new file will have additional '.bak's appended until a name is found that does not collide. 
 
     \author klm127
     \date 1/22/2023
@@ -119,7 +119,32 @@ char * addExtension(const char* filename, const char* extension);
 */
 char * removeExtension(const char * filename);
 
+/*!
+    generateAbsolutePath uses a fileapi.h call to generate the absolute path for a given filename.
 
+    \pre filename has already been validated to have an extension
+    \param filename the filename to create an absolute path for
+    \return a malloced string for a full path name
+    \warning ensure the returned string is freed when you are done to avoid memory leaks
+    \authors karl, anthony, thomas
+    \date 2/1/2023
+
+*/
+char * generateAbsolutePath(const char * filename);
+
+/*!
+    checkIfSamePaths uses generateAbsolutePath to see if two filenames have the same resulting path.
+
+    \pre both filenames should be validated to be possible filenames.
+
+    \param filename1 the first filename to check.
+    \param filename2 the second filename to check.
+
+    \return 1 if they are the same path, 0 otherwise. 
+    \author karl
+    \date 2/1/2023
+*/
+short checkIfSamePaths(const char* filename1, const char * filename2);
 
 #pragma endregion filenames
 
