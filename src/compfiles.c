@@ -25,7 +25,8 @@ void CompFiles_Init() {
 void CompFiles_GenerateTempFile() {
     int testnum = 0;
     char * temp_name = malloc(20 * sizeof(char));
-    while(CompFiles.temp == NULL) {
+    short temp_file_made = 0;
+    while(!temp_file_made) {
         free(temp_name);
         char * temp_name = malloc(20 * sizeof(char));
         sprintf(temp_name, "temp%d.tmp", testnum);
@@ -33,8 +34,10 @@ void CompFiles_GenerateTempFile() {
         if(does_exist) {
             testnum++;
         } else {
+            temp_file_made = 1;
             CompFiles_LoadTempFile(fopen(temp_name, "w"));
             CompFiles.temp_file_name = temp_name;
+            printf("\n\t- Created temp file %s.\n", temp_name);
         }
     }
 }
@@ -49,6 +52,7 @@ void CompFiles_DeInit() {
     if(CompFiles.temp != NULL) {
         fclose(CompFiles.temp);
         remove(CompFiles.temp_file_name);
+        printf("\n\t- Removed temp file %s.\n", CompFiles.temp_file_name);
     }
     if(CompFiles.listing != NULL) {
         fclose(CompFiles.in);
@@ -282,7 +286,7 @@ short CompFiles_AcquireValidatedOutputFile(const char * filename)
 
     if(CompFiles.terminate_requested != 1) {
         CompFiles_LoadOutputFile(fopen(tempfilename, "w"));
-        printf("\n\t- Loaded output file: %s.\n", tempfilename);
+        printf("\n\t- Created output file: %s.\n", tempfilename);
         char * listfile_nx = removeExtension(tempfilename);
         char * listfile_ex = addExtension(listfile_nx, "list");
         free(listfile_nx);
@@ -374,7 +378,7 @@ short CompFiles_AcquireValidatedListingFile(const char * filename)
 
     if(CompFiles.terminate_requested != 1) {
         CompFiles_LoadListingFile(fopen(tempfilename, "w"));
-        printf("\n\t- Loaded listing file %s.\n", tempfilename);
+        printf("\n\t- Created listing file %s.\n", tempfilename);
     } else {
         printf("\n\t- Terminate program request received.\n");
     }

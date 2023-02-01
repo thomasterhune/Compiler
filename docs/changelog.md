@@ -3,6 +3,7 @@
  - created checkIfSamePaths function to compare file name actual paths
  - reworked the validate files functions to check for output/input name collisions
  - adjusted some printing
+ - fixed tempfile bug
 
 1/28/2023: Karl
  - used doxygen to generate documentation

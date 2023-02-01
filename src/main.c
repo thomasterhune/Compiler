@@ -51,8 +51,8 @@ int main(int argc, char *argv[]) {
     if(terminate_requested != 1) {
         CompFiles_GenerateTempFile();
         CompFiles_CopyInputToOutputs();
-        printf("\n\t- Copied input file to all output files.");
+        printf("\n\t- Copied input file to all output files.\n");
     }
-    printf("\n\nDone running... for now.\n");
     CompFiles_DeInit();
+    printf("\n\nDone running... for now.\n");
  }
