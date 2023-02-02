@@ -7,7 +7,7 @@
 
 /*
 -------------------------------
-Test File-op related functions                                   
+Test File-op related functions
 -------------------------------
 */
 #pragma region test_fileops
@@ -25,19 +25,24 @@ Test File-op related functions
                     Created On: 1/19/2023
 
 */
-const char* test_filepath_create = "tests/__temp_test_in.in";
-const char* test_filepath_fake = "tests/__temp_test_notHere.in";
-void test_FileExists(CuTest *tc) {
-    FILE * file = fopen(test_filepath_create, "w");
+const char *test_filepath_create = "tests/__temp_test_in.in";
+const char *test_filepath_fake = "tests/__temp_test_notHere.in";
+const char *test_filepath_fake2 = "dfdfsfsdf/__temp_test_notHere.in";
+void test_FileExists(CuTest *tc)
+{
+    FILE *file = fopen(test_filepath_create, "w");
     fclose(file);
 
     /* It should return 1 if a file exists. */
     short testResultExists = fileExists(test_filepath_create);
-    CuAssertIntEquals(tc, 1, testResultExists);
+    CuAssertIntEquals(tc, FILE_EXISTS, testResultExists);
 
     /* It should return 0 if a file does not exist. */
     short testResultDoesntExist = fileExists(test_filepath_fake);
-    CuAssertIntEquals(tc, 0, testResultDoesntExist);
+    CuAssertIntEquals(tc, FILE_DOES_NOT_EXIST, testResultDoesntExist);
+
+    short testResultCANTEXIST = fileExists(test_filepath_fake2);
+    CuAssertIntEquals(tc, FILE_CANT_EXIST, testResultCANTEXIST);
 
     remove(test_filepath_create);
 }
@@ -48,14 +53,15 @@ void test_FileExists(CuTest *tc) {
                     Authors:    klm127
                     Created On: 1/22/2023
 */
-void test_backupFile(CuTest *tc) {
+void test_backupFile(CuTest *tc)
+{
     StdSwapper_Init();
     StdSwapper_SetAllStdWithInputOf(".");
-    char * fname = "tests/prevOut.out";
-    FILE * file = fopen(fname, "w");
+    char *fname = "tests/prevOut.out";
+    FILE *file = fopen(fname, "w");
     fclose(file);
     backupFile(fname);
-    char * newname = "tests/prevOut.out.bak";
+    char *newname = "tests/prevOut.out.bak";
     short exists = fileExists(newname);
     CuAssertIntEquals_Msg(tc, "A file with a .bak extension should exist.", FILE_EXISTS, exists);
     exists = fileExists(fname);
@@ -67,13 +73,12 @@ void test_backupFile(CuTest *tc) {
 
 #pragma endregion test_fileops
 
-/* 
+/*
 -------------------------------
-Test Filename-related functions                                   
+Test Filename-related functions
 -------------------------------
 */
 #pragma region test_filenames
-
 
 /*
     test_filenameHasExtension tests the filenameHasExtension function in file_util.c.
@@ -84,8 +89,9 @@ Test Filename-related functions
                     Created On: 1/19/2023
 
 */
-void test_filenameHasExtension(CuTest *tc) {
-    char * test_case;
+void test_filenameHasExtension(CuTest *tc)
+{
+    char *test_case;
     int result;
 
     /* it should be able to find a normal extension. */
@@ -107,7 +113,7 @@ void test_filenameHasExtension(CuTest *tc) {
     test_case = ".ext";
     result = filenameHasExtension(test_case);
     CuAssertIntEquals_Msg(tc, "filename can start with a period", 0, result);
-    
+
     /* it should return negative if the string ends with a period. */
     test_case = "ext.";
     result = filenameHasExtension(test_case);
@@ -120,67 +126,57 @@ void test_filenameHasExtension(CuTest *tc) {
 
     test_case = "tests/myfile";
     result = filenameHasExtension(test_case);
-    CuAssertIntEquals_Msg(tc, 
-        "\n\tIt should be able to check a file in a folder.",
-        FILENAME_HAS_NO_PERIOD, result
-    );
+    CuAssertIntEquals_Msg(tc,
+                          "\n\tIt should be able to check a file in a folder.",
+                          FILENAME_HAS_NO_PERIOD, result);
 
     test_case = "tests/my.subfolder/out";
     result = filenameHasExtension(test_case);
-    CuAssertIntEquals_Msg(tc, 
-        "\n\tIt should be able to tell that a file in a folder has no extension, even if the folder name has a period.",
-        FILENAME_HAS_NO_PERIOD, result
-    );
+    CuAssertIntEquals_Msg(tc,
+                          "\n\tIt should be able to tell that a file in a folder has no extension, even if the folder name has a period.",
+                          FILENAME_HAS_NO_PERIOD, result);
 
     test_case = "tests\\my.subfolder\\out";
     result = filenameHasExtension(test_case);
-    CuAssertIntEquals_Msg(tc, 
-        "\n\tIt should be able to tell that a file in a folder has no extension, even if the folder name has a period and it uses backslashes.(\\).",
-        FILENAME_HAS_NO_PERIOD, result
-    );
+    CuAssertIntEquals_Msg(tc,
+                          "\n\tIt should be able to tell that a file in a folder has no extension, even if the folder name has a period and it uses backslashes.(\\).",
+                          FILENAME_HAS_NO_PERIOD, result);
 
     test_case = "tests/my.subfolder/out.bak";
     result = filenameHasExtension(test_case);
-    CuAssertIntEquals_Msg(tc, 
-        "\n\tIt should be able to tell that a file in a folder has an extension, even if the folder name has a period.",
-        22, result
-    );
+    CuAssertIntEquals_Msg(tc,
+                          "\n\tIt should be able to tell that a file in a folder has an extension, even if the folder name has a period.",
+                          22, result);
 
     test_case = ".vscode/out.hi";
     result = filenameHasExtension(test_case);
-    CuAssertIntEquals_Msg(tc, 
-        "\n\tIt should be able to check files within folders which start with an extension.",
-        11, result
-    );
+    CuAssertIntEquals_Msg(tc,
+                          "\n\tIt should be able to check files within folders which start with an extension.",
+                          11, result);
 
     test_case = ".vscode/out";
     result = filenameHasExtension(test_case);
-    CuAssertIntEquals_Msg(tc, 
-        "\n\tIt should be able to check files within folders which start with an extension.",
-        FILENAME_HAS_NO_PERIOD, result
-    );
+    CuAssertIntEquals_Msg(tc,
+                          "\n\tIt should be able to check files within folders which start with an extension.",
+                          FILENAME_HAS_NO_PERIOD, result);
 
     test_case = "./tests/";
     result = filenameHasExtension(test_case);
-    CuAssertIntEquals_Msg(tc, 
-        "\n\tIt should be able to check whether a file is actually a directory.",
-        FILENAME_IS_DIRECTORY, result
-    );
+    CuAssertIntEquals_Msg(tc,
+                          "\n\tIt should be able to check whether a file is actually a directory.",
+                          FILENAME_IS_DIRECTORY, result);
 
     test_case = "tests/";
     result = filenameHasExtension(test_case);
-    CuAssertIntEquals_Msg(tc, 
-        "\n\tIt should be able to check whether a file is actually a directory.",
-        FILENAME_IS_DIRECTORY, result
-    );
+    CuAssertIntEquals_Msg(tc,
+                          "\n\tIt should be able to check whether a file is actually a directory.",
+                          FILENAME_IS_DIRECTORY, result);
 
     test_case = ".vscode/";
     result = filenameHasExtension(test_case);
-    CuAssertIntEquals_Msg(tc, 
-        "\n\tIt should be able to check whether a file is actually a directory.",
-        FILENAME_IS_DIRECTORY, result
-    );
-
+    CuAssertIntEquals_Msg(tc,
+                          "\n\tIt should be able to check whether a file is actually a directory.",
+                          FILENAME_IS_DIRECTORY, result);
 }
 
 /*
@@ -189,10 +185,11 @@ void test_filenameHasExtension(CuTest *tc) {
                     Authors:    klm127
                     Created On: 1/19/2023
 */
-void test_addExtension(CuTest *tc) {
-    char * test_filename;
-    char * test_extension;
-    char * concatenated;
+void test_addExtension(CuTest *tc)
+{
+    char *test_filename;
+    char *test_extension;
+    char *concatenated;
     test_filename = "mytestfile";
     test_extension = "ext1";
     int test = 0;
@@ -202,14 +199,14 @@ void test_addExtension(CuTest *tc) {
     test = strcmp(concatenated, "mytestfile.ext1");
     CuAssertIntEquals(tc, 0, test);
     free(concatenated);
-
 }
 
-void test_removeExtension(CuTest *tc) {
-    char * test_filename;
-    char * test_filename_removed_extension;
+void test_removeExtension(CuTest *tc)
+{
+    char *test_filename;
+    char *test_filename_removed_extension;
     int test = 0;
-    
+
     test_filename = "mytestfile.in";
 
     /*it should remove the extension from the filename*/
@@ -231,20 +228,21 @@ void test_removeExtension(CuTest *tc) {
     test = strcmp(test_filename_removed_extension, "m");
     CuAssertIntEquals(tc, 0, test);
     free(test_filename_removed_extension);
-
 }
 
-void test_generateAbsolutePath(CuTest *tc) {
-    char * infile = "in.txt";
-    char * testpath = generateAbsolutePath("./");
+void test_generateAbsolutePath(CuTest *tc)
+{
+    char *infile = "in.txt";
+    char *testpath = generateAbsolutePath("./");
     char expected[200];
     strcpy(expected, testpath);
     strcat(expected, infile);
-    char * actual = generateAbsolutePath("in.txt");
+    char *actual = generateAbsolutePath("in.txt");
     CuAssertStrEquals_Msg(tc, "gen absolute path should produce expected path name", expected, actual);
 }
 
-void test_checkIfSamePaths(CuTest *tc) {
+void test_checkIfSamePaths(CuTest *tc)
+{
     short result;
     result = checkIfSamePaths("a.in", "a.out");
     CuAssertIntEquals_Msg(tc, "if names are different, result should be 0", 0, result);
@@ -256,15 +254,16 @@ void test_checkIfSamePaths(CuTest *tc) {
 
 #pragma endregion test_filenames
 
-/* 
+/*
 -------------
-Test prompts                                                      
+Test prompts
 -------------
 */
 #pragma region test_prompts
 
-void test_getString(CuTest *tc) {
-    char* test_result;
+void test_getString(CuTest *tc)
+{
+    char *test_result;
     printf("testing");
 
     /* If the user enters a "\n", it should return previous characters*/
@@ -283,29 +282,28 @@ void test_getString(CuTest *tc) {
     free(test_result);
 
     StdSwapper_DeInit();
-
 }
 
 #pragma endregion test_prompts
 
-/* 
+/*
 -------------
-Sanity Tests                                                     
+Sanity Tests
 -------------
 */
 #pragma region test_sanity
 
-void test_getc(CuTest *tc) {
+void test_getc(CuTest *tc)
+{
     char result;
     printf("\nLet's test getc.\n\tPress 'Enter'!\n");
     result = getchar();
     CuAssertIntEquals_Msg(tc, "The result should be '\n'.", '\n', result);
 }
 
-
 #pragma endregion test_sanity
 
-/* 
+/*
     fileUtilGetSuite provides the suite of tests for the file_util module.
 
     It's used by main_test.c to access the tests within file_util_test; it loads each testing function into the suite and returns it.
@@ -316,14 +314,15 @@ void test_getc(CuTest *tc) {
 
     returns CuSuite* - the testing suite for file_util. See CuTest documentation for more information.
 */
-CuSuite* fileUtilGetSuite(){
-    CuSuite* suite = CuSuiteNew();
+CuSuite *fileUtilGetSuite()
+{
+    CuSuite *suite = CuSuiteNew();
     SUITE_ADD_TEST(suite, test_FileExists);
     SUITE_ADD_TEST(suite, test_backupFile);
     SUITE_ADD_TEST(suite, test_filenameHasExtension);
     SUITE_ADD_TEST(suite, test_removeExtension);
     /* SUITE_ADD_TEST(suite, test_directory_validation); <--- a sanity test only */
-    /* SUITE_ADD_TEST(suite, test_getc);  <--- a sanity test only */ 
+    /* SUITE_ADD_TEST(suite, test_getc);  <--- a sanity test only */
     SUITE_ADD_TEST(suite, test_getString);
     SUITE_ADD_TEST(suite, test_addExtension);
     SUITE_ADD_TEST(suite, test_generateAbsolutePath);
