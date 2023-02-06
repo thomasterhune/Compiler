@@ -1,0 +1,51 @@
+
+
+scanner ideas
+
+- transform a character stream into a token stream.
+
+
+hashmap implementation
+https://attractivechaos.wordpress.com/2009/09/29/khash-h/
+
+
+
+scanner {
+
+    readingFrom: File*
+
+    currentLine: int
+    currentRow: int
+
+    chunk: char[100]
+    chunk_size: int
+    chunk_index: int
+
+    char peek()
+    char consume()
+    put(char)
+
+    buffer: char* //default 100
+
+
+    token_buffer: token[100]
+    token_buffer_size: 100
+    pushToken(token) // should also realloc token_buffer if necessary
+
+}
+
+printTokencClassName(int tokenType)
+
+printToken(token * token)
+
+// linked list node
+token {
+    type: int
+    line: int
+    row: int
+    token_buffer: char*
+    next_token: token*
+}
+
+isDigit(char)
+isChar(char)
