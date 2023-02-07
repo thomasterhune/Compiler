@@ -40,16 +40,8 @@
 */
 int main(int argc, char *argv[]) {
     CompFiles_Init();
-    short terminate_requested = 0;
-    if(argc < 2) {
-        terminate_requested = CompFiles_AcquireValidatedFiles(NULL, NULL);
-    } else if(argc < 3) {
-        terminate_requested = CompFiles_AcquireValidatedFiles(argv[1], NULL);
-    } else {
-        terminate_requested = CompFiles_AcquireValidatedFiles(argv[1], argv[2]);
-    }
+    short terminate_requested = CompFiles_FileOpenFromCLIArgs(argc, argv);
     if(terminate_requested != 1) {
-        CompFiles_GenerateTempFile();
         CompFiles_CopyInputToOutputs();
         printf("\n\t- Copied input file to all output files.\n");
     }

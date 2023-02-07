@@ -1,4 +1,68 @@
 
+- main function calls start module
+- start module opens files
+- main of scanner module will continuously call the scanner receiving the token util the SCANEOF token is received.
+
+- there is a token buffer in the scanner caller
+
+- created an enum for all 33 tokens. 
+- keep track of line you are on.
+- read a file pointer when you enter scanner. 
+
+
+token scanner(char * buffer, FILE *in_file, FILE *out_file, FILE *list_file);
+
+^ we can unit test this probably fairly easily.
+
+
+scanner looks fir first non-whitespace character
+ > scanner.consumeWhitespace()
+
+if alphanumeric, copy them into buffer until whitespace.
+
+check for a '-' (looking for comments)
+check for a second '-' .... if exists, consume all remaining characters.
+
+if the second char is a digit, the minus is placed in the token buffer and all digits following '-' are copied into the token buffer and the token is an *intliteral*.
+
+
+professor provided routines:
+
+start_up(FILE *, FILE *, FILE *)
+clear_buffer (char *) // clear buffer
+int check_reserved (char *) // return token of the string
+int lexical_error (char *, flag, FILE *) // print lexical error, if flag, return count. 
+token_ident(token, char *) // identify string for token (write to char*)
+add_char(char *, char) // add a character to the buffer
+
+
+fpos_t position; 
+fgetpos(in_file, &position)
+fsetpos(in_file, &position)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OLD/BAD ideas:
 
 scanner ideas
 
@@ -12,29 +76,26 @@ https://attractivechaos.wordpress.com/2009/09/29/khash-h/
 
 scanner {
 
+    // file management functions 
     readingFrom: File*
-
     currentLine: int
     currentRow: int
 
     chunk: char[100]
     chunk_size: int
     chunk_index: int
+    getChunk()
 
     char peek()
     char consume()
     put(char)
 
-    buffer: char* //default 100
 
-
-    token_buffer: token[100]
-    token_buffer_size: 100
-    pushToken(token) // should also realloc token_buffer if necessary
+    buffer: char* //default 100?
+    first_token: token*
+    last_token: token*
 
 }
-
-printTokencClassName(int tokenType)
 
 printToken(token * token)
 
@@ -44,7 +105,7 @@ token {
     line: int
     row: int
     token_buffer: char*
-    next_token: token*
+    next_token: token* | NULL
 }
 
 isDigit(char)

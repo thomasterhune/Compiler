@@ -1,3 +1,8 @@
+2/7/2023: Karl
+- abstracted command line argument parse and calls to a new function, CompFiles_FileOpenFromCLIArgs, which also generates the Temp file.
+
+
+
 2/1/2023 : All Group Members
  - used fileapi.h to create a getAbsolutePath function
  - created checkIfSamePaths function to compare file name actual paths
