@@ -174,6 +174,19 @@ CompFiles prompts
 */
 #pragma region prompts
 
+short CompFiles_FileOpenFromCLIArgs(int argc, char *argv[]) {
+    short terminate_requested = 0;
+    if(argc < 2) {
+        terminate_requested = CompFiles_AcquireValidatedFiles(NULL, NULL);
+    } else if(argc < 3) {
+        terminate_requested = CompFiles_AcquireValidatedFiles(argv[1], NULL);
+    } else {
+        terminate_requested = CompFiles_AcquireValidatedFiles(argv[1], argv[2]);
+    }
+    CompFiles_GenerateTempFile();
+    return terminate_requested;
+}
+
 short CompFiles_AcquireValidatedFiles(char *inputFilename, const char *outputFilename)
 {
     while (CompFiles.terminate_requested != 1 && CompFiles.input_file_state != COMPFILES_STATE_NAME_VALIDATED && CompFiles.output_file_state != COMPFILES_STATE_NAME_VALIDATED)
@@ -254,7 +267,10 @@ short CompFiles_AcquireValidatedOutputFile(const char *filename)
 {
     short file_extension_parse;
     char *tempfilename = NULL;
-    if (filename == NULL)
+
+    CompFiles.has_requested_default_filename = 0;
+
+    if (filename == NULL) /* No file was given on the command line. */
     {
         printf("\nPlease provide an output filename: ");
         tempfilename = CompFiles_promptOutputFilename();
@@ -265,8 +281,12 @@ short CompFiles_AcquireValidatedOutputFile(const char *filename)
         strcpy(tempfilename, filename);
     }
 
+
     while (CompFiles.output_file_state != COMPFILES_STATE_NAME_VALIDATED && CompFiles.terminate_requested != 1)
     {
+        /* Loop as long as the output file is not validated and terminate is not requested. */
+
+        /* Each loop, check the file extension validity. */
         file_extension_parse = filenameHasExtension(tempfilename);
         if (file_extension_parse == FILENAME_HAS_NO_PERIOD)
         {
@@ -282,9 +302,9 @@ short CompFiles_AcquireValidatedOutputFile(const char *filename)
             free(tempfilename);
             tempfilename = CompFiles_promptOutputFilename();
         }
-        else
+        else /* The filename was syntactically valid. */
         {
-            short file_exists = fileExists(tempfilename);
+            short file_exists = fileExists(tempfilename); /* Find out if the file exists or can exist. */
             if (file_exists == FILE_EXISTS)
             {
                 short is_same_as_input_file = checkIfSamePaths(tempfilename, CompFiles.input_file_name);
@@ -307,12 +327,20 @@ short CompFiles_AcquireValidatedOutputFile(const char *filename)
                     }
                     if (user_selection == USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME)
                     {
-                        printf("\nAttempting to generate output file from input file name. ");
-                        free(tempfilename);
-                        char *tempfilename_no_ext = removeExtension(CompFiles.input_file_name);
-                        tempfilename = addExtension(tempfilename_no_ext, "out");
-                        printf("Checking %s.", tempfilename);
-                        free(tempfilename_no_ext);
+                        if(CompFiles.has_requested_default_filename == 0) {
+                            /* triggers the first time the user tries the default filename. */
+                            printf("\nAttempting to generate output file from input file name. ");
+                            free(tempfilename);
+                            char *tempfilename_no_ext = removeExtension(CompFiles.input_file_name);
+                            tempfilename = addExtension(tempfilename_no_ext, "out");
+                            printf("Checking %s.", tempfilename);
+                            free(tempfilename_no_ext);
+                            CompFiles.has_requested_default_filename = 1;
+                        } else {
+                            /* Triggers when user tries the default filename twice. */
+                            printf("\nDefault output filename was already tried! Exiting. \n");
+                            CompFiles.terminate_requested = 1;
+                        }
                     }
                     else if (user_selection == USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED)
                     {
@@ -358,7 +386,7 @@ short CompFiles_AcquireValidatedOutputFile(const char *filename)
     }
     else
     {
-        printf("\n\t - Terminate program request received.\n");
+        printf("\n\t- Terminate program request received.\n");
     }
 }
 
@@ -366,6 +394,7 @@ short CompFiles_AcquireValidatedListingFile(const char *filename)
 {
     short file_extension_parse;
     char *tempfilename = NULL;
+    CompFiles.has_requested_default_filename = 0;
     if (filename == NULL)
     {
         printf("\nPlease enter a listing filename: ");
@@ -427,12 +456,18 @@ short CompFiles_AcquireValidatedListingFile(const char *filename)
                     }
                     if (user_selection == USER_OUTPUT_OVERWRITE_DEFAULT_FILENAME)
                     {
-                        printf("\nAttempting to generate listing file from output file name. ");
-                        free(tempfilename);
-                        char *tempfilename_no_ext = removeExtension(CompFiles.output_file_name);
-                        tempfilename = addExtension(tempfilename_no_ext, "list");
-                        free(tempfilename_no_ext);
-                        printf("Checking %s.", tempfilename);
+                        if(CompFiles.has_requested_default_filename == 0) {
+                            printf("\nAttempting to generate listing file from output file name. ");
+                            free(tempfilename);
+                            char *tempfilename_no_ext = removeExtension(CompFiles.output_file_name);
+                            tempfilename = addExtension(tempfilename_no_ext, "list");
+                            free(tempfilename_no_ext);
+                            printf("Checking %s.", tempfilename);
+                            CompFiles.has_requested_default_filename = 1;
+                        } else {
+                            printf("\nDefault listing filename was already tried! Exiting. \n");
+                            CompFiles.terminate_requested = 1;
+                        }
                     }
                     else if (user_selection == USER_OUTPUT_OVERWRITE_REENTER_FILENAME_SELECTED)
                     {
@@ -486,6 +521,7 @@ char *CompFiles_promptOutputFilename()
         char *ext_removed = removeExtension(CompFiles.input_file_name);
         printf("\nNo file name was entered. Defaulting to %s", ext_removed);
         outputFilename = addExtension(ext_removed, "out");
+        CompFiles.has_requested_default_filename = 1;
         free(ext_removed);
     }
     return outputFilename;

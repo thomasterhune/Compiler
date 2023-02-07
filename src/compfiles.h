@@ -55,6 +55,8 @@ struct TCompFiles {
     short listing_file_state; 
     /*! 1 indicates that a user requested to terminate the program. */
     short terminate_requested;
+    /*! 1 indicates that a user has requested to use a default ouput filename already. This is so that if the user selects this twice, they will automatically exit instead of looping the prompt. */
+    short has_requested_default_filename;
     /*! The input filename. */
     char * input_file_name;
     /*! The output filename, */
@@ -129,8 +131,21 @@ CompFiles prompts
 */
 #pragma region prompts
 
+
 /*!
-    Loops and prompts until all input and output files are set correctly or until terminate is requested.
+    Parses the command line args and calls functions to acquire validated filenames. 
+
+    \param argc The argument count.
+    \param argv The argument array.
+    \returns 1 if terminate was requested. Otherwise, 0.
+    \author klm127
+    \date 2/7/2023
+*/
+short CompFiles_FileOpenFromCLIArgs(int argc, char *argv[]);
+
+
+/*!
+    Loops and prompts until all input and output files are set correctly or until terminate is requested. After the input, output, and listing files are generated, CompFiles_AcquireValidatedFiles also generates a temp file.
 
     \param inputFilename a filename with which to begin input validation with or NULL
     \param outputFilename  a filename with which to begin output validation with or NULL
