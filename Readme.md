@@ -21,8 +21,9 @@ Place the `bin` directory on your system path if you want to be able to run tomp
 - .vscode : Contains vscode configurations.
 - docs : Contains additional documentation
 - src : Contains source code
-    - file_util.c / .h : file i/o for the compiler
     - main.c : Program entry point
+    - compfiles.c / .h : struct for managing input output file access
+    - file_util.c / .h : file i/o helpersfor the compiler
 - tests : Contains source code for tests
     - deps: Contains test dependencies
         - CuTest.c / .h : CuTest micro test framework
