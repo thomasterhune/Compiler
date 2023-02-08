@@ -174,7 +174,7 @@ CompFiles prompts
 */
 #pragma region prompts
 
-short CompFiles_FileOpenFromCLIArgs(int argc, char *argv[]) {
+short CompFiles_Open(int argc, char *argv[]) {
     short terminate_requested = 0;
     if(argc < 2) {
         terminate_requested = CompFiles_AcquireValidatedFiles(NULL, NULL);
@@ -183,7 +183,9 @@ short CompFiles_FileOpenFromCLIArgs(int argc, char *argv[]) {
     } else {
         terminate_requested = CompFiles_AcquireValidatedFiles(argv[1], argv[2]);
     }
-    CompFiles_GenerateTempFile();
+    if(!terminate_requested) {
+        CompFiles_GenerateTempFile();
+    }
     return terminate_requested;
 }
 

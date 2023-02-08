@@ -141,7 +141,7 @@ CompFiles prompts
     \author klm127
     \date 2/7/2023
 */
-short CompFiles_FileOpenFromCLIArgs(int argc, char *argv[]);
+short CompFiles_Open(int argc, char *argv[]);
 
 
 /*!

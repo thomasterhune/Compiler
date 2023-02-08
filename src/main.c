@@ -40,7 +40,7 @@
 */
 int main(int argc, char *argv[]) {
     CompFiles_Init();
-    short terminate_requested = CompFiles_FileOpenFromCLIArgs(argc, argv);
+    short terminate_requested = CompFiles_Open(argc, argv);
     if(terminate_requested != 1) {
         CompFiles_CopyInputToOutputs();
         printf("\n\t- Copied input file to all output files.\n");
