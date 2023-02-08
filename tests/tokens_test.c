@@ -76,27 +76,29 @@ void testToken_Recognize(CuTest *tc) {
 
     int token = Token_RecognizeKeyword("while", strlen("while"));
     CuAssertIntEquals(tc, WHILE, token);
-    /*token = Token_Recognize("write", strlen("write"));
+    token = Token_RecognizeKeyword("write", strlen("write"));
      CuAssertIntEquals(tc, WRITE, token);
-    token = Token_Recognize("endwhile", strlen("endwhile"));
+    token = Token_RecognizeKeyword("endwhile", strlen("endwhile"));
     CuAssertIntEquals(tc, ENDWHILE, token);
-    token = Token_Recognize("if", strlen("if"));
+    token = Token_RecognizeKeyword("if", strlen("if"));
     CuAssertIntEquals(tc, IF, token);
-    token = Token_Recognize("then", strlen("then"));
-    CuAssertIntEquals(tc, THEN, token);
-    token = Token_Recognize("else", strlen("else"));
-    CuAssertIntEquals(tc, ELSE, token);
-    token = Token_Recognize("endif", strlen("endif"));
-    CuAssertIntEquals(tc, ENDIF, token);
-    token = Token_Recognize("endwoogie", strlen("endwoogie"));
+    token = Token_RecognizeKeyword("ifx", strlen("ifx"));
     CuAssertIntEquals(tc, ID, token);
-    token = Token_Recognize("begin", strlen("begin"));
+    token = Token_RecognizeKeyword("then", strlen("then"));
+    CuAssertIntEquals(tc, THEN, token);
+    token = Token_RecognizeKeyword("else", strlen("else"));
+    CuAssertIntEquals(tc, ELSE, token);
+    token = Token_RecognizeKeyword("endif", strlen("endif"));
+    CuAssertIntEquals(tc, ENDIF, token);
+    token = Token_RecognizeKeyword("endwoogie", strlen("endwoogie"));
+    CuAssertIntEquals(tc, ID, token);
+    token = Token_RecognizeKeyword("begin", strlen("begin"));
     CuAssertIntEquals(tc, BEGIN, token);
 
-    token = Token_Recognize("end", strlen("end"));
+    token = Token_RecognizeKeyword("end", strlen("end"));
     CuAssertIntEquals(tc, END, token);
-    token = Token_Recognize("read", strlen("read"));
-    CuAssertIntEquals(tc, READ, token); */
+    token = Token_RecognizeKeyword("read", strlen("read"));
+    CuAssertIntEquals(tc, READ, token);
 
 }
 
