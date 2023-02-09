@@ -1,9 +1,15 @@
+2/8/2023: Karl, Thomas, Anthony
+- created scanner.h and scanner.c
+- add struct to hold scanner info
+- scanner lifecycle functions
+- scanner buffer functions
+- scanner_util , created buffer resize and refresh functions
+- created tests for scanner_util
+
 2/7/2023: Karl
 - abstracted command line argument parse and calls to a new function, CompFiles_FileOpenFromCLIArgs, which also generates the Temp file.
 - created Tokens_GetName, the tokens Map, the tokens enum.
 - created a state transition table as a 3d array for a keyword recognizer Token_RecognizeKeyword. Used excel to design the table; .xlsx is in the /docs folder.
-
-
 
 2/1/2023 : All Group Members
  - used fileapi.h to create a getAbsolutePath function

@@ -24,4 +24,15 @@ const char * Token_GetName(int id);
 */
 int Token_RecognizeKeyword(char * word, int length);
 
+
+
+/*! Token_NextToken will take the next token from the buffer
+    \param char * 
+
+ char * word Token_NextToken(char * word);
+ 
+ 
+ */
+
+
 #endif
