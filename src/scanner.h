@@ -117,6 +117,18 @@ void Scanner_Scan();
 */
 short Scanner_lookAhead();
 
+
+/*!
+    will skip over whitespace and not put it in the buffer
+*/
+void Scanner_Skipwhitespace();
+
+
+/*!
+    will extract a word from the lookahead because it will be a synatx error
+*/
+void Scanner_ExtractWord();
+
 #pragma endregion logic
 
 #pragma region debug
