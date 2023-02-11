@@ -152,6 +152,41 @@ short Scanner_lookAhead() {
 #pragma endregion logic
 
 /*
+---------------
+Scanner actions
+---------------
+*/
+#pragma region action
+
+void Scanner_Skipwhitespace(short lookahead)
+{
+    /* can use getchar to skip the whitespace im not sure what we are passing in here and how to acess it like is it a spefic postion(like a single char
+        or many 
+    
+    */
+    
+    
+    
+}
+
+
+
+void Scanner_ExtractWord()
+{
+/*same for here use getchar and extract entire word that is valid synatx just go until you reahed whitespace or some other delimter 
+
+
+*/
+
+
+}
+
+
+
+
+#pragma endregion action
+
+/*
 ----------------
 Scanner debug
 ----------------
