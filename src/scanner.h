@@ -20,17 +20,15 @@
 /*!
     TScanner holds the static data a scanner needs to process files.
 */
-struct TScanner{
+typedef struct {
     /*A character array for the input buffer*/
     char * buffer;
     /*! The current buffer size, in bytes. */
     int current_buff_size; 
-    /*! The current position being read in the buffer.*/
+    /*! The current position being read in the buffer and a running counter of the column being read.*/
     int buf_pos;
     /*! A running counter of the line being read. */
     int line_count;
-    /*! A running counter of the column being read. */
-    int col_count;
     /*! Character array to hold token*/
     char * token;
     /*! Short referencing error flag*/
@@ -44,10 +42,10 @@ struct TScanner{
     /*! A file pointer to an open listing file. */
     FILE *listing;
 
-};
+} TScanner;
 
 /*! The singleton instance of the scanner. */
-struct TScanner scanner;
+TScanner scanner;
 
 #pragma endregion structs
 
@@ -83,6 +81,16 @@ void Scanner_clearBuffer();
 */
 void Scanner_expandBuffer();
 
+/*!
+    Reads a file until a newline character or EOF character is found. Puts all found characters in its buffer. Expands the buffer if necessary to fit a line.
+
+    It also increments scanner's line counter and resets buf_pos (which doubles as a column counter) to 0.
+    
+    \returns The number of characters read into the buffer.
+    \author klm127
+    \date 2/10/2023
+*/
+int Scanner_populateBuffer();
 
 #pragma endregion buffer
 
@@ -95,8 +103,25 @@ void Scanner_addChar();
 
 #pragma region logic
 
+
+/*!
+    Executes calls to other Scanner methods to perform the scanning logic. Uses Scanner_Scan to look ahead and determine the correct function to call with a switch statement.
+
+*/
 void Scanner_Scan();
+/*!
+    Peeks ahead in the scanner. Starts by looking at current position and scans forward if a '-' is found so it can identify a comment. It does not move the buf pos.
+    \returns A SCAN_LHEAD_VAL corresponding to what it found. 0 = whitespace, 1 = eof, 2 = newline, 3 = comment, 4 = syntax
+    \author klm127
+    \date 2/10/2023
+*/
+short Scanner_lookAhead();
 
 #pragma endregion logic
+
+#pragma region debug
+/* GetScanner returns the global scanner singleton. It should only be used for tests.*/
+TScanner* __GetScanner();
+#pragma endregion debug
 
 #endif

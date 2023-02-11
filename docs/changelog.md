@@ -1,3 +1,11 @@
+
+
+
+2/10/2023: Karl
+- Added Scanner_populateBuffer() and tested it.
+- Created Scanner_LookAhead() and put a switch statement in Scanner_Scan()
+
+
 2/8/2023: Karl, Thomas, Anthony
 - created scanner.h and scanner.c
 - add struct to hold scanner info
