@@ -173,12 +173,9 @@ void Scanner_Skipwhitespace()
 
 
 
-void Scanner_ExtractWord()
+char* Scanner_ExtractWord()
 {
-/*same for here use getchar and extract entire word that is valid synatx just go until you reahed whitespace or some other delimter 
 
-
-*/
 
 
 }

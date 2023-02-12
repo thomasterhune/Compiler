@@ -1,6 +1,7 @@
 
 2/11/2023: Karl
-- Added skipWhitespace general function in scanner_util and added tests for it.
+- Added skipWhitespace general function in scanner_util and added tests for it
+- Added charIn function in scanner_util which is used by extractWord function in scanner_util.
 
 2/10/2023: Karl
 - Added Scanner_populateBuffer() and tested it.
