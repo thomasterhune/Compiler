@@ -25,6 +25,20 @@ void test_refreshBuffer(CuTest *tc){
     CuAssertIntEquals_Msg(tc, "The old char array should be freed and new char array should be 200 bytes", 1, 1);
 }
 
+void test_skipWhitespace(CuTest *tc) {
+    char * buf = "s     a buffer\n";
+    int index = 0;
+    skipWhitespace(buf, &index);
+    CuAssertIntEquals_Msg(tc, "if starts on a char, should end on a char.", 0, 0);
+    index += 1;
+    skipWhitespace(buf, &index);
+    CuAssertIntEquals_Msg(tc, "should be at 'a'", 1, buf[index] == 'a');
+    skipWhitespace(buf, &index);
+    CuAssertIntEquals_Msg(tc, "should be at 'a'", 1, buf[index] == 'a');
+    index += 1;
+    CuAssertIntEquals_Msg(tc, "should be at 'b'", 1, buf[index] == 'b');
+}
+
 
 
 CuSuite *scannerUtilGetSuite()

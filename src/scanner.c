@@ -158,12 +158,14 @@ Scanner actions
 */
 #pragma region action
 
-void Scanner_Skipwhitespace(short lookahead)
+void Scanner_Skipwhitespace()
 {
     /* can use getchar to skip the whitespace im not sure what we are passing in here and how to acess it like is it a spefic postion(like a single char
         or many 
     
     */
+
+   /* Shouldn't have to pass anything in. That lookahead enum is only used by the switch statement in Scanner_Scan(). I created a skip whitespace in scanner_util.c - this can probably just call that with members of scanner. */
     
     
     
