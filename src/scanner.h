@@ -125,9 +125,11 @@ void Scanner_Skipwhitespace();
 
 
 /*!
-    will extract a word from the lookahead because it will be a synatx error
+    Moves the buffer index forward until a whitespace or an operator. Returns everything between the start position and the end position as a new, malloced char string.
+
+    \returns A malloced car string. 
 */
-void Scanner_ExtractWord();
+char* Scanner_ExtractWord();
 
 #pragma endregion logic
 
