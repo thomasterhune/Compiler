@@ -14,3 +14,11 @@ char* refreshBuffer(char * bufferToRefresh, int newSize){
     free(bufferToRefresh);
     return newBuffer;
 }
+
+void skipWhitespace(char * buffer, int * index) {
+    char test;
+    do {
+        test = buffer[*index];
+        *index += 1;
+    } while(test == ' ' || test == '\t');
+}

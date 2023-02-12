@@ -20,5 +20,15 @@ char* resizeBuffer(char * bufferToResize, int newSize);
 */
 char* refreshBuffer(char * bufferToRefresh, int newSize);
 
+/*!
+    Moves a pointer to a buffer index to the index of the next character in the buffer that isn't a ' ' or a '\t'. 
+
+    \pre The buffer should end in a non-whitespace (such as \n or EOF) to prevent overflows. Index should point to a valid index.
+    \post index will point to the next non-whitespace character after it started
+    \param buffer char* The buffer to check.
+    \param index A pointer to the buffer index. Checking will start from this index. This index will be set to the next non-whitespace character, which may be the samne value it started as.
+*/
+void skipWhitespace(char * buffer, int * index);
+
 
 #endif
