@@ -1,6 +1,8 @@
 #ifndef scanner_h
 #define scanner_h
 
+#define SCANNER_PRINTS_TO_CONSOLE 1
+
 #include <stdio.h>
 
 /* The initial buffer size for the scanner's buffer. It will be expanded when necessary. */
@@ -10,12 +12,21 @@
     \file scanner.h
     \brief Scanner struct and 'method'
 
-    We deviated slightly from the suggested implementation in that we are maintaining a scanner singleton that operates on its members as 'methods'.
+    We achieve scanning using a singleton struct called scanner of type TScanner that operates on its members using 'methods'. Every scanner method (every function in this file) begins with 'Scanner_' to indicate that it will be mutating the scanner singleton. 
+
+    Scanner reads from the input file one line at a time. That is, it reads a line until it hits either a newline or EOF. This line is read into an expanding malloced buffer to allow for excessively large line sizes, though it prefers line sizes under 100 characters. 
+
+    The scanner methods call the generic functions in scanner_util to read its buffer.
 
     The scanner is responsible for reading an input file and extracting tokens. See tokens.h / tokens.c for more information.
 
 */
 
+/*
+-------------------
+Scanner struct/typedef
+-------------------
+*/
 #pragma region structs
 /*!
     TScanner holds the static data a scanner needs to process files.
@@ -29,10 +40,10 @@ typedef struct {
     int buf_pos;
     /*! A running counter of the line being read. */
     int line_count;
-    /*! Character array to hold token*/
-    char * token;
-    /*! Short referencing error flag*/
-    short errorFlag;
+    /* An array of boundry characters that delimit literals, keywords, and identifiers. Effectively all operator characters plus space, newline, and EOF. Set in Scanner_Init().*/
+    char * boundaries; 
+    /* Set in populateBuffer when a line ends in the EOF char. */
+    short on_last_line;
     /*! A file pointer to an open input file. */
     FILE *in;
     /*! A file pointer to an open output file. */
@@ -48,19 +59,17 @@ typedef struct {
 TScanner scanner;
 
 #pragma endregion structs
-
+/*
+-------------------
+Scanner lifecycle
+-------------------
+*/
 #pragma region lifecycle
 /*!
     Initializes the scanner.
-
-    \pre Each of the files is open and ready for reading or writing.
-    \param in input file for reading
-    \param out output file for output
-    \param listing listing file output for scanner process
-    \param temp temporary file 
     
 */
-void Scanner_Init(FILE * in, FILE * out, FILE * listing, FILE * temp);
+void Scanner_Init();
 
 /*!
     De-Initializes the scanner. Frees the buffer string. Forgets the file pointer references. Scanner_Init() should be called again if the scanner is to be re-used. 
@@ -68,9 +77,12 @@ void Scanner_Init(FILE * in, FILE * out, FILE * listing, FILE * temp);
 void Scanner_DeInit();
 
 #pragma endregion lifecycle
-
+/*
+-------------------
+Scanner buffer
+-------------------
+*/
 #pragma region buffer
-
 /*! 
     Clears scanner.buffer and sets it to a new buffer of default size by calling refreshBuffer in scanner_util. 
 */
@@ -94,32 +106,45 @@ int Scanner_populateBuffer();
 
 #pragma endregion buffer
 
-/*!
-Scanner_addChar add a char to the buffer
-
+/*
+----------------
+Scanner logic
+----------------
 */
-void Scanner_addChar();
-
-
 #pragma region logic
-
-
 /*!
-    Executes calls to other Scanner methods to perform the scanning logic. Uses Scanner_Scan to look ahead and determine the correct function to call with a switch statement.
+    Executes calls to other Scanner methods to perform the scanning logic. Uses Scanner_Scan to look ahead and determine the correct function to call with a switch statement. Effectively drives the scanning process.
 
+    \pre Each of the files is open and ready for reading or writing.
+    \param in input file for reading
+    \param out output file for output
+    \param listing listing file output for scanner process
+    \param temp temporary file 
 */
-void Scanner_Scan();
+void Scanner_Scan(FILE * in, FILE * out, FILE * listing, FILE * temp);
 /*!
     Peeks ahead in the scanner. Starts by looking at current position and scans forward if a '-' is found so it can identify a comment. It does not move the buf pos.
-    \returns A SCAN_LHEAD_VAL corresponding to what it found. 0 = whitespace, 1 = eof, 2 = newline, 3 = comment, 4 = syntax
+    \returns A SCAN_LHEAD_VAL corresponding to what it found. SCAN_LHEAD_WHITESPACE=0, SCAN_LHEAD_EOF=1, SCAN_LHEAD_NLINE=2, SCAN_LHEAD_COMMENT=3, SCAN_LHEAD_OPERATOR=4, SCAN_LHEAD_NUMBER=5, SCAN_LHEAD_WORD=6
     \author klm127
     \date 2/10/2023
 */
 short Scanner_lookAhead();
 
-
 /*!
-    will skip over whitespace and not put it in the buffer
+    Scanner_takeAction evaluates the result of calling Scanner_lookAhead() and calls the appropriate method using a switch statement. 
+*/
+void Scanner_takeAction(short lookAheadResult);
+
+#pragma endregion logic
+
+/*
+---------------
+Scanner actions
+---------------
+*/
+#pragma region actions
+/*!
+    Moves the scanner buffer pointer to the first non-whitespace found from its current position.
 */
 void Scanner_Skipwhitespace();
 
@@ -127,12 +152,41 @@ void Scanner_Skipwhitespace();
 /*!
     Moves the buffer index forward until a whitespace or an operator. Returns everything between the start position and the end position as a new, malloced char string.
 
-    \returns A malloced car string. 
+    \returns A malloced char string. 
 */
 char* Scanner_ExtractWord();
 
-#pragma endregion logic
+/*!
+    Moves the buffer index forward until a non-number is found. Returns everything between the start position and the end position as a new, malloced char string.
 
+    \returns A malloced char string consisting only of digits.
+*/
+char* Scanner_ExtractInteger();
+#pragma endregion actions
+
+/*
+----------------
+Scanner printing
+----------------
+*/
+#pragma region printing
+
+/*!
+    Prints the line number and a tab, then prints the current buffer to the listing file, starting at position 0 and ending at scanner.buf_pos.
+
+    It will also print to stdout if the flag is set in the header file.
+
+    \author klm127
+    \date 2/12/2023
+*/
+void Scanner_printLine();
+
+#pragma endregion printing
+/*
+----------------
+Scanner debug
+----------------
+*/
 #pragma region debug
 /* GetScanner returns the global scanner singleton. It should only be used for tests.*/
 TScanner* __GetScanner();

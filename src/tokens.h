@@ -5,6 +5,18 @@ enum TOKEN {
     BEGIN=0, END, READ, WRITE, IF, THEN, ELSE, ENDIF, WHILE, ENDWHILE, ID, INTLITERAL, FALSEOP, TRUEOP, NULLOP, LPAREN, RPAREN, SEMICOLON, COMMA, ASSIGNOP, PLUSOP, MINUSOP, MULTOP,DIVOP, NOTOP, LESSOP, LESSEQUALOP, GREATEROP, GREATEREQUALOP, EQUALOP, NOTEQUALOP, SCANEOF, ERROR
 };
 
+typedef struct {
+    /* A type corresponding to the TOKEN enum. */
+    short token;
+    /* The character that was found. */
+    char * raw;
+    /* The line number it was found on. */
+    int line_no;
+    /* The column where it started. */
+    int col_no;
+
+} TokenCatch;
+
 /*! Token_GetName gets a character string representing a token. 
 
     \param id The token ENUM to retrieve.
@@ -25,14 +37,14 @@ const char * Token_GetName(int id);
 int Token_RecognizeKeyword(char * word, int length);
 
 
-
-/*! Token_NextToken will take the next token from the buffer
-    \param char * 
-
- char * word Token_NextToken(char * word);
- 
- 
- */
-
+/*!
+    Token_Catch is called when an actual token has been found. It produces a TokenCatch struct which wraps the token type with other associated data, such as the raw text that was found and the line it was found at.
+    \param tokenType A type in enum TOKEN
+    \param raw_text_found A char pointer to the raw text that caused this token to be identified as such.
+    \param line_found_at The line in the file the token was found.
+    \param col_found_at The column at which the token was found. 
+    \returns A new TokenCatch encapsulating the parameter data. 
+*/
+TokenCatch Token_Catch(short tokenType, char* raw_text_found, int line_found_at, int col_found_at);
 
 #endif

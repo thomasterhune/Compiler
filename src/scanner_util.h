@@ -27,8 +27,9 @@ char* refreshBuffer(char * bufferToRefresh, int newSize);
     \post index will point to the next non-whitespace character after it started
     \param buffer char* The buffer to check.
     \param index A pointer to the buffer index. Checking will start from this index. This index will be set to the next non-whitespace character, which may be the samne value it started as.
+    \returns The number of characters skipped.
 */
-void skipWhitespace(char * buffer, int * index);
+int skipWhitespace(char * buffer, int * index);
 
 
 /*!
@@ -37,11 +38,21 @@ void skipWhitespace(char * buffer, int * index);
     \param index A pointer to an int that holds an index in the buffer from which to start and tha twill be moved to the value of the end of the word extracted
     \param boundrychars A set of characters that are boundries and end a word
     \param l_boundrychars The length of boundrychars.
-    \returns A new malloced string containing the extracted word.
+    \returns A new malloced string, null-terminated, and containing the extracted word.
     \author klm127
     \date 2/11/2023
 */
 char* extractWord(char* buffer, int * index, char* boundrychars, int l_boundrychars);
+
+/*!
+    Extract a positive integer from a buffer and returns it as a new malloced string. The number starts at index and ends when the first non-number character is found. Index will be moved to the first non-number character after the number.
+    \param buffer A buffer to read.
+    \param index A pointer to an int that holds the starting index of the buffer. 
+    \returns A new malloced string, null-terminated, and containing the extracted integer as a string.
+    \author klm127
+    \date 2/12/2023
+*/
+char* extractInt(char* buffer, int* index);
 
 /*!
     Determines if a char matches a char within charset.
