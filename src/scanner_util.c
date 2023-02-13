@@ -16,25 +16,28 @@ char* refreshBuffer(char * bufferToRefresh, int newSize){
     return newBuffer;
 }
 
-void skipWhitespace(char * buffer, int * index) {
+int skipWhitespace(char * buffer, int * index) {
     char test = buffer[*index];
+    int start = *index;
     while(test == ' ' || test == '\t') {
         *index += 1;
         test = buffer[*index];
     }
+    return *index - start; /* Return num chars read by checking buffer offset */
 }
 
 char* extractWord(char* buffer, int * index, char* boundrychars, int l_boundrychars) {
     int start = *index;
     int offset = start;
-    char test;
+    char test = buffer[offset];
     short at_boundry = 0;
     while(!at_boundry) {
         at_boundry = charIn(test, boundrychars, l_boundrychars);
         offset+=1;
         test = buffer[offset];
     }
-    char * new_word  = malloc( (offset - start + 1) * sizeof(char)) ;
+    int size_neword = offset-start+1;
+    char * new_word  = malloc( size_neword * sizeof(char)) ;
     int i = 0;
     while(start < offset - 1) {
         new_word[i] = buffer[start];
@@ -42,7 +45,30 @@ char* extractWord(char* buffer, int * index, char* boundrychars, int l_boundrych
         start++;
     }
     *index = offset - 1;
-    new_word[i] == '\0';
+    new_word[i] = '\0';
+    return new_word;
+}
+
+char* extractInt(char* buffer, int* index) {
+    int start = *index;
+    int offset = start;
+    char test = buffer[offset];
+    short at_boundry = 0;
+    while(!at_boundry) {
+        at_boundry = test >= '0' && test <= '9';
+        offset+=1;
+        test = buffer[offset];
+    }
+    int size_neword = offset-start+1;
+    char * new_word  = malloc( size_neword * sizeof(char)) ;
+    int i = 0;
+    while(start < offset - 1) {
+        new_word[i] = buffer[start];
+        i++;
+        start++;
+    }
+    *index = offset - 1;
+    new_word[i] = '\0';
     return new_word;
 }
 

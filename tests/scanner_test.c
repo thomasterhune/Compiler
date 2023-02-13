@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include "CuTest.h"
 #include "scanner.h"
+#include "string.h"
 
 void test_Scanner_Init(CuTest *tc){
-
+    Scanner_Init(NULL,NULL,NULL,NULL);
+    TScanner * scan = __GetScanner();
+    CuAssertIntEquals(tc, 17, strlen(scan->boundaries));
 }
 
 void test_Scanner_DeInit(CuTest *tc){
@@ -71,6 +74,7 @@ void test_Scanner_Scan(CuTest *tc){
 CuSuite* scannerGetSuite() {
     CuSuite *suite = CuSuiteNew();
     SUITE_ADD_TEST(suite, test_Scanner_populateBuffer);
+    SUITE_ADD_TEST(suite, test_Scanner_Init);
     return suite;
 
 }

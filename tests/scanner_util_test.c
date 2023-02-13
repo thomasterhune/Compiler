@@ -63,26 +63,56 @@ void test_extractWord(CuTest *tc) {
 
     int index = 0;
     char * hello = extractWord(buffer, &index, boundrychars, l_boundry);
-    CuAssertStrEquals(tc, "hello", hello);
+    CuAssertStrEquals(tc, "hello\0", hello);
     free(hello);
 
     index += 3;
     char * wbuffer = extractWord(buffer, &index, boundrychars, l_boundry);
-    CuAssertStrEquals(tc, "buffer", wbuffer);
+    CuAssertStrEquals(tc, "buffer\0", wbuffer);
     free(wbuffer);
 
     index += 1;
     char * wthree = extractWord(buffer, &index, boundrychars, l_boundry);
-    CuAssertStrEquals(tc, "three", wthree);
+    CuAssertStrEquals(tc, "three\0", wthree);
     free(wthree);
 
     index += 1;
     char * wkeyword = extractWord(buffer, &index, boundrychars, l_boundry);
-    CuAssertStrEquals(tc, "keyword", wkeyword);
+    CuAssertStrEquals(tc, "keyword\0", wkeyword);
     free(wkeyword);
+}
+
+void test_extractInt(CuTest *tc) {
+    char * boundrychars = "\t+-;* \0";
+    int l_boundry = 6;
+    char* buffer = "1111* 3333 - 55;111 0";
+
+    int index = 0;
+    char * test = extractWord(buffer, &index, boundrychars, l_boundry);
+    CuAssertStrEquals(tc, "1111\0", test);
+    free(test);
+
+    index += 2;
+    test = extractWord(buffer, &index, boundrychars, l_boundry);
+    CuAssertStrEquals(tc, "3333\0", test);
+    free(test);
+
+    index += 3;
+    test = extractWord(buffer, &index, boundrychars, l_boundry);
+    CuAssertStrEquals(tc, "55\0", test);
+    free(test);
+
+    index += 1;
+    test = extractWord(buffer, &index, boundrychars, l_boundry);
+    CuAssertStrEquals(tc, "111\0", test);
+    free(test);
+
+    index += 1;
+    test = extractWord(buffer, &index, boundrychars, l_boundry);
+    CuAssertStrEquals(tc, "0\0", test);
+    free(test);
 
 
-    
 }
 
 
@@ -93,6 +123,7 @@ CuSuite *scannerUtilGetSuite()
     SUITE_ADD_TEST(suite, test_refreshBuffer);
     SUITE_ADD_TEST(suite, test_charin);
     SUITE_ADD_TEST(suite, test_extractWord);
+    SUITE_ADD_TEST(suite, test_extractInt);
 
     return suite; 
 }

@@ -1,3 +1,16 @@
+2/12/2023: Karl
+- Added recognizers for trueop, nullop, falseop to the state transition table, which I had missed before.
+- Skipwhitespace now returns the number of characters missed. This can be useful if we extract a number and it isn't followed by a whitespace (skipwhitespace will produce 0.) This may be a cause for an error print. (Worth asking)
+- Fixed extractWord errors and added Scanner_ExtractWord
+- Added extractInteger and Scanner_ExtractInteger 
+- Added a boundries member to Tscanner. This is a list of all boundry characters that delimit words, identifiers, and number and it includes all operators plus whitespace and EOF. See Scanner_Init() for how it's constructed.
+- Token Recognize now returns ERROR if there is a non number, non alphanumeric within the tested string. It also now allows for identifiers to have numbers.
+- Created Token wrapping struct called TokenCatch that encapsulates info about the token such as the recognized raw string, line number, and so forth. 
+- Scanner now takes files on Scanner_Scan(files...) not on Scanner_Init()
+- Init and DeInit functions in main
+- Moved switch statement/dispatcher into a function Scanner_TakeAction(lookaheadResult)
+- Made basic Scanner_Scan(); currently will print the listing file numbers and lines only
+
 
 2/11/2023: Karl
 - Added skipWhitespace general function in scanner_util and added tests for it

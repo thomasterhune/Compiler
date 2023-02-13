@@ -86,6 +86,8 @@ void testToken_Recognize(CuTest *tc) {
     CuAssertIntEquals(tc, ID, token);
     token = Token_RecognizeKeyword("then", strlen("then"));
     CuAssertIntEquals(tc, THEN, token);
+    token = Token_RecognizeKeyword("tHeN", strlen("then"));
+    CuAssertIntEquals(tc, THEN, token);
     token = Token_RecognizeKeyword("else", strlen("else"));
     CuAssertIntEquals(tc, ELSE, token);
     token = Token_RecognizeKeyword("endif", strlen("endif"));
@@ -99,6 +101,22 @@ void testToken_Recognize(CuTest *tc) {
     CuAssertIntEquals(tc, END, token);
     token = Token_RecognizeKeyword("read", strlen("read"));
     CuAssertIntEquals(tc, READ, token);
+
+    token = Token_RecognizeKeyword("true", strlen("true"));
+    CuAssertIntEquals(tc, TRUEOP, token);
+    token = Token_RecognizeKeyword("false", strlen("false"));
+    CuAssertIntEquals(tc, FALSEOP, token);
+    token = Token_RecognizeKeyword("null", strlen("null"));
+    CuAssertIntEquals(tc, NULLOP, token);
+    
+    token = Token_RecognizeKeyword("^&", strlen("^&"));
+    CuAssertIntEquals(tc, ERROR, token);
+    
+    token = Token_RecognizeKeyword("+++---5555", strlen("+++---5555"));
+    CuAssertIntEquals(tc, ERROR, token);
+    
+    token = Token_RecognizeKeyword("ab5", strlen("ab5"));
+    CuAssertIntEquals(tc, ID, token);
 
 }
 

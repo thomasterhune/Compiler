@@ -38,7 +38,7 @@ enum COMPFILES_STATE {
 
     It has a number of functions closely associated to it. In that way it is a class-like, but a singleton. There is only one CompFiles that ever should exist.
 */
-struct TCompFiles {
+typedef struct {
     /*! A file pointer to an open input file. */
     FILE * in;
     /*! A file pointer to an open output file. */
@@ -65,10 +65,10 @@ struct TCompFiles {
     char * listing_file_name;
     /*! The temp filename */
     char * temp_file_name;
-};
+} TCompFiles;
 
 /*! The CompFiles singleton. */
-struct TCompFiles CompFiles;
+TCompFiles CompFiles;
 
 #pragma endregion structs
 
@@ -92,6 +92,12 @@ void CompFiles_DeInit();
     \date 1/26/2023
 */
 void CompFiles_GenerateTempFile();
+
+/*!
+    Gets the CompFiles struct so that the validated files can be used elsewhere in the program.
+    \returns A TCompFiles struct.
+*/
+TCompFiles* CompFiles_GetFiles();
 
 #pragma endregion lifecycle
 

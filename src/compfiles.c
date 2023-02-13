@@ -87,6 +87,10 @@ void CompFiles_DeInit()
     CompFiles_Init();
 }
 
+TCompFiles* CompFiles_GetFiles() {
+    return &CompFiles;
+}
+
 #pragma endregion lifecycle
 
 /*

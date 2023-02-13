@@ -30,21 +30,41 @@
 
 #include "file_util.h"
 #include "compfiles.h"
+#include "scanner.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
 /*!
+  Start the program by initializing the needed modules in the correct order. 
+*/
+void Init() {
+    CompFiles_Init();
+    Scanner_Init();
+}
+
+void Execute(int argc, char* argv[]) {
+    short terminate;
+    terminate = CompFiles_Open(argc, argv);
+    if(!terminate) {
+        TCompFiles * files = CompFiles_GetFiles();
+        Scanner_Scan(files->in, files->out, files->listing, files->temp);
+    }
+}
+
+void DeInit() {
+    Scanner_DeInit();
+    CompFiles_DeInit();
+}
+
+/*!
    Program entry point.
 */
 int main(int argc, char *argv[]) {
-    CompFiles_Init();
-    short terminate_requested = CompFiles_Open(argc, argv);
-    if(terminate_requested != 1) {
-        CompFiles_CopyInputToOutputs();
-        printf("\n\t- Copied input file to all output files.\n");
-    }
-    CompFiles_DeInit();
-    printf("\n\nDone running... for now.\n");
+    Init();
+    Execute(argc, argv);
+    DeInit();
+    printf("\n\nDone running... for now. 🧑\n");
+    return 2023;
  }
