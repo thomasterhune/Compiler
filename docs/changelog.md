@@ -1,3 +1,10 @@
+2/13/2023: All Group Members
+- Extract op
+- Fleshed out the switch statement for take Action
+- printLine always happens at the end of populateBuffer now
+- extractOperator and Scanner_ExtractOperator.... extractOperator is in Scanner not scanner_util because it is dependent 
+- Token_CatchOp Token_CatchError 
+
 2/12/2023: Karl
 - Added recognizers for trueop, nullop, falseop to the state transition table, which I had missed before.
 - Skipwhitespace now returns the number of characters missed. This can be useful if we extract a number and it isn't followed by a whitespace (skipwhitespace will produce 0.) This may be a cause for an error print. (Worth asking)

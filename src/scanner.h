@@ -5,6 +5,8 @@
 
 #include <stdio.h>
 
+#include "tokens.h"
+
 /* The initial buffer size for the scanner's buffer. It will be expanded when necessary. */
 #define TSCANNER_INIT_BUFF_SIZE 100
 
@@ -52,6 +54,10 @@ typedef struct {
     FILE *temp;
     /*! A file pointer to an open listing file. */
     FILE *listing;
+    /*! The buffer of found tokens that will be read by the parser. */
+    TokenCatch* tokens;
+    /*! The length of the tokens array. */
+    int l_tokens;
 
 } TScanner;
 
@@ -97,6 +103,8 @@ void Scanner_expandBuffer();
     Reads a file until a newline character or EOF character is found. Puts all found characters in its buffer. Expands the buffer if necessary to fit a line.
 
     It also increments scanner's line counter and resets buf_pos (which doubles as a column counter) to 0.
+
+    It also calls Scanner_printLine() to print the current line to the listing file. 
     
     \returns The number of characters read into the buffer.
     \author klm127
@@ -162,6 +170,19 @@ char* Scanner_ExtractWord();
     \returns A malloced char string consisting only of digits.
 */
 char* Scanner_ExtractInteger();
+
+/*!
+    Scanner_ExtractOperator is called by dispatch action when the lookahead is an operator. 
+
+    \returns A int corresponding to a token. 
+*/
+int Scanner_ExtractOperator();
+
+/*!
+
+*/
+int extractOperator(char * buffer, int * index);
+
 #pragma endregion actions
 
 /*

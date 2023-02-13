@@ -49,6 +49,8 @@ char* extractWord(char* buffer, int * index, char* boundrychars, int l_boundrych
     return new_word;
 }
 
+
+
 char* extractInt(char* buffer, int* index) {
     int start = *index;
     int offset = start;

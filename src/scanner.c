@@ -106,6 +106,7 @@ int Scanner_populateBuffer() {
     if(check == EOF) {
         scanner.on_last_line = 1;
     }
+    Scanner_printLine();
     return read_index; /* The number of characters read. */
 }
 
@@ -138,19 +139,13 @@ void Scanner_Scan(FILE * in, FILE * out, FILE * listing, FILE * temp) {
     scanner.out = out;
     scanner.listing = listing;
     scanner.temp = temp;
-    short at_eof = 0;
-    int chars_read = Scanner_populateBuffer();
-    short lookahead = Scanner_lookAhead();
-    Scanner_takeAction(lookahead);
-    Scanner_printLine();
+    int chars_read;
+    short lookahead;
 
+    Scanner_populateBuffer();
     while(!scanner.on_last_line) {
-
-        Scanner_populateBuffer(); /* note that future calls to populatBuffer will probably ultimately move into the Scanner_takeAction(lookahead) dispatcher function. */
         lookahead = Scanner_lookAhead();
-        /*Scanner_takeAction(lookahead);*/
-        Scanner_printLine();
-
+        Scanner_takeAction(lookahead);
     }
 }
 
@@ -192,29 +187,41 @@ short Scanner_lookAhead() {
 }
 
 void Scanner_takeAction(short lookAheadResult) {
+    char * tokenFound;
+    char * tokTextOp;
+    int tok;
+    int token_start_at = scanner.buf_pos;
     switch(lookAheadResult) {
         case SCAN_LHEAD_COMMENT:
-        /* If '--' are upcoming, we can skip tokenizing the rest of the line*/
+            Scanner_populateBuffer();
             break;
         case SCAN_LHEAD_EOF:
         /* If eof is upcoming, we are done.*/
             break;
         case SCAN_LHEAD_NLINE:
+            Scanner_populateBuffer();
         /* time to read another line. */
             break;
         case SCAN_LHEAD_WHITESPACE:
-        /* whitespace to skip*/
-            /* Scanner_SkipWhitespace()? */
+            Scanner_Skipwhitespace();
             break;
         case SCAN_LHEAD_OPERATOR:
+            tok = Scanner_ExtractOperator();
+            Token_CatchOp(tok, scanner.line_count, token_start_at);
             break;
         case SCAN_LHEAD_NUMBER:
+            tokenFound = Scanner_ExtractInteger();
+            Token_Catch(INTLITERAL, tokenFound, scanner.line_count, token_start_at);
             break;
         case SCAN_LHEAD_ERROR:
+            Token_CatchError(scanner.buffer[scanner.buf_pos], scanner.line_count, token_start_at);
+            scanner.buf_pos += 1;
             break;
         default:
             /* If it's none of the above it's SCAN_LHEAD_WORD*/
-            /* Scanner_ExtractWord()? */
+            tokenFound = Scanner_ExtractWord();
+            tok = Token_RecognizeKeyword(tokenFound, strlen(tokenFound));
+            Token_Catch(tok, tokenFound, scanner.line_count, token_start_at);
             break;
             
     }
@@ -231,6 +238,7 @@ Scanner actions
 void Scanner_Skipwhitespace()
 {
     skipWhitespace(scanner.buffer, &scanner.buf_pos);   
+
 }
 
 char* Scanner_ExtractWord()
@@ -244,6 +252,80 @@ char* Scanner_ExtractInteger()
     return extractInt(scanner.buffer, &scanner.buf_pos);
 }
 
+int Scanner_ExtractOperator()
+{
+    return extractOperator(scanner.buffer, &scanner.buf_pos);
+}
+
+int extractOperator(char *buffer, int *index) {
+    int retval = ERROR;
+    switch (buffer[*index]){
+        case '(':
+            retval = LPAREN;
+            break;
+        case ')':
+            retval = RPAREN;
+            break;
+        case ';':
+            retval = SEMICOLON;
+            break;
+        case ',':
+            retval = COMMA;
+            break;
+        case ':':
+            if(scanner.buffer[scanner.buf_pos+1] == '='){
+                retval = ASSIGNOP;
+                scanner.buf_pos = scanner.buf_pos + 1;
+            }else{
+                retval = ERROR;
+            }
+            break;
+        case '+':
+            retval = PLUSOP;
+            break;
+        case '-':
+            retval = MINUSOP;
+            break;
+        case '*':
+            retval = MULTOP;
+            break;
+        case '/':
+            retval = DIVOP ;
+            break;
+        case '!':
+            retval = NOTOP;
+            break;
+        case '<':
+            if(scanner.buffer[scanner.buf_pos+1] == '='){
+                retval = LESSEQUALOP;
+                scanner.buf_pos = scanner.buf_pos + 1;
+            }
+            else if (scanner.buffer[scanner.buf_pos + 1] == '>'){
+                retval = NOTEQUALOP;
+                scanner.buf_pos = scanner.buf_pos + 1;
+            }else{
+                retval = LESSOP;
+            }
+            break;
+        case '>':
+            if(scanner.buffer[scanner.buf_pos+1] == '='){
+                retval = GREATEREQUALOP;
+                scanner.buf_pos = scanner.buf_pos + 1;
+            }else{
+                retval = GREATEROP;
+            }
+            retval = GREATEROP;
+            break;
+        case '=':
+            retval = EQUALOP;
+            break;
+        default:
+            break;
+    }
+    scanner.buf_pos = scanner.buf_pos + 1;
+    return retval;
+}
+
 #pragma endregion actions
 /*
 ----------------
@@ -252,7 +334,7 @@ Scanner printing
 */
 #pragma region printing
 
-void Scanner_printLine() {
+    void Scanner_printLine() {
     if(SCANNER_PRINTS_TO_CONSOLE) {
         printf("%d : \t%s", scanner.line_count, scanner.buffer);
     }
