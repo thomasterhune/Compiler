@@ -1,6 +1,8 @@
 #ifndef tokens_h
 #define tokens_h
 
+#include <stdlib.h>
+
 enum TOKEN {
     BEGIN=0, END, READ, WRITE, IF, THEN, ELSE, ENDIF, WHILE, ENDWHILE, ID, INTLITERAL, FALSEOP, TRUEOP, NULLOP, LPAREN, RPAREN, SEMICOLON, COMMA, ASSIGNOP, PLUSOP, MINUSOP, MULTOP,DIVOP, NOTOP, LESSOP, LESSEQUALOP, GREATEROP, GREATEREQUALOP, EQUALOP, NOTEQUALOP, SCANEOF, ERROR
 };
@@ -46,5 +48,25 @@ int Token_RecognizeKeyword(char * word, int length);
     \returns A new TokenCatch encapsulating the parameter data. 
 */
 TokenCatch Token_Catch(short tokenType, char* raw_text_found, int line_found_at, int col_found_at);
+
+/*!
+    Token_Catch_Op is called when an op is found. It still produces a TokenCatch but it infers the text that was found based on the token type rather than needing the raw text, since there is not variation in how the operators can be written.  
+    \param tokenType A type in enum TOKEN
+    \param raw_text_found A char pointer to the raw text that caused this token to be identified as such.
+    \param line_found_at The line in the file the token was found.
+    \param col_found_at The column at which the token was found. 
+    \returns A new TokenCatch encapsulating the parameter data. 
+*/
+TokenCatch Token_CatchOp(short tokenType, int line_found_at, int col_found_at);
+
+/*!
+    Token_CatchError is called when an error is found. Whatever character is passed in will become the 'raw' member of a TokenCatch. 
+    \param tokenType A type in enum TOKEN
+    \param raw_text_found A char pointer to the raw text that caused this token to be identified as such.
+    \param line_found_at The line in the file the token was found.
+    \param col_found_at The column at which the token was found. 
+    \returns A new TokenCatch encapsulating the parameter data. 
+*/
+TokenCatch Token_CatchError(char badChar, int line_found_at, int col_found_at);
 
 #endif

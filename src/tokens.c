@@ -83,8 +83,8 @@ int Token_RecognizeKeyword(char *word, int length)
         }
         if(c >='0' && c <='9') {
             /* if a number is involved, it's an identifier, because no keywords have numbers. We can already guarantee that it won't start with a number because if it did it would have been already extracted as an int. */
-            i = length; /* break the loop. */
             token = ID;
+            state = 38;
         }
         else if (c < 'a' || c > 'z') {
             /* If it's outside the alphabet and wasn't a number, it's a syntax error. The word will always be extracted on operator boundaries, so if a non alphabetic character is found here it isn't defined in our sigma. */
@@ -95,8 +95,8 @@ int Token_RecognizeKeyword(char *word, int length)
             c -= 'a'; /* the letter offset corresponds to the column of the transition table. */
             token = keywordsST[state][c][1];
             state = keywordsST[state][c][0];
-            i++;
         }
+        i++;
     }
     return token;
 }
@@ -108,4 +108,32 @@ TokenCatch Token_Catch(short tokenType, char* raw_text_found, int line_found_at,
     tc.line_no = line_found_at;
     tc.col_no = col_found_at;
     return tc;
+}
+
+
+TokenCatch Token_CatchOp(short tokenType, int line_found_at, int col_found_at) {
+    TokenCatch tc;
+    tc.token = tokenType;
+    const char * tokName;
+    if(tc.token == ERROR) {
+        /* If tok is error, then it MUST have been ':' */
+        tokName = ":";
+    } else {
+        tokName = Token_GetName(tokenType);
+    }
+    tc.raw = malloc(strlen(tokName) *sizeof(char));
+    strcpy(tc.raw, tokName);
+    tc.line_no = line_found_at;
+    tc.col_no = col_found_at;
+    return tc;
+}
+
+TokenCatch Token_CatchError(char badChar, int line_found_at, int col_found_at) {
+    TokenCatch tc;
+    tc.token = ERROR;
+    tc.raw = malloc(2*sizeof(char));
+    tc.raw[0] = badChar;
+    tc.raw[1] = '\0';
+    tc.line_no = line_found_at;
+    tc.col_no = col_found_at;
 }

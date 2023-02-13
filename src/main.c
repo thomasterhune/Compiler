@@ -65,6 +65,6 @@ int main(int argc, char *argv[]) {
     Init();
     Execute(argc, argv);
     DeInit();
-    printf("\n\nDone running... for now. 🧑\n");
+    printf("\n\nDone running... for now. \0\n");
     return 2023;
  }

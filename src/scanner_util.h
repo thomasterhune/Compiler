@@ -66,4 +66,5 @@ char* extractInt(char* buffer, int* index);
 */
 short charIn(char test, char* charset, int l_charset);
 
+
 #endif
