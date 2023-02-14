@@ -1,3 +1,18 @@
+2/13/2023: Karl and thomas
+- fixed listing file not loading
+- fixed extractInt AND extractInt tests (they were using extractWord)!
+- running error count and print errors
+- fixed detect SCANEOF
+- fixed null terminates at end of buffer for no overflow print
+- fixed last line being ignored
+- several types of token catch initializers
+- token catch allocates memory; can use the tokens later in the parser
+- scanner printLine fixes
+- print error count
+- Token_GetOpRaw
+- formatting line printing
+
+
 2/13/2023: All Group Members
 - Extract op
 - Fleshed out the switch statement for take Action

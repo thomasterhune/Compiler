@@ -32,6 +32,7 @@ Scanner lifecycle
 
 void Scanner_Init(FILE * in, FILE * out, FILE * listing, FILE * tmp) {
     scanner.on_last_line = 0;
+    scanner.n_errors = 0;
     scanner.line_count = 0;
     scanner.buf_pos = 0;
     scanner.in = in;
@@ -95,7 +96,7 @@ int Scanner_populateBuffer() {
     int read_index = 0;
     while( check != '\n' && check != EOF) {
         /* Expand the buffer if it isn't big enough. */
-        if(read_index >= scanner.current_buff_size - 1) {
+        if(read_index >= scanner.current_buff_size - 2) {
             Scanner_expandBuffer();
         }
         check = getc(scanner.in);
@@ -103,9 +104,11 @@ int Scanner_populateBuffer() {
         scanner.buffer[read_index] = check;
         read_index++;
     }
+    scanner.buffer[read_index] = '\0';
     if(check == EOF) {
         scanner.on_last_line = 1;
     }
+    scanner.buf_pos = 0;
     Scanner_printLine();
     return read_index; /* The number of characters read. */
 }
@@ -140,13 +143,14 @@ void Scanner_Scan(FILE * in, FILE * out, FILE * listing, FILE * temp) {
     scanner.listing = listing;
     scanner.temp = temp;
     int chars_read;
-    short lookahead;
+    short lookahead = 0;
 
     Scanner_populateBuffer();
-    while(!scanner.on_last_line) {
+    while(lookahead != SCAN_LHEAD_EOF) {
         lookahead = Scanner_lookAhead();
         Scanner_takeAction(lookahead);
     }
+    Scanner_PrintErrorCount();
 }
 
 short Scanner_lookAhead() {
@@ -190,40 +194,48 @@ void Scanner_takeAction(short lookAheadResult) {
     char * tokenFound;
     char * tokTextOp;
     int tok;
+    struct TokenCatch* tok_catch = NULL;
     int token_start_at = scanner.buf_pos;
+    int chars_to_print;
     switch(lookAheadResult) {
         case SCAN_LHEAD_COMMENT:
-            Scanner_populateBuffer();
+            Scanner_populateBuffer(); /* move along to the next line . */
             break;
         case SCAN_LHEAD_EOF:
-        /* If eof is upcoming, we are done.*/
+            tok_catch = Token_Catch(SCANEOF, "<file end>", scanner.line_count, token_start_at);
+            Scanner_printToken(tok_catch);
             break;
         case SCAN_LHEAD_NLINE:
-            Scanner_populateBuffer();
-        /* time to read another line. */
+            Scanner_populateBuffer(); /* move along to the next line. */
             break;
         case SCAN_LHEAD_WHITESPACE:
             Scanner_Skipwhitespace();
             break;
         case SCAN_LHEAD_OPERATOR:
             tok = Scanner_ExtractOperator();
-            Token_CatchOp(tok, scanner.line_count, token_start_at);
+            tok_catch = Token_CatchOp(tok, scanner.line_count, token_start_at);
+            Scanner_printToken(tok_catch);
             break;
         case SCAN_LHEAD_NUMBER:
             tokenFound = Scanner_ExtractInteger();
-            Token_Catch(INTLITERAL, tokenFound, scanner.line_count, token_start_at);
+
+            tok_catch = Token_Catch(INTLITERAL, tokenFound, scanner.line_count, token_start_at);
+            Scanner_printToken(tok_catch);
             break;
         case SCAN_LHEAD_ERROR:
-            Token_CatchError(scanner.buffer[scanner.buf_pos], scanner.line_count, token_start_at);
+            tok_catch = Token_CatchError(scanner.buffer[scanner.buf_pos], scanner.line_count, token_start_at);
+            Scanner_printError(tok_catch);
             scanner.buf_pos += 1;
+            scanner.n_errors += 1;
+            
             break;
         default:
             /* If it's none of the above it's SCAN_LHEAD_WORD*/
             tokenFound = Scanner_ExtractWord();
             tok = Token_RecognizeKeyword(tokenFound, strlen(tokenFound));
-            Token_Catch(tok, tokenFound, scanner.line_count, token_start_at);
+            tok_catch = Token_Catch(tok, tokenFound, scanner.line_count, token_start_at);
+            Scanner_printToken(tok_catch);
             break;
-            
     }
 }
 #pragma endregion logic
@@ -273,9 +285,9 @@ int extractOperator(char *buffer, int *index) {
             retval = COMMA;
             break;
         case ':':
-            if(scanner.buffer[scanner.buf_pos+1] == '='){
+            if(buffer[(*index) + 1] == '='){
                 retval = ASSIGNOP;
-                scanner.buf_pos = scanner.buf_pos + 1;
+                *index = *index + 1;
             }else{
                 retval = ERROR;
             }
@@ -296,33 +308,35 @@ int extractOperator(char *buffer, int *index) {
             retval = NOTOP;
             break;
         case '<':
-            if(scanner.buffer[scanner.buf_pos+1] == '='){
+            if(buffer[(*index) + 1] == '='){
                 retval = LESSEQUALOP;
-                scanner.buf_pos = scanner.buf_pos + 1;
+                *index = *index + 1;
             }
-            else if (scanner.buffer[scanner.buf_pos + 1] == '>'){
+            else if (buffer[(*index) + 1] == '>'){
                 retval = NOTEQUALOP;
-                scanner.buf_pos = scanner.buf_pos + 1;
+                *index = *index + 1;
             }else{
                 retval = LESSOP;
             }
             break;
         case '>':
-            if(scanner.buffer[scanner.buf_pos+1] == '='){
+            if(buffer[(*index) + 1] == '='){
                 retval = GREATEREQUALOP;
-                scanner.buf_pos = scanner.buf_pos + 1;
+                *index = *index + 1;
             }else{
                 retval = GREATEROP;
             }
-            retval = GREATEROP;
             break;
         case '=':
             retval = EQUALOP;
             break;
+        case EOF:
+            retval = SCANEOF;
+            break;
         default:
             break;
     }
-    scanner.buf_pos = scanner.buf_pos + 1;
+    *index = *index + 1;
     return retval;
 }
 
@@ -334,13 +348,54 @@ Scanner printing
 */
 #pragma region printing
 
-    void Scanner_printLine() {
+void Scanner_printLine() {
+    fprintf(scanner.listing, "% 3d :\t", scanner.line_count);
     if(SCANNER_PRINTS_TO_CONSOLE) {
-        printf("%d : \t%s", scanner.line_count, scanner.buffer);
+        printf("\n%d:\t", scanner.line_count);
     }
-    fprintf(scanner.listing, "%d : \t%s", scanner.line_count, scanner.buffer);
+    int index = 0;
+    char c = scanner.buffer[index];
+    while(c != '\n' && c != EOF) {
+        fputc(scanner.buffer[index], scanner.listing);
+        if(SCANNER_PRINTS_TO_CONSOLE) {
+            printf("%c", scanner.buffer[index]);
+        }
+        index++;
+        c = scanner.buffer[index];
+        /* printc*/
+    }
+    fprintf(scanner.listing, "\n");
 }
 
+void Scanner_printToken(struct TokenCatch * token){
+    if(SCANNER_PRINTS_TO_CONSOLE){
+        printf("\ntoken number: %d\t token type: %s\t actual token: %s", token->token, Token_GetName(token->token), token->raw);
+    }
+    fprintf(scanner.out, "\ntoken number: %d\t token type: %s\t actual token: %s", token->token, Token_GetName(token->token), token->raw);
+    
+}
+
+void Scanner_printError(struct TokenCatch * token){
+    fprintf(scanner.listing, "% 3d x\t", scanner.line_count);
+    int i = 0;
+    for (i = 0; i < token->col_no; i++){
+        fprintf(scanner.listing, " ");
+        if(SCANNER_PRINTS_TO_CONSOLE) {
+            printf(" ");
+        }
+    }
+    if(SCANNER_PRINTS_TO_CONSOLE){
+        printf("\n^ERROR. %s not recognized at Line %d Column %d.\n", token->raw, token->line_no, token->col_no);
+    }
+    fprintf(scanner.listing, "^ERROR. %s not recognized at Line %d Column %d.\n", token->raw, token->line_no, token->col_no);
+}
+
+void Scanner_PrintErrorCount() {
+    fprintf(scanner.listing, "\n\n%d syntactic errors. \n", scanner.n_errors);
+    if(SCANNER_PRINTS_TO_CONSOLE) {
+        printf("\n\n%d syntactic errors. \n", scanner.n_errors);
+    }
+}
 #pragma endregion printing
 /*
 ----------------

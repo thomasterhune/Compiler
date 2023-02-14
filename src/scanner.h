@@ -54,10 +54,8 @@ typedef struct {
     FILE *temp;
     /*! A file pointer to an open listing file. */
     FILE *listing;
-    /*! The buffer of found tokens that will be read by the parser. */
-    TokenCatch* tokens;
-    /*! The length of the tokens array. */
-    int l_tokens;
+    /*! The number of syntax errors found. */
+    int n_errors;
 
 } TScanner;
 
@@ -202,6 +200,32 @@ Scanner printing
 */
 void Scanner_printLine();
 
+/*!
+    Prints information about a token in an output file. 
+
+    It will also print to stdout if the flag is set in the header file.
+
+    If the token is of type error, it also calls Scanner_printError to effect printing to the listing file. 
+
+    \param token A TokenCatch struct containing the token type, raw string, line, and column number of the given token. 
+    \author klm127
+    \date 2/12/2023
+*/
+void Scanner_printToken(struct TokenCatch * token);
+
+/*!
+    Prints an error to the listing file. Includes appropriately indented caret. 
+
+    \param token A TokenCatch struct for an error token, containing the raw string, line, and column number of the given error token.
+    \author klm127
+    \date 2/12/2023
+*/
+void Scanner_printError(struct TokenCatch * token);
+
+/*!
+    Prints the error total to the listing file.
+*/
+void Scanner_PrintErrorCount();
 #pragma endregion printing
 /*
 ----------------

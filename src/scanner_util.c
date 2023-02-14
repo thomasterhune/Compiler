@@ -53,25 +53,24 @@ char* extractWord(char* buffer, int * index, char* boundrychars, int l_boundrych
 
 char* extractInt(char* buffer, int* index) {
     int start = *index;
-    int offset = start;
-    char test = buffer[offset];
-    short at_boundry = 0;
-    while(!at_boundry) {
-        at_boundry = test >= '0' && test <= '9';
-        offset+=1;
-        test = buffer[offset];
-    }
-    int size_neword = offset-start+1;
-    char * new_word  = malloc( size_neword * sizeof(char)) ;
+
     int i = 0;
-    while(start < offset - 1) {
-        new_word[i] = buffer[start];
+    char check = buffer[start];
+    while(check >= '0' && check <= '9') {
         i++;
-        start++;
+        check = buffer[start+i];
     }
-    *index = offset - 1;
-    new_word[i] = '\0';
-    return new_word;
+
+    char * newstring = malloc( (i+1) * sizeof(char));
+    
+    int j = 0;
+    while(j < i) {
+        newstring[j] = buffer[start+j];
+        j++;
+    }
+    newstring[j] = '\0';
+    *index += i;
+    return newstring;
 }
 
 short charIn(char test, char* charset, int l_charset) {
