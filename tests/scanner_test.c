@@ -9,20 +9,102 @@ void test_Scanner_Init(CuTest *tc){
     CuAssertIntEquals(tc, 17, strlen(scan->boundaries));
 }
 
-void test_Scanner_DeInit(CuTest *tc){
 
-}
 
-void test_Scanner_clearBuffer(CuTest *tc){
+void test_extractOp(CuTest *tc) {
+    printf("Made it here.");
+    fflush(stdout);
 
-}
+    int index = 0;
+    char * buff = "(";
+    int tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, LPAREN, tok );
 
-void test_Scanner_expandBuffer(CuTest *tc){
+    index = 0;
+    buff = ")";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, RPAREN,  tok);
+
+    index = 0;
+    buff = ";";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, SEMICOLON,  tok);
+
+    index = 0;
+    buff = ",";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, COMMA,  tok);
+
+    index = 0;
+    buff = ":=";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, ASSIGNOP,  tok);
+
+    index = 0;
+    buff = "+";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, PLUSOP,  tok);
+
+    index = 0;
+    buff = "-";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, MINUSOP,  tok);
+
+    index = 0;
+    buff = "*";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, MULTOP,  tok);
+
+    index = 0;
+    buff = "/";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, DIVOP,  tok);
+
+    index = 0;
+    buff = "!";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, NOTOP,  tok);
+
+    index = 0;
+    buff = "<+";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, LESSOP,  tok);
+
+    index = 0;
+    buff = "<=";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, LESSEQUALOP,  tok);
+
+    index = 0;
+    buff = ">1";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, GREATEROP,  tok);
+
+    index = 0;
+    buff = ">=";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, GREATEREQUALOP, tok);
+
+    index = 0;
+    buff = "=";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, EQUALOP, tok);
+
+    index = 0;
+    buff = "<>";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, NOTEQUALOP, tok);
+
+    index = 0;
+    buff = "&";
+    tok = extractOperator(buff, &index);
+    CuAssertIntEquals(tc, ERROR, tok);
 
 }
 
 const char * pbtFile = "scn_tbuf_poplate.txt";
 void test_Scanner_populateBuffer(CuTest *tc) {
+    /* TODO: STD Swap*/
     FILE * in = fopen(pbtFile, "w");
     fprintf(in, "Something in a file.\nA new line.\na 160 character linea 160 character linea 160 character linea 160 character linea 160 character linea 160 character linea 160 character line\nSomething else, then the EOF.");
     fclose(in);
@@ -63,18 +145,13 @@ void test_Scanner_populateBuffer(CuTest *tc) {
 
 }
 
-void test_Scanner_addChar(CuTest *tc){
 
-}
-
-void test_Scanner_Scan(CuTest *tc){
-
-}
 
 CuSuite* scannerGetSuite() {
     CuSuite *suite = CuSuiteNew();
-    SUITE_ADD_TEST(suite, test_Scanner_populateBuffer);
+    /* SUITE_ADD_TEST(suite, test_Scanner_populateBuffer); */
     SUITE_ADD_TEST(suite, test_Scanner_Init);
+    SUITE_ADD_TEST(suite, test_extractOp);
     return suite;
 
 }

@@ -19,12 +19,12 @@ const char *tokensMap[] = {
     [ENDIF] = "ENDIF",
     [WHILE] = "WHILE",
     [ENDWHILE] = "ENDWHILE",
-
     [ID] = "ID",
     [INTLITERAL] = "INTLITERAL",
     [FALSEOP] = "FALSEOP",
     [TRUEOP] = "TRUEOP",
     [NULLOP] = "NULLOP",
+
     [LPAREN] = "LPAREN",
     [RPAREN] = "RPAREN",
     [SEMICOLON] = "SEMICOLON",
@@ -101,39 +101,96 @@ int Token_RecognizeKeyword(char *word, int length)
     return token;
 }
 
-TokenCatch Token_Catch(short tokenType, char* raw_text_found, int line_found_at, int col_found_at) {
-    TokenCatch tc;
-    tc.token = tokenType;
-    tc.raw = raw_text_found;
-    tc.line_no = line_found_at;
-    tc.col_no = col_found_at;
+struct TokenCatch* Token_Catch(short tokenType, char* raw_text_found, int line_found_at, int col_found_at) {
+    struct TokenCatch* tc = malloc(sizeof (struct TokenCatch));
+    tc->token = tokenType;
+    tc->raw = raw_text_found;
+    tc->line_no = line_found_at;
+    tc->col_no = col_found_at;
     return tc;
 }
 
-
-TokenCatch Token_CatchOp(short tokenType, int line_found_at, int col_found_at) {
-    TokenCatch tc;
-    tc.token = tokenType;
-    const char * tokName;
-    if(tc.token == ERROR) {
-        /* If tok is error, then it MUST have been ':' */
-        tokName = ":";
-    } else {
-        tokName = Token_GetName(tokenType);
+char * Token_GetOpRaw(short tokenType) {
+    char * result;
+    switch(tokenType) {
+        case LPAREN:
+            result = "(";
+            break;
+        case RPAREN:
+            result = ")";
+            break;
+        case SEMICOLON:
+            result = ";";
+            break;
+        case COMMA:
+            result = ",";
+            break;
+        case ASSIGNOP:
+            result = ":=";
+            break;
+        case PLUSOP:
+            result = "+";
+            break;
+        case MINUSOP:
+            result = "-";
+            break;
+        case MULTOP:
+            result = "*";
+            break;
+        case DIVOP:
+            result = "/";
+            break;
+        case NOTOP:
+            result = "!";
+            break;
+        case LESSOP:
+            result = "<";
+            break;
+        case LESSEQUALOP:
+            result = "<=";
+            break;
+        case GREATEROP:
+            result = ">";
+            break;
+        case GREATEREQUALOP:
+            result = ">=";
+            break;
+        case EQUALOP:
+            result = "=";
+            break;
+        case NOTEQUALOP:
+            result = "<>";
+            break;
+        default:
+            result = ":";
     }
-    tc.raw = malloc(strlen(tokName) *sizeof(char));
-    strcpy(tc.raw, tokName);
-    tc.line_no = line_found_at;
-    tc.col_no = col_found_at;
+    char * ret_val = malloc( (strlen(result)+1)*sizeof(char));
+    strcpy(ret_val, result);
+    return ret_val;
+
+}
+
+
+struct TokenCatch* Token_CatchOp(short tokenType, int line_found_at, int col_found_at) {
+    struct TokenCatch* tc = malloc(sizeof(struct TokenCatch));
+    tc->token = tokenType;
+    tc->raw = Token_GetOpRaw(tokenType);
+    tc->line_no = line_found_at;
+    tc->col_no = col_found_at;
     return tc;
 }
 
-TokenCatch Token_CatchError(char badChar, int line_found_at, int col_found_at) {
-    TokenCatch tc;
-    tc.token = ERROR;
-    tc.raw = malloc(2*sizeof(char));
-    tc.raw[0] = badChar;
-    tc.raw[1] = '\0';
-    tc.line_no = line_found_at;
-    tc.col_no = col_found_at;
+struct TokenCatch* Token_CatchError(char badChar, int line_found_at, int col_found_at) {
+    struct TokenCatch* tc = malloc(sizeof(struct TokenCatch));
+    tc->token = ERROR;
+    tc->raw = malloc(2*sizeof(char));
+    tc->raw[0] = badChar;
+    tc->raw[1] = '\0';
+    tc->line_no = line_found_at;
+    tc->col_no = col_found_at;
+}
+
+void Token_Destroy(struct TokenCatch* token) {
+    free(token->raw); /* dealloc the string first. */
+    free(token);
 }

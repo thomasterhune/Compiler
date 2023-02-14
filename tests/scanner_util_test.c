@@ -83,33 +83,33 @@ void test_extractWord(CuTest *tc) {
 }
 
 void test_extractInt(CuTest *tc) {
-    char * boundrychars = "\t+-;* \0";
-    int l_boundry = 6;
-    char* buffer = "1111* 3333 - 55;111 0";
+    char * boundrychars = "\t+-;*() \n\0";
+    int l_boundry = 10;
+    char* buffer = "1111* 3333) - 55;111 0";
 
     int index = 0;
-    char * test = extractWord(buffer, &index, boundrychars, l_boundry);
-    CuAssertStrEquals(tc, "1111\0", test);
+    char * test = extractInt(buffer, &index);
+    CuAssertStrEquals(tc, "1111", test);
     free(test);
 
     index += 2;
-    test = extractWord(buffer, &index, boundrychars, l_boundry);
-    CuAssertStrEquals(tc, "3333\0", test);
+    test = extractInt(buffer, &index);
+    CuAssertStrEquals(tc, "3333", test);
     free(test);
 
-    index += 3;
-    test = extractWord(buffer, &index, boundrychars, l_boundry);
-    CuAssertStrEquals(tc, "55\0", test);
-    free(test);
-
-    index += 1;
-    test = extractWord(buffer, &index, boundrychars, l_boundry);
-    CuAssertStrEquals(tc, "111\0", test);
+    index += 4;
+    test = extractInt(buffer, &index);
+    CuAssertStrEquals(tc, "55", test);
     free(test);
 
     index += 1;
-    test = extractWord(buffer, &index, boundrychars, l_boundry);
-    CuAssertStrEquals(tc, "0\0", test);
+    test = extractInt(buffer, &index);
+    CuAssertStrEquals(tc, "111", test);
+    free(test);
+
+    index += 1;
+    test = extractInt(buffer, &index);
+    CuAssertStrEquals(tc, "0", test);
     free(test);
 
 

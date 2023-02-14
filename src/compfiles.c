@@ -133,7 +133,7 @@ void CompFiles_LoadListingFile(FILE *newListingFile)
     {
         fclose(CompFiles.listing);
     }
-    CompFiles.temp = newListingFile;
+    CompFiles.listing = newListingFile;
 }
 
 char *CompFiles_promptInputFilename()
