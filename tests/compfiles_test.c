@@ -1,4 +1,5 @@
-#include "compfiles_test.h"
+#include "test.h"
+#include "CompFiles.h"
 
 
 void test_CompFiles_Init(CuTest * tc) {

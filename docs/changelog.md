@@ -1,3 +1,15 @@
+
+2/15/2023: Karl
+- Finished debugging full DFA. 
+- Rewrote scanner in scan.h. No more using memory allocation and TokenCatch structures. It reads from file and writes directly to the listing and output files now. 
+- Deleted scanner.c, scanner.h, scanner_util.c, scanner_util.h and associated test files.
+- Deleted the recognize keyword token function and the associated dfa, since the new dfa covers everything.
+- If we need those files and features back, we can revert to an earlier commit. 
+
+2/14/2023: Karl
+- Created a FULL dfa planned to replace all current logic.
+- Moved all test header files to one header file "test.h".
+
 2/13/2023: Karl and thomas
 - fixed listing file not loading
 - fixed extractInt AND extractInt tests (they were using extractWord)!

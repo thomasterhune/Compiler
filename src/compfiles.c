@@ -1,5 +1,19 @@
 #include "compfiles.h"
 
+/**
+ * \file compfiles.h
+ * \brief CompFiles struct and "methods" definitions.
+
+    CompFiles is a struct which holds pointers to the compilation input and output files. It also tracks their names and their validation status. It provides methods for prompting the user for valid file names until terminate is requested or all files are validated.
+
+    \authors Tom Terhune, Karl Miller, Anthony Stepich
+    \date January 2023
+*/
+
+/*
+    NOTE: function descriptions are located in the header file instead of the .c file to enable intellisense type hints. 
+*/
+
 /*
 -------------------
 CompFiles lifecycle

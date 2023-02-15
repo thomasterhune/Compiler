@@ -1,9 +1,5 @@
 #include "CuTest.h"
-#include "file_util_test.h"
-#include "compfiles_test.h"
-#include "tokens_test.h"
-#include "scanner_util_test.h"
-#include "scanner_test.h"
+#include "test.h"
 #include <stdio.h>
 
 /*
@@ -25,8 +21,7 @@ void RunAllTests(void) {
     CuSuiteAddSuite(suite, fileUtilGetSuite());
     CuSuiteAddSuite(suite, CompfilesGetSuite());
     CuSuiteAddSuite(suite, tokensTestGetSuite());
-    CuSuiteAddSuite(suite, scannerUtilGetSuite());
-    CuSuiteAddSuite(suite, scannerGetSuite());
+    CuSuiteAddSuite(suite, dfaTestGetSuite());
  
     CuSuiteRun(suite);
     CuSuiteSummary(suite, output);

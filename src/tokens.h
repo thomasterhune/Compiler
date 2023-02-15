@@ -3,20 +3,21 @@
 
 #include <stdlib.h>
 
+/*!
+    \file tokens.h
+    \brief Token functions declarations.
+
+    The tokensMap maps a given token to a constant string, which is used by Token_GetName() to get the name of a token. The index of a token string in the tokensMap is the same as it's enumerated value. E.G, BEGIN is value 0 and "BEGIN" is at position 0 in the tokensMap array. 
+
+    This file also contains declarations for TokenCatch methods, which are no longer used. In an earlier version of the program, a TokenCatch wrapped a given token with related data and was memory-allocated. The current version does not use TokenCatch, but it is retained here in case we need it for future parsing features. 
+
+    \authors Tom Terhune, Karl Miller, Anthony Stepich
+    \date February 2023
+
+*/
+
 enum TOKEN {
     BEGIN=0, END, READ, WRITE, IF, THEN, ELSE, ENDIF, WHILE, ENDWHILE, ID, INTLITERAL, FALSEOP, TRUEOP, NULLOP, LPAREN, RPAREN, SEMICOLON, COMMA, ASSIGNOP, PLUSOP, MINUSOP, MULTOP,DIVOP, NOTOP, LESSOP, LESSEQUALOP, GREATEROP, GREATEREQUALOP, EQUALOP, NOTEQUALOP, SCANEOF, ERROR
-};
-
-struct TokenCatch{
-    /* A type corresponding to the TOKEN enum. */
-    short token;
-    /* The character that was found. */
-    char * raw;
-    /* The line number it was found on. */
-    int line_no;
-    /* The column where it started. */
-    int col_no;
-
 };
 
 /*! Token_GetName gets a character string representing a token. 
@@ -29,18 +30,23 @@ struct TokenCatch{
 */
 const char * Token_GetName(int id);
 
-
-
-/*! Token_Recognize recognizes a token from a string parameter and returns the corresponding token id.
-    \param word The string to identify.
-    \param length The length of characters to parse.
-    \pre The token is only alphanumeric characters and has already been validated not to contain a comment. (Two '--' chars.)
-    \pre The token does not contain any valid operators. (It will be recognized as an identifier if so.)
-    \return int a integer within the TOKEN enum; ERROR if it was not a valid word.
-    \note Covered by unit tests.
+/*!
+------------------------------------------------------------------
+    Note: TokenCatch is no longer used. It was used in an earlier version of this program. It may be revived in the future depending on the needs of the parser. 
+------------------------------------------------------------------
 */
-int Token_RecognizeKeyword(char * word, int length);
+#pragma region token_catch
+struct TokenCatch{
+    /* A type corresponding to the TOKEN enum. */
+    short token;
+    /* The character that was found. */
+    char * raw;
+    /* The line number it was found on. */
+    int line_no;
+    /* The column where it started. */
+    int col_no;
 
+};
 
 /*!
     Token_Catch is called when an actual token has been found. It produces a TokenCatch struct which wraps the token type with other associated data, such as the raw text that was found and the line it was found at.
@@ -84,5 +90,7 @@ struct TokenCatch* Token_CatchError(char badChar, int line_found_at, int col_fou
     \param token A token to deallocate.
 */
 void Token_Destroy(struct TokenCatch* token);
+
+#pragma endregion token_catch
 
 #endif
