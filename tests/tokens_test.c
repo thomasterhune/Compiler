@@ -1,4 +1,4 @@
-#include "tokens_test.h"
+#include "test.h"
 #include "tokens.h"
 #include <string.h>
 

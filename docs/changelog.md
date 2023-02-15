@@ -1,3 +1,11 @@
+
+2/15/2023: Karl
+- Finished debugging full DFA. 
+
+2/14/2023: Karl
+- Created a FULL dfa planned to replace all current logic.
+- Moved all test header files to one header file "test.h".
+
 2/13/2023: Karl and thomas
 - fixed listing file not loading
 - fixed extractInt AND extractInt tests (they were using extractWord)!

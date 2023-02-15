@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "file_util_test.h"
+#include "test.h"
 #include "file_util.h"
 #include <stdlib.h>
 #include <string.h>

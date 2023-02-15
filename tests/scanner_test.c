@@ -2,6 +2,7 @@
 #include "CuTest.h"
 #include "scanner.h"
 #include "string.h"
+#include "test.h"
 
 void test_Scanner_Init(CuTest *tc){
     Scanner_Init(NULL,NULL,NULL,NULL);
