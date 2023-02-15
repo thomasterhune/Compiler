@@ -254,8 +254,6 @@ CompFiles operations
     \author Thomas, Karl
     \date 1/27/2023
 
-    \todo Not Covered by Unit Tests
-
 */
 void CompFiles_CopyInputToOutputs();
 

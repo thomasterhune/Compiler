@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['name_0',['name',['../struct_cu_test.html#a5ac083a645d964373f022d03df4849c8',1,'CuTest']]]
+  ['scanner_0',['scanner',['../scan_8c.html#a11efdc5e7288d9b0d60736826b99c9a3',1,'scan.c']]]
 ];

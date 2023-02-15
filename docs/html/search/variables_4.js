@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['temp_0',['temp',['../struct_t_comp_files.html#a92de8149fb2c9648cec956cb047d20ca',1,'TCompFiles']]],
-  ['temp_5ffile_5fname_1',['temp_file_name',['../struct_t_comp_files.html#a2c5b67a5dbd1d3d08287e25200589f73',1,'TCompFiles']]],
-  ['terminate_5frequested_2',['terminate_requested',['../struct_t_comp_files.html#aeceef68eac013ef0c62e2573b7963d2f',1,'TCompFiles']]]
+  ['in_0',['in',['../struct_t_comp_files.html#aca392a8d3941cd0740aef3ad92545d67',1,'TCompFiles::in()'],['../struct_scanner.html#aca392a8d3941cd0740aef3ad92545d67',1,'Scanner::in()']]],
+  ['input_5ffile_5fname_1',['input_file_name',['../struct_t_comp_files.html#aa91ff4ee3ee60baee9c097d4da3e3d18',1,'TCompFiles']]],
+  ['input_5ffile_5fstate_2',['input_file_state',['../struct_t_comp_files.html#ad3ef35a0409f3ff8ab82de15d0891e4a',1,'TCompFiles']]]
 ];

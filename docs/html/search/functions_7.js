@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['printcmp_0',['printCmp',['../main_8c.html#a7915c32ca395e483c515d2825b66327b',1,'main.c']]]
+  ['init_0',['Init',['../main_8c.html#a1e3b6d38df0786ccf7f938d60e386aae',1,'main.c']]]
 ];

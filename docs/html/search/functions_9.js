@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['removeextension_0',['removeExtension',['../file__util_8c.html#a49526f1da9e23e86123c02cd9fb53192',1,'removeExtension(const char *filename):&#160;file_util.c'],['../file__util_8h.html#a49526f1da9e23e86123c02cd9fb53192',1,'removeExtension(const char *filename):&#160;file_util.c']]],
-  ['runalltests_1',['RunAllTests',['../main__test_8c.html#a0733a029032379b9e74c6242baefe5ca',1,'main_test.c']]]
+  ['printcell_0',['printCell',['../dfa_8c.html#a70bdb15c1704e9e42e597ea54a9953cd',1,'printCell(int row, int col):&#160;dfa.c'],['../dfa_8h.html#a70bdb15c1704e9e42e597ea54a9953cd',1,'printCell(int row, int col):&#160;dfa.c']]],
+  ['printstateandchar_1',['printStateAndChar',['../dfa_8c.html#ab9d83e698c3236fec56d04addac7659a',1,'printStateAndChar(int row, int col):&#160;dfa.c'],['../dfa_8h.html#ab9d83e698c3236fec56d04addac7659a',1,'printStateAndChar(int row, int col):&#160;dfa.c']]]
 ];

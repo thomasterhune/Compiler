@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['tcompfiles_0',['TCompFiles',['../struct_t_comp_files.html',1,'']]]
+  ['scanner_0',['Scanner',['../struct_scanner.html',1,'']]]
 ];

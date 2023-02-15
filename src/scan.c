@@ -144,7 +144,9 @@ void Scanner_ScanAndPrint(FILE *input, FILE *output, FILE *listing,  FILE *temp)
                 break;
         }
     }
-    Scanner_PrintErrorSummary();
+    Scanner_PrintTokenFront(SCANEOF);
+    Scanner_BackprintIdentifier(0);
+    Scanner_PrintErrorSummary(1);
 
 }
 
