@@ -19,8 +19,13 @@ Flags
 -------------------
 */
 
+#ifndef SCANNER_PRINTS_LINES_TO_CONSOLE
 #define SCANNER_PRINTS_LINES_TO_CONSOLE 1
+#endif
+
+#ifndef SCANNER_PRINTS_TOKENS_TO_CONSOLE
 #define SCANNER_PRINTS_TOKENS_TO_CONSOLE 1
+#endif 
 
 /*
 -------------------
@@ -32,11 +37,11 @@ Scanner lifecycle
     Scanner struct holds references to the files being read and keeps track of the line and column position. It is a singleton. 
 */
 struct Scanner {
-    /* The line number being scanned. */
+    /*! The line number being scanned. */
     int line_no;
-    /* The column number. */
+    /*! The column number. */
     int col_no;
-    /* The error count. */
+    /*! The error count. */
     int errors;
     /* File pointers. */
     FILE * in;

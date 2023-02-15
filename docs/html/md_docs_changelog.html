@@ -66,11 +66,78 @@ $(function() {
   <div class="headertitle"><div class="title">changelog </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p >2/1/2023 : All Group Members</p><ul>
+<div class="textblock"><p >2/15/2023: Karl</p><ul>
+<li>Finished debugging full DFA.</li>
+<li>Rewrote scanner in <a class="el" href="scan_8h.html" title="Scanner struct and &#39;methods&#39; declarations.">scan.h</a>. No more using memory allocation and <a class="el" href="struct_token_catch.html">TokenCatch</a> structures. It reads from file and writes directly to the listing and output files now.</li>
+<li>Deleted scanner.c, scanner.h, scanner_util.c, scanner_util.h and associated test files.</li>
+<li>Deleted the recognize keyword token function and the associated dfa, since the new dfa covers everything.</li>
+<li>If we need those files and features back, we can revert to an earlier commit.</li>
+</ul>
+<p >2/14/2023: Karl</p><ul>
+<li>Created a FULL dfa planned to replace all current logic.</li>
+<li>Moved all test header files to one header file "test.h".</li>
+</ul>
+<p >2/13/2023: Karl and thomas</p><ul>
+<li>fixed listing file not loading</li>
+<li>fixed extractInt AND extractInt tests (they were using extractWord)!</li>
+<li>running error count and print errors</li>
+<li>fixed detect SCANEOF</li>
+<li>fixed null terminates at end of buffer for no overflow print</li>
+<li>fixed last line being ignored</li>
+<li>several types of token catch initializers</li>
+<li>token catch allocates memory; can use the tokens later in the parser</li>
+<li>scanner printLine fixes</li>
+<li>print error count</li>
+<li>Token_GetOpRaw</li>
+<li>formatting line printing</li>
+</ul>
+<p >2/13/2023: All Group Members</p><ul>
+<li>Extract op</li>
+<li>Fleshed out the switch statement for take Action</li>
+<li>printLine always happens at the end of populateBuffer now</li>
+<li>extractOperator and Scanner_ExtractOperator.... extractOperator is in <a class="el" href="struct_scanner.html">Scanner</a> not scanner_util because it is dependent</li>
+<li>Token_CatchOp Token_CatchError</li>
+</ul>
+<p >2/12/2023: Karl</p><ul>
+<li>Added recognizers for trueop, nullop, falseop to the state transition table, which I had missed before.</li>
+<li>Skipwhitespace now returns the number of characters missed. This can be useful if we extract a number and it isn't followed by a whitespace (skipwhitespace will produce 0.) This may be a cause for an error print. (Worth asking)</li>
+<li>Fixed extractWord errors and added Scanner_ExtractWord</li>
+<li>Added extractInteger and Scanner_ExtractInteger</li>
+<li>Added a boundries member to Tscanner. This is a list of all boundry characters that delimit words, identifiers, and number and it includes all operators plus whitespace and EOF. See <a class="el" href="scan_8c.html#ab5c1a90b9665d083ebf18b1025997fa5">Scanner_Init()</a> for how it's constructed.</li>
+<li>Token Recognize now returns ERROR if there is a non number, non alphanumeric within the tested string. It also now allows for identifiers to have numbers.</li>
+<li>Created Token wrapping struct called <a class="el" href="struct_token_catch.html">TokenCatch</a> that encapsulates info about the token such as the recognized raw string, line number, and so forth.</li>
+<li><a class="el" href="struct_scanner.html">Scanner</a> now takes files on Scanner_Scan(files...) not on <a class="el" href="scan_8c.html#ab5c1a90b9665d083ebf18b1025997fa5">Scanner_Init()</a></li>
+<li>Init and DeInit functions in main</li>
+<li>Moved switch statement/dispatcher into a function Scanner_TakeAction(lookaheadResult)</li>
+<li>Made basic Scanner_Scan(); currently will print the listing file numbers and lines only</li>
+</ul>
+<p >2/11/2023: Karl</p><ul>
+<li>Added skipWhitespace general function in scanner_util and added tests for it</li>
+<li>Added charIn function in scanner_util which is used by extractWord function in scanner_util.</li>
+</ul>
+<p >2/10/2023: Karl</p><ul>
+<li>Added Scanner_populateBuffer() and tested it.</li>
+<li>Created Scanner_LookAhead() and put a switch statement in Scanner_Scan()</li>
+</ul>
+<p >2/8/2023: Karl, Thomas, Anthony</p><ul>
+<li>created scanner.h and scanner.c</li>
+<li>add struct to hold scanner info</li>
+<li>scanner lifecycle functions</li>
+<li>scanner buffer functions</li>
+<li>scanner_util , created buffer resize and refresh functions</li>
+<li>created tests for scanner_util</li>
+</ul>
+<p >2/7/2023: Karl</p><ul>
+<li>abstracted command line argument parse and calls to a new function, CompFiles_FileOpenFromCLIArgs, which also generates the Temp file.</li>
+<li>created Tokens_GetName, the tokens Map, the tokens enum.</li>
+<li>created a state transition table as a 3d array for a keyword recognizer Token_RecognizeKeyword. Used excel to design the table; .xlsx is in the /docs folder.</li>
+</ul>
+<p >2/1/2023 : All Group Members</p><ul>
 <li>used fileapi.h to create a getAbsolutePath function</li>
 <li>created checkIfSamePaths function to compare file name actual paths</li>
 <li>reworked the validate files functions to check for output/input name collisions</li>
 <li>adjusted some printing</li>
+<li>fixed tempfile bug</li>
 </ul>
 <p >1/28/2023: Karl</p><ul>
 <li>used doxygen to generate documentation</li>

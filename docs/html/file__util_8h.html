@@ -83,7 +83,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a39ecaaf304cab70ba716c1c9d3d08e85"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="file__util_8h.html#a39ecaaf304cab70ba716c1c9d3d08e85">FILE_EXISTS_ENUM</a> { <a class="el" href="file__util_8h.html#a39ecaaf304cab70ba716c1c9d3d08e85a3d10ee4ca1907dc4bcc2047c2d90082b">FILE_EXISTS</a> = 1
+<tr class="memitem:a39ecaaf304cab70ba716c1c9d3d08e85"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="file__util_8h.html#a39ecaaf304cab70ba716c1c9d3d08e85">FILE_EXISTS_ENUM</a> { <a class="el" href="file__util_8h.html#a39ecaaf304cab70ba716c1c9d3d08e85a3d317b2cbcd0313b0e1f60c0f2922493">FILE_CANT_EXIST</a> = -1
+, <a class="el" href="file__util_8h.html#a39ecaaf304cab70ba716c1c9d3d08e85a3d10ee4ca1907dc4bcc2047c2d90082b">FILE_EXISTS</a> = 1
 , <a class="el" href="file__util_8h.html#a39ecaaf304cab70ba716c1c9d3d08e85aac354ea05a07076842e23f6ed840d3ea">FILE_DOES_NOT_EXIST</a> = 0
  }</td></tr>
 <tr class="separator:a39ecaaf304cab70ba716c1c9d3d08e85"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,7 +131,8 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p >Alias for true false, 1, 0 </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a39ecaaf304cab70ba716c1c9d3d08e85a3d10ee4ca1907dc4bcc2047c2d90082b" name="a39ecaaf304cab70ba716c1c9d3d08e85a3d10ee4ca1907dc4bcc2047c2d90082b"></a>FILE_EXISTS&#160;</td><td class="fielddoc"></td></tr>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a39ecaaf304cab70ba716c1c9d3d08e85a3d317b2cbcd0313b0e1f60c0f2922493" name="a39ecaaf304cab70ba716c1c9d3d08e85a3d317b2cbcd0313b0e1f60c0f2922493"></a>FILE_CANT_EXIST&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39ecaaf304cab70ba716c1c9d3d08e85a3d10ee4ca1907dc4bcc2047c2d90082b" name="a39ecaaf304cab70ba716c1c9d3d08e85a3d10ee4ca1907dc4bcc2047c2d90082b"></a>FILE_EXISTS&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a39ecaaf304cab70ba716c1c9d3d08e85aac354ea05a07076842e23f6ed840d3ea" name="a39ecaaf304cab70ba716c1c9d3d08e85aac354ea05a07076842e23f6ed840d3ea"></a>FILE_DOES_NOT_EXIST&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
@@ -285,7 +287,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>short:<ul>
 <li>1 if the file exists</li>
-<li>0 if it does not. </li>
+<li>0 if it does not.</li>
+<li>-1 if file cant exist </li>
 </ul>
 </dd></dl>
 <dl class="section author"><dt>Authors</dt><dd>klm127 </dd></dl>

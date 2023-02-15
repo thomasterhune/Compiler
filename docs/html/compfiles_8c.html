@@ -82,6 +82,8 @@ Functions</h2></td></tr>
 <tr class="separator:a68967e95486e11ce8b88782768b2e7f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed3075e804adee4adcde717d1e6ae881"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#aed3075e804adee4adcde717d1e6ae881">CompFiles_DeInit</a> ()</td></tr>
 <tr class="separator:aed3075e804adee4adcde717d1e6ae881"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdf0dc539c73cd6786d8952371304fff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_t_comp_files.html">TCompFiles</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#afdf0dc539c73cd6786d8952371304fff">CompFiles_GetFiles</a> ()</td></tr>
+<tr class="separator:afdf0dc539c73cd6786d8952371304fff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b4cfe90e8f44563ed95a284b07099bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#a4b4cfe90e8f44563ed95a284b07099bb">CompFiles_LoadInputFile</a> (FILE *newInputFile)</td></tr>
 <tr class="separator:a4b4cfe90e8f44563ed95a284b07099bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a734535621b2d1776417950d5f4541735"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#a734535621b2d1776417950d5f4541735">CompFiles_LoadOutputFile</a> (FILE *newOutputFile)</td></tr>
@@ -94,6 +96,8 @@ Functions</h2></td></tr>
 <tr class="separator:acf7859327083319dfdc48468b4d24839"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a331a984a5bcfd0ee8bcbf275b91a1265"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#a331a984a5bcfd0ee8bcbf275b91a1265">CompFiles_CopyInputToOutputs</a> ()</td></tr>
 <tr class="separator:a331a984a5bcfd0ee8bcbf275b91a1265"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa481f64a48987107dcfac5fe72dc941a"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#aa481f64a48987107dcfac5fe72dc941a">CompFiles_Open</a> (int argc, char *argv[])</td></tr>
+<tr class="separator:aa481f64a48987107dcfac5fe72dc941a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43b30bf86345564683b090b567d85054"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#a43b30bf86345564683b090b567d85054">CompFiles_AcquireValidatedFiles</a> (char *inputFilename, const char *outputFilename)</td></tr>
 <tr class="separator:a43b30bf86345564683b090b567d85054"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d2b3e6e781d67ec86bcd80d268d7e12"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compfiles_8c.html#a8d2b3e6e781d67ec86bcd80d268d7e12">CompFiles_AcquireValidatedInputFile</a> (char *filename)</td></tr>
@@ -133,7 +137,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Loops and prompts until all input and output files are set correctly or until terminate is requested.</p>
+<p >Loops and prompts until all input and output files are set correctly or until terminate is requested. After the input, output, and listing files are generated, CompFiles_AcquireValidatedFiles also generates a temp file.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">inputFilename</td><td>a filename with which to begin input validation with or NULL </td></tr>
@@ -245,8 +249,7 @@ Functions</h2></td></tr>
 <p >CompFiles_CopyInputToOutputs copies all the data from the input file to each of the output files. After execution, all output files (tmp, list, and out) will have text identical to the input files.</p>
 <dl class="section warning"><dt>Warning</dt><dd>Precondition: All CompFiles file pointers must be open and ready to read/write.</dd></dl>
 <dl class="section author"><dt>Author</dt><dd>Thomas, Karl </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>1/27/2023</dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>Not Covered by Unit Tests</dd></dl>
+<dl class="section date"><dt>Date</dt><dd>1/27/2023 </dd></dl>
 
 </div>
 </div>
@@ -285,6 +288,24 @@ Functions</h2></td></tr>
 <p >Generates a temporary file with a unique name. This file will be destroyed when <a class="el" href="compfiles_8h.html#aed3075e804adee4adcde717d1e6ae881">CompFiles_DeInit()</a> is called.</p>
 <dl class="section author"><dt>Author</dt><dd>klm127 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>1/26/2023 </dd></dl>
+
+</div>
+</div>
+<a id="afdf0dc539c73cd6786d8952371304fff" name="afdf0dc539c73cd6786d8952371304fff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdf0dc539c73cd6786d8952371304fff">&#9670;&nbsp;</a></span>CompFiles_GetFiles()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_t_comp_files.html">TCompFiles</a> * CompFiles_GetFiles </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Gets the CompFiles struct so that the validated files can be used elsewhere in the program. </p><dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="struct_t_comp_files.html" title="Manages input and output files.">TCompFiles</a> struct. </dd></dl>
 
 </div>
 </div>
@@ -399,6 +420,45 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="aa481f64a48987107dcfac5fe72dc941a" name="aa481f64a48987107dcfac5fe72dc941a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa481f64a48987107dcfac5fe72dc941a">&#9670;&nbsp;</a></span>CompFiles_Open()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">short CompFiles_Open </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>argv</em>[]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Parses the command line args and calls functions to acquire validated filenames.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">argc</td><td>The argument count. </td></tr>
+    <tr><td class="paramname">argv</td><td>The argument array. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if terminate was requested. Otherwise, 0. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>klm127 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2/7/2023 </dd></dl>
 
 </div>
 </div>

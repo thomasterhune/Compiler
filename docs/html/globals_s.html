@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: Globals</title>
+<title>TomPiler: Globals</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,8 +21,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">My Project
+   <div id="projectname">TomPiler<span id="projectnumber">&#160;0.2.5</span>
    </div>
+   <div id="projectbrief">A school project.</div>
   </td>
  </tr>
  </tbody>
@@ -65,22 +66,93 @@ $(function() {
 <div class="textblock">Here is a list of all functions, variables, defines, enums, and typedefs with links to the files they belong to:</div>
 
 <h3><a id="index_s" name="index_s"></a>- s -</h3><ul>
-<li>SET_COLOR&#160;:&#160;<a class="el" href="terminal_8h.html#a68108461458bb83e59295f4c68385aaf">terminal.h</a></li>
-<li>StdSwapper_DeInit()&#160;:&#160;<a class="el" href="std__swapper_8c.html#a845fb686aa7657f49a6e4f70325008e3">std_swapper.c</a>, <a class="el" href="std__swapper_8h.html#a845fb686aa7657f49a6e4f70325008e3">std_swapper.h</a></li>
-<li>StdSwapper_Init()&#160;:&#160;<a class="el" href="std__swapper_8c.html#aa6d9f7512521221134be1e6d6dcdb1d8">std_swapper.c</a>, <a class="el" href="std__swapper_8h.html#aa6d9f7512521221134be1e6d6dcdb1d8">std_swapper.h</a></li>
-<li>StdSwapper_RestoreAllStd()&#160;:&#160;<a class="el" href="std__swapper_8c.html#ada0f0d7ab8e54660cab36bc21f39d86c">std_swapper.c</a>, <a class="el" href="std__swapper_8h.html#ada0f0d7ab8e54660cab36bc21f39d86c">std_swapper.h</a></li>
-<li>StdSwapper_RestoreStdIn()&#160;:&#160;<a class="el" href="std__swapper_8c.html#a942904bbf45dfd998ba7e144bdae1795">std_swapper.c</a>, <a class="el" href="std__swapper_8h.html#a942904bbf45dfd998ba7e144bdae1795">std_swapper.h</a></li>
-<li>StdSwapper_RestoreStdOut()&#160;:&#160;<a class="el" href="std__swapper_8c.html#a562c0dffbe0a5b5222459d99584752d8">std_swapper.c</a>, <a class="el" href="std__swapper_8h.html#a562c0dffbe0a5b5222459d99584752d8">std_swapper.h</a></li>
-<li>StdSwapper_SetAllStdWithInputOf()&#160;:&#160;<a class="el" href="std__swapper_8c.html#a010cb686d33a769e4b8364aef36ed346">std_swapper.c</a>, <a class="el" href="std__swapper_8h.html#a010cb686d33a769e4b8364aef36ed346">std_swapper.h</a></li>
-<li>StdSwapper_SetDefaultStdinFile()&#160;:&#160;<a class="el" href="std__swapper_8c.html#a148b57b01374ff2bc874a3fc25034a2c">std_swapper.c</a>, <a class="el" href="std__swapper_8h.html#a148b57b01374ff2bc874a3fc25034a2c">std_swapper.h</a></li>
-<li>StdSwapper_SetDefaultStdoutFile()&#160;:&#160;<a class="el" href="std__swapper_8c.html#a872cab5ad79293f5033f2ff68b9fa10a">std_swapper.c</a>, <a class="el" href="std__swapper_8h.html#a872cab5ad79293f5033f2ff68b9fa10a">std_swapper.h</a></li>
-<li>StdSwapper_SetStdIn()&#160;:&#160;<a class="el" href="std__swapper_8c.html#a30efb71cd4055a1cb3196c62b0a2f60e">std_swapper.c</a>, <a class="el" href="std__swapper_8h.html#a30efb71cd4055a1cb3196c62b0a2f60e">std_swapper.h</a></li>
-<li>StdSwapper_SetStdOut()&#160;:&#160;<a class="el" href="std__swapper_8c.html#aa10f7acc7d3c974afffe4b5a97dc5f36">std_swapper.c</a>, <a class="el" href="std__swapper_8h.html#aa10f7acc7d3c974afffe4b5a97dc5f36">std_swapper.h</a></li>
-<li>STRING_INC&#160;:&#160;<a class="el" href="_cu_test_8h.html#aebbf25c57ad1257fe25ae880888213df">CuTest.h</a></li>
-<li>STRING_MAX&#160;:&#160;<a class="el" href="_cu_test_8h.html#a41f16f17393bc7dfd8c3a44a6ba595ba">CuTest.h</a></li>
-<li>SUITE_ADD_TEST&#160;:&#160;<a class="el" href="_cu_test_8h.html#a9d9dfb4e9970c9a775ae3ff1aff9da92">CuTest.h</a></li>
-<li>swapper&#160;:&#160;<a class="el" href="std__swapper_8c.html#ad2852e60cd8354ec963ad9348c6a6deb">std_swapper.c</a></li>
-<li>swapper_has_applied_defaults&#160;:&#160;<a class="el" href="std__swapper_8c.html#a335275f45bb91d0035c8f34fe5c70c67">std_swapper.c</a></li>
+<li>SCANEOF&#160;:&#160;<a class="el" href="tokens_8h.html#ac6f62333aafcf3546f487ccd7caa9928a16692c79a97cd80524e150589cf89e6f">tokens.h</a></li>
+<li>scanner&#160;:&#160;<a class="el" href="scan_8c.html#a11efdc5e7288d9b0d60736826b99c9a3">scan.c</a></li>
+<li>Scanner_AdvanceLine()&#160;:&#160;<a class="el" href="scan_8c.html#a51351562e77dc93ff55c9fc8f637341a">scan.c</a>, <a class="el" href="scan_8h.html#a51351562e77dc93ff55c9fc8f637341a">scan.h</a></li>
+<li>Scanner_BackprintIdentifier()&#160;:&#160;<a class="el" href="scan_8c.html#a4be9e7aa76f8f7e31d5ae09f253a0015">scan.c</a>, <a class="el" href="scan_8h.html#a4be9e7aa76f8f7e31d5ae09f253a0015">scan.h</a></li>
+<li>Scanner_DeInit()&#160;:&#160;<a class="el" href="scan_8c.html#a94b33bd04b8b00f8d1de8f76618c753c">scan.c</a>, <a class="el" href="scan_8h.html#a94b33bd04b8b00f8d1de8f76618c753c">scan.h</a></li>
+<li>Scanner_Init()&#160;:&#160;<a class="el" href="scan_8c.html#ab5c1a90b9665d083ebf18b1025997fa5">scan.c</a>, <a class="el" href="scan_8h.html#ab5c1a90b9665d083ebf18b1025997fa5">scan.h</a></li>
+<li>Scanner_Lookahead()&#160;:&#160;<a class="el" href="scan_8c.html#a471835eff173c380cbd29ee8cec7ebc9">scan.c</a>, <a class="el" href="scan_8h.html#a471835eff173c380cbd29ee8cec7ebc9">scan.h</a></li>
+<li>Scanner_PrintErrorListing()&#160;:&#160;<a class="el" href="scan_8c.html#a865c3cf5595f9645941090df87af5b55">scan.c</a>, <a class="el" href="scan_8h.html#a865c3cf5595f9645941090df87af5b55">scan.h</a></li>
+<li>Scanner_PrintErrorSummary()&#160;:&#160;<a class="el" href="scan_8c.html#a32481718a927d35d45554c19c618e4ce">scan.c</a>, <a class="el" href="scan_8h.html#a32481718a927d35d45554c19c618e4ce">scan.h</a></li>
+<li>Scanner_PrintLine()&#160;:&#160;<a class="el" href="scan_8c.html#a9df8f85b719a0f73dd0929f04ccf1f6c">scan.c</a>, <a class="el" href="scan_8h.html#a9df8f85b719a0f73dd0929f04ccf1f6c">scan.h</a></li>
+<li>SCANNER_PRINTS_LINES_TO_CONSOLE&#160;:&#160;<a class="el" href="scan_8h.html#a22ed65a4a037d9066910b439de9bc04b">scan.h</a></li>
+<li>SCANNER_PRINTS_TOKENS_TO_CONSOLE&#160;:&#160;<a class="el" href="scan_8h.html#ab8eb12cf7479579d7a70a21a167a6ef6">scan.h</a></li>
+<li>Scanner_PrintTokenFront()&#160;:&#160;<a class="el" href="scan_8c.html#abbe8c8d149a7ddb76839ee76305fa33e">scan.c</a>, <a class="el" href="scan_8h.html#aa1e6b201f23a483b067beb8870ab3a8f">scan.h</a></li>
+<li>Scanner_ScanAndPrint()&#160;:&#160;<a class="el" href="scan_8c.html#a7a803f706ed8b682cc2a90473c9875dc">scan.c</a>, <a class="el" href="scan_8h.html#a67c3b83e3afcbdce34dfa9366e0e3a69">scan.h</a></li>
+<li>Scanner_SkipWhitespace()&#160;:&#160;<a class="el" href="scan_8c.html#a0be2f1a07d6668975233bef686cc7f9a">scan.c</a>, <a class="el" href="scan_8h.html#a0be2f1a07d6668975233bef686cc7f9a">scan.h</a></li>
+<li>SEMICOLON&#160;:&#160;<a class="el" href="tokens_8h.html#ac6f62333aafcf3546f487ccd7caa9928a55eebe3c7e08b49cd5969442f4f8c4ce">tokens.h</a></li>
+<li>STATE_B&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a5ae62508b79893c526e0394ecb9eddde">dfa.c</a></li>
+<li>STATE_BE&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a3022dbb3633d1a6edd90c4456ac82ded">dfa.c</a></li>
+<li>STATE_BEG&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3abe573eb5145be71422d35a1667a31518">dfa.c</a></li>
+<li>STATE_BEGI&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3aa38473b355b9d129356afba43d26049e">dfa.c</a></li>
+<li>STATE_BEGIN&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3ae2bb6f66fa4f47040c4fe991b88a3d9f">dfa.c</a></li>
+<li>STATE_COLON&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3ad51ae0464033c475de5add382ea5cf50">dfa.c</a></li>
+<li>STATE_COLONEQUALS&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3adf0348e0e2f9084019624d49b89f54f7">dfa.c</a></li>
+<li>STATE_COMMA&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a7095bd582e453569dac41ee60f565603">dfa.c</a></li>
+<li>STATE_DIV&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3aec2312d1afe4d9fb391907cf78550ece">dfa.c</a></li>
+<li>STATE_E&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a4c0d939e61f82d28ea40dcf949280eca">dfa.c</a></li>
+<li>STATE_EL&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a3ef1876b8596d18e9172025b67557781">dfa.c</a></li>
+<li>STATE_ELS&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a85509516bb9986583f4681288ecf9a77">dfa.c</a></li>
+<li>STATE_ELSE&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a2434cc944baf673b2237b12a45a9ad69">dfa.c</a></li>
+<li>STATE_EN&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a4b9b68e4ca017d4dc82fef5fd1efd736">dfa.c</a></li>
+<li>STATE_END&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3af3f9f84c5967b769ca17cdc6c523f7fe">dfa.c</a></li>
+<li>STATE_ENDI&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a4ab4aa0c4872bc228bf7eb743c892754">dfa.c</a></li>
+<li>STATE_ENDIF&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a6b706731fd8e52801ba61620c07ec193">dfa.c</a></li>
+<li>STATE_ENDW&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3aae6d9bd2e6fc3f2498655b2714d1dfa7">dfa.c</a></li>
+<li>STATE_ENDWH&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a73df20f45b43358aa68fdc7e699f46e9">dfa.c</a></li>
+<li>STATE_ENDWHI&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3ac04cce74b4b26c0c6595f7e85908dd98">dfa.c</a></li>
+<li>STATE_ENDWHIL&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a071bbd48a3aa8b69cd496b98eeae68bc">dfa.c</a></li>
+<li>STATE_ENDWHILE&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3abe1e1e8aaf2750b29699e7e53dd25454">dfa.c</a></li>
+<li>STATE_EOF&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a9f3f0f3bc2ba0831b14c93278ed61e46">dfa.c</a></li>
+<li>STATE_EQ&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a41d9bea4e08eb6ff78736834c2d64ba5">dfa.c</a></li>
+<li>STATE_ERROR&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3ad55c0bfe3a7d3ae983e81a98e3384d6c">dfa.c</a></li>
+<li>STATE_F&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3ab655c9d755abee69148de073359a81a2">dfa.c</a></li>
+<li>STATE_FA&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a0ab85cfdd6eea9965b344341a6e0a147">dfa.c</a></li>
+<li>STATE_FAL&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3ac5855d3a8e630a7e9eafbab4106ca68b">dfa.c</a></li>
+<li>STATE_FALS&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a2a8734f7ee5280adedea45dfb926ef7f">dfa.c</a></li>
+<li>STATE_FALSE&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a0a9bbe7cafc21cdbd0a09a219af6ee31">dfa.c</a></li>
+<li>STATE_GREAT&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a581f88a32e42949b9f02ce08ed8d2a3a">dfa.c</a></li>
+<li>STATE_GREATEQ&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a99f36a320bcc88d5d6309cae9c7f7ca7">dfa.c</a></li>
+<li>STATE_I&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3ad0f94fcc4e1d596a7b5d739717048977">dfa.c</a></li>
+<li>STATE_ID&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3afc8df9b178ba8b45d7090e3a083363fa">dfa.c</a></li>
+<li>STATE_IF&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a8e14677548dc87e4b2f7b4500600bd3f">dfa.c</a></li>
+<li>STATE_INT&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a0303a773c5ac4ecf942519d6e2f1a160">dfa.c</a></li>
+<li>STATE_LESS&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3ab81b1aa81da3be3cb1a232f34241bc8b">dfa.c</a></li>
+<li>STATE_LESSEQ&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3ac74ef2cc73ac7c0076a582891c01ebe8">dfa.c</a></li>
+<li>STATE_LPAR&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a648adde7abdecc4ad788e902bd8beda5">dfa.c</a></li>
+<li>STATE_MINUS&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3aabd5fcee30e248321e45e2ecfcf96a62">dfa.c</a></li>
+<li>STATE_MULTIPLY&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a04300c48ea8ca2f0d1d74012d60c83b7">dfa.c</a></li>
+<li>STATE_N&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a705231124c0a95712b7fee892335aa4a">dfa.c</a></li>
+<li>STATE_NOT&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a006e0d031efafc9a4090885bb0a4f41c">dfa.c</a></li>
+<li>STATE_NOTEQ&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a0ab51b599b79d8947a94f5e7459dfe27">dfa.c</a></li>
+<li>STATE_NU&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a80c0f74dbfe2e686ba929b1521036457">dfa.c</a></li>
+<li>STATE_NUL&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a84a6c969422e2241fe736864bf3ac4e1">dfa.c</a></li>
+<li>STATE_NULL&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a0980ed83de990f1099d3537bb6b6df24">dfa.c</a></li>
+<li>STATE_PLUS&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a1b0fb017716e122fc6025e81c34d104c">dfa.c</a></li>
+<li>STATE_R&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a767e9bc08ec7502be27915ea803fb44a">dfa.c</a></li>
+<li>STATE_RE&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a34fa4422a6f09ff16abd50f2d9932965">dfa.c</a></li>
+<li>STATE_REA&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a09ecb3dd9a7abd1ff525566d59b21a88">dfa.c</a></li>
+<li>STATE_READ&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a0bd62d2c19c771fedb1c6459ff576756">dfa.c</a></li>
+<li>STATE_RPAR&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a62cfb3d98b0a1e2faf3727bdcda2c790">dfa.c</a></li>
+<li>STATE_SEMIC&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a6dcba2f61886a1388a0ffb3f62f87ac3">dfa.c</a></li>
+<li>STATE_START&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a1844f314039d713261df43a309145446">dfa.c</a></li>
+<li>STATE_T&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3aa2a265ac2436b53d594b53d746bf70e8">dfa.c</a></li>
+<li>STATE_TH&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a7ccee70508d1042b066f859022baaa0c">dfa.c</a></li>
+<li>STATE_THE&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a4528a0e008bb3a5eca9ad97fd08cb352">dfa.c</a></li>
+<li>STATE_THEN&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3abf7e50c0e57bcef2cd6a7274488640dd">dfa.c</a></li>
+<li>STATE_TR&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a518535d947c09f07bcdf8d55bcb16615">dfa.c</a></li>
+<li>STATE_TRU&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a6f931c5d294efa8357916e68766e4e79">dfa.c</a></li>
+<li>STATE_TRUE&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a952f7839f792e4a98d871e3f9494c3ce">dfa.c</a></li>
+<li>STATE_W&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a6135d0517c529af96547054f2792a8f0">dfa.c</a></li>
+<li>STATE_WH&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3ab317e588feeb57fe2977f8d965797677">dfa.c</a></li>
+<li>STATE_WHI&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3ace99fe49c04d087e88e876ebaa641007">dfa.c</a></li>
+<li>STATE_WHIL&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a83bff0444af56a657ee7a495b8028714">dfa.c</a></li>
+<li>STATE_WHILE&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3a20836cfac29ee1a041154dbb56c50d80">dfa.c</a></li>
+<li>STATE_WR&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3acd9b1ae27bf8e25c120a6442148c9e9b">dfa.c</a></li>
+<li>STATE_WRI&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3afca32c2c30695a97f9f3b6407022c5aa">dfa.c</a></li>
+<li>STATE_WRIT&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3ae161dde63fec2ebedfe31ec5f2ba83fa">dfa.c</a></li>
+<li>STATE_WRITE&#160;:&#160;<a class="el" href="dfa_8c.html#a58ef7abae943dd2ec716a893ce349fd3ad7e5fc0be7f7577c4cd289a483a31a8f">dfa.c</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

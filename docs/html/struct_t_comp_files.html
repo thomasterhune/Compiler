@@ -92,6 +92,8 @@ Data Fields</h2></td></tr>
 <tr class="separator:a21ee750617e372bbaad63fe7fd754c8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeceef68eac013ef0c62e2573b7963d2f"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_t_comp_files.html#aeceef68eac013ef0c62e2573b7963d2f">terminate_requested</a></td></tr>
 <tr class="separator:aeceef68eac013ef0c62e2573b7963d2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac30df1dc2c3a06e883d45b2495d65197"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_t_comp_files.html#ac30df1dc2c3a06e883d45b2495d65197">has_requested_default_filename</a></td></tr>
+<tr class="separator:ac30df1dc2c3a06e883d45b2495d65197"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa91ff4ee3ee60baee9c097d4da3e3d18"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_t_comp_files.html#aa91ff4ee3ee60baee9c097d4da3e3d18">input_file_name</a></td></tr>
 <tr class="separator:aa91ff4ee3ee60baee9c097d4da3e3d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdcd0d11bb729145f180d52a0755cddf"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_t_comp_files.html#acdcd0d11bb729145f180d52a0755cddf">output_file_name</a></td></tr>
@@ -106,6 +108,21 @@ Data Fields</h2></td></tr>
 <p >CompFiles is a globally accesible struct which maintains references to the loaded files.</p>
 <p >It has a number of functions closely associated to it. In that way it is a class-like, but a singleton. There is only one CompFiles that ever should exist. </p>
 </div><h2 class="groupheader">Field Documentation</h2>
+<a id="ac30df1dc2c3a06e883d45b2495d65197" name="ac30df1dc2c3a06e883d45b2495d65197"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac30df1dc2c3a06e883d45b2495d65197">&#9670;&nbsp;</a></span>has_requested_default_filename</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">short has_requested_default_filename</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >1 indicates that a user has requested to use a default ouput filename already. This is so that if the user selects this twice, they will automatically exit instead of looping the prompt. </p>
+
+</div>
+</div>
 <a id="aca392a8d3941cd0740aef3ad92545d67" name="aca392a8d3941cd0740aef3ad92545d67"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aca392a8d3941cd0740aef3ad92545d67">&#9670;&nbsp;</a></span>in</h2>
 

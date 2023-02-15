@@ -1,14 +1,14 @@
 var searchData=
 [
-  ['test_5faddextension_0',['test_addExtension',['../file__util__test_8c.html#ae1deabd8d83b66434595f38fe3b56431',1,'file_util_test.c']]],
-  ['test_5fbackupfile_1',['test_backupFile',['../file__util__test_8c.html#ac8c15b453c9aa0f06ee190412b110d9a',1,'file_util_test.c']]],
-  ['test_5fcompfiles_5finit_2',['test_CompFiles_Init',['../compfiles__test_8c.html#ab2e4fee193e63a97d73ae29662b449b3',1,'compfiles_test.c']]],
-  ['test_5ffileexists_3',['test_FileExists',['../file__util__test_8c.html#a5cdbdf850a21ba4b7d6bd34d149448f1',1,'file_util_test.c']]],
-  ['test_5ffilenamehasextension_4',['test_filenameHasExtension',['../file__util__test_8c.html#ae1aec71e3618c3ecdfcc8eb66cc45d75',1,'file_util_test.c']]],
-  ['test_5fgetc_5',['test_getc',['../file__util__test_8c.html#ab704a9eb1555ab78d52b520ef2bc3ab2',1,'file_util_test.c']]],
-  ['test_5fgetstring_6',['test_getString',['../file__util__test_8c.html#a38c57a58d0845727e01f210a7a4b9bed',1,'file_util_test.c']]],
-  ['test_5fpromptinputfilename_7',['test_promptInputFilename',['../compfiles__test_8c.html#ab01f9236564091951efe071c6728229c',1,'compfiles_test.c']]],
-  ['test_5fpromptoutputfilename_8',['test_promptOutputFilename',['../compfiles__test_8c.html#a65bd01ce36f12e3c67ad95910aa02e3a',1,'compfiles_test.c']]],
-  ['test_5fpromptuseroverwriteselection_9',['test_promptUserOverwriteSelection',['../compfiles__test_8c.html#a68a006f75163d9e8c1b73aa67b41cb22',1,'compfiles_test.c']]],
-  ['test_5fremoveextension_10',['test_removeExtension',['../file__util__test_8c.html#a9a209c6cd3e549a65f9bc4a2de94083a',1,'file_util_test.c']]]
+  ['scanner_5fadvanceline_0',['Scanner_AdvanceLine',['../scan_8c.html#a51351562e77dc93ff55c9fc8f637341a',1,'Scanner_AdvanceLine():&#160;scan.c'],['../scan_8h.html#a51351562e77dc93ff55c9fc8f637341a',1,'Scanner_AdvanceLine():&#160;scan.c']]],
+  ['scanner_5fbackprintidentifier_1',['Scanner_BackprintIdentifier',['../scan_8c.html#a4be9e7aa76f8f7e31d5ae09f253a0015',1,'Scanner_BackprintIdentifier(int nchars):&#160;scan.c'],['../scan_8h.html#a4be9e7aa76f8f7e31d5ae09f253a0015',1,'Scanner_BackprintIdentifier(int nchars):&#160;scan.c']]],
+  ['scanner_5fdeinit_2',['Scanner_DeInit',['../scan_8c.html#a94b33bd04b8b00f8d1de8f76618c753c',1,'Scanner_DeInit():&#160;scan.c'],['../scan_8h.html#a94b33bd04b8b00f8d1de8f76618c753c',1,'Scanner_DeInit():&#160;scan.c']]],
+  ['scanner_5finit_3',['Scanner_Init',['../scan_8c.html#ab5c1a90b9665d083ebf18b1025997fa5',1,'Scanner_Init():&#160;scan.c'],['../scan_8h.html#ab5c1a90b9665d083ebf18b1025997fa5',1,'Scanner_Init():&#160;scan.c']]],
+  ['scanner_5flookahead_4',['Scanner_Lookahead',['../scan_8c.html#a471835eff173c380cbd29ee8cec7ebc9',1,'Scanner_Lookahead():&#160;scan.c'],['../scan_8h.html#a471835eff173c380cbd29ee8cec7ebc9',1,'Scanner_Lookahead():&#160;scan.c']]],
+  ['scanner_5fprinterrorlisting_5',['Scanner_PrintErrorListing',['../scan_8c.html#a865c3cf5595f9645941090df87af5b55',1,'Scanner_PrintErrorListing():&#160;scan.c'],['../scan_8h.html#a865c3cf5595f9645941090df87af5b55',1,'Scanner_PrintErrorListing():&#160;scan.c']]],
+  ['scanner_5fprinterrorsummary_6',['Scanner_PrintErrorSummary',['../scan_8c.html#a32481718a927d35d45554c19c618e4ce',1,'Scanner_PrintErrorSummary():&#160;scan.c'],['../scan_8h.html#a32481718a927d35d45554c19c618e4ce',1,'Scanner_PrintErrorSummary():&#160;scan.c']]],
+  ['scanner_5fprintline_7',['Scanner_PrintLine',['../scan_8c.html#a9df8f85b719a0f73dd0929f04ccf1f6c',1,'Scanner_PrintLine():&#160;scan.c'],['../scan_8h.html#a9df8f85b719a0f73dd0929f04ccf1f6c',1,'Scanner_PrintLine():&#160;scan.c']]],
+  ['scanner_5fprinttokenfront_8',['Scanner_PrintTokenFront',['../scan_8c.html#abbe8c8d149a7ddb76839ee76305fa33e',1,'Scanner_PrintTokenFront(int token):&#160;scan.c'],['../scan_8h.html#aa1e6b201f23a483b067beb8870ab3a8f',1,'Scanner_PrintTokenFront():&#160;scan.h']]],
+  ['scanner_5fscanandprint_9',['Scanner_ScanAndPrint',['../scan_8c.html#a7a803f706ed8b682cc2a90473c9875dc',1,'Scanner_ScanAndPrint(FILE *input, FILE *output, FILE *listing, FILE *temp):&#160;scan.c'],['../scan_8h.html#a67c3b83e3afcbdce34dfa9366e0e3a69',1,'Scanner_ScanAndPrint(FILE *input, FILE *listing, FILE *output, FILE *temp):&#160;scan.c']]],
+  ['scanner_5fskipwhitespace_10',['Scanner_SkipWhitespace',['../scan_8c.html#a0be2f1a07d6668975233bef686cc7f9a',1,'Scanner_SkipWhitespace():&#160;scan.c'],['../scan_8h.html#a0be2f1a07d6668975233bef686cc7f9a',1,'Scanner_SkipWhitespace():&#160;scan.c']]]
 ];
