@@ -3,6 +3,24 @@
 #include <string.h>
 #include <stdio.h>
 
+/*!
+    \file dfa.c
+    \brief The DFA and related logic definitions.
+
+    The DFA is a 3 dimensional array that maps a given state and character input to a result consisting of the next state, token, and whether reading should continue.
+
+    The DFA was created in Excel, and the excel file is available in docs/fullDFA.xlsx.
+
+    \authors Tom Terhune, Karl Miller, Anthony Stepich
+    \date February 2023
+
+*/
+
+/*
+
+    NOTE: function descriptions are located in the header file instead of the .c file to enable intellisense type hints. 
+
+*/
 
 #pragma region dfaStates
 enum DFA_STATES { /* Enumerated values for the DFA states, to aid readability. */
@@ -632,19 +650,28 @@ int GetNextToken(FILE * file, int * charsRead) {
     short token = ERROR;
     short state = STATE_START;
     short keepReading = 1;
-    short read = fgetc(file);
+    char lastchar = getc(file);
+    short read = GetDFAColumn(lastchar);
     while(read == CH_WSPC)
     { /* skip leading whitespace. */
-        read = GetDFAColumn(fgetc(file));
-        
+        lastchar = getc(file);
+        read = GetDFAColumn(lastchar);
     }
+    /* printf("\n-- ws skip done, starting parse -- "); */
+    /* printStateAndChar(state, read); */
     while(keepReading) {
         token = DFA[state][read][1];
+        /* printf("\n\tToken At state: %s", Token_GetName(token)); */
         state = DFA[state][read][0];
-        read = GetDFAColumn(fgetc(file));
+        lastchar = getc(file);
+        read = GetDFAColumn(lastchar);
         *charsRead += 1;
         keepReading = DFA[state][read][2];
+        /* printf("\n\tKeep reading? %d", keepReading);
+        printStateAndChar(state, read); */
     }
+    ungetc(lastchar, file);
+    /* printf("\n>> RETURNING %s", Token_GetName(token)); */
     return token;
 }
 

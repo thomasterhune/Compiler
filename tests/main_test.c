@@ -21,8 +21,6 @@ void RunAllTests(void) {
     CuSuiteAddSuite(suite, fileUtilGetSuite());
     CuSuiteAddSuite(suite, CompfilesGetSuite());
     CuSuiteAddSuite(suite, tokensTestGetSuite());
-    CuSuiteAddSuite(suite, scannerUtilGetSuite());
-    CuSuiteAddSuite(suite, scannerGetSuite());
     CuSuiteAddSuite(suite, dfaTestGetSuite());
  
     CuSuiteRun(suite);

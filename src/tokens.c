@@ -4,6 +4,25 @@
 #include <stdio.h>
 
 /*!
+    \file tokens.c
+    \brief Token map and related functions
+
+    The tokensMap maps a given token to a constant string, which is used by Token_GetName() to get the name of a token. The index of a token string in the tokensMap is the same as it's enumerated value. E.G, BEGIN is value 0 and "BEGIN" is at position 0 in the tokensMap array. 
+
+    This file also contains definitions for TokenCatch methods, which are no longer used. In an earlier version of the program, a TokenCatch wrapped a given token with related data and was memory-allocated. The current version does not use TokenCatch, but it is retained here in case we need it for future parsing features. 
+
+    \authors Tom Terhune, Karl Miller, Anthony Stepich
+    \date February 2023
+
+*/
+
+/*
+
+    NOTE: function descriptions are located in the header file instead of the .c file to enable intellisense type hints. 
+
+*/
+
+/*!
     TokensMap maps each token to the corresponding string.
     \warning If you change the order in the enum, you must also change the order in this map!
 
@@ -61,46 +80,12 @@ const char *Token_GetName(int id)
     return r_value;
 }
 
-/* A transition table / DFA for keywords. */
-int keywordsST[52][26][2] = {{{38, ID},{1, ID},{38, ID},{38, ID},{6, ID},{39, ID},{38, ID},{38, ID},{32, ID},{38, ID},{38, ID},{38, ID},{38, ID},{48, ID},{38, ID},{38, ID},{38, ID},{19, ID},{38, ID},{34, ID},{38, ID},{38, ID},{23, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{2, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{3, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{4, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{5, BEGIN},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{7, ID},{38, ID},{10, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{8, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{9, ELSE},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{11, END},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{12, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{14, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{13, ENDIF},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{15, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{16, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{17, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{18, ENDWHILE},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{20, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{21, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{22, READ},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{28, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{24, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{25, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{26, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{27, WRITE},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{29,ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{30,ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{31, WHILE},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{33, IF},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{35, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{45, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{36, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{37, THEN},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{40, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{41, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{42, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{43, FALSEOP},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR},{44, ERROR}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{46, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{47, TRUEOP},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{49, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{50, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{51, NULLOP},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}},{{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID},{38, ID}}}
-
-;
-
-
-
-
-int Token_RecognizeKeyword(char *word, int length)
-{
-    int i = 0;
-    int state = 0; /* corresponds to the row of the transition table. */
-    int token;
-    char c;
-    while(i < length) { /* Put the word through the transition table / DFA*/
-        c = word[i];
-        if (c >= 'A' && c <= 'Z') {
-            /* if it's a capital letter, make it lowercase. */
-            c = c | 0x60;
-        }
-        if(c >='0' && c <='9') {
-            /* if a number is involved, it's an identifier, because no keywords have numbers. We can already guarantee that it won't start with a number because if it did it would have been already extracted as an int. */
-            token = ID;
-            state = 38;
-        }
-        else if (c < 'a' || c > 'z') {
-            /* If it's outside the alphabet and wasn't a number, it's a syntax error. The word will always be extracted on operator boundaries, so if a non alphabetic character is found here it isn't defined in our sigma. */
-            i = length; /* 'break the loop. */
-            token = ERROR;
-        } else {
-            /* If we reach this branch, we have a character that can cause a transition in our table. */
-            c -= 'a'; /* the letter offset corresponds to the column of the transition table. */
-            token = keywordsST[state][c][1];
-            state = keywordsST[state][c][0];
-        }
-        i++;
-    }
-    return token;
-}
-
+/*!
+------------------------------------------------------------------
+    Note: TokenCatch is no longer used. It was used in an earlier version of this program. It may be revived in the future depending on the needs of the parser. 
+------------------------------------------------------------------
+*/
+#pragma region token_catch
 struct TokenCatch* Token_Catch(short tokenType, char* raw_text_found, int line_found_at, int col_found_at) {
     struct TokenCatch* tc = malloc(sizeof (struct TokenCatch));
     tc->token = tokenType;
@@ -167,7 +152,6 @@ char * Token_GetOpRaw(short tokenType) {
     char * ret_val = malloc( (strlen(result)+1)*sizeof(char));
     strcpy(ret_val, result);
     return ret_val;
-
 }
 
 
@@ -194,3 +178,4 @@ void Token_Destroy(struct TokenCatch* token) {
     free(token->raw); /* dealloc the string first. */
     free(token);
 }
+#pragma endregion token_catch

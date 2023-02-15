@@ -1,9 +1,41 @@
 #include "dfa.h"
 #include "CuTest.h"
 #include "tokens.h"
+#include <stdio.h>
 
+void test_ScanFile(CuTest * tc) {
+    char * fn = "tests/dfa_test_fil1.test.txt";
+    FILE * file = fopen(fn, "w");
+    fprintf(file, " begin \n a := BB & A;\nend\n");
+    fclose(file);
+    file = fopen(fn, "r");
+    
+    int charsRead = 0;
+    int token = ERROR;
+    token = GetNextToken(file, &charsRead);
+    CuAssertIntEquals(tc, BEGIN, token);
+    fgetc(file);
+    fgetc(file);
+    token = GetNextToken(file, &charsRead);
+    CuAssertIntEquals(tc, ID, token);
+    token = GetNextToken(file, &charsRead);
+    CuAssertIntEquals(tc, ASSIGNOP, token);
+    token = GetNextToken(file, &charsRead);
+    CuAssertIntEquals(tc, ID, token);
+    token = GetNextToken(file, &charsRead);
+    CuAssertIntEquals(tc, ERROR, token);
+    token = GetNextToken(file, &charsRead);
+    CuAssertIntEquals(tc, ID, token);
+    token = GetNextToken(file, &charsRead);
+    CuAssertIntEquals(tc, SEMICOLON, token);
+    fgetc(file);
+    token = GetNextToken(file, &charsRead);
+    CuAssertIntEquals(tc, END, token);
 
+    fclose(file);
+    remove(fn);
 
+}
 
 void test_GetNextTokenInBuffer(CuTest * tc) {
     char * buffer;
@@ -189,6 +221,7 @@ CuSuite* dfaTestGetSuite() {
     CuSuite *suite = CuSuiteNew();
     SUITE_ADD_TEST(suite, test_GetDFAColumn);
     SUITE_ADD_TEST(suite, test_GetNextTokenInBuffer);
+    SUITE_ADD_TEST(suite, test_ScanFile);
     return suite;
 
 }

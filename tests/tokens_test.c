@@ -72,57 +72,9 @@ void testToken_GetName(CuTest *tc) {
     CuAssertStrEquals_Msg(tc, "The enum ID doesn't match with the returned string. Did the order of the enums change, and does it still match up with tokensMap in tokens.c?", "ERROR", error);
 }
 
-void testToken_Recognize(CuTest *tc) {
-
-    int token = Token_RecognizeKeyword("while", strlen("while"));
-    CuAssertIntEquals(tc, WHILE, token);
-    token = Token_RecognizeKeyword("write", strlen("write"));
-     CuAssertIntEquals(tc, WRITE, token);
-    token = Token_RecognizeKeyword("endwhile", strlen("endwhile"));
-    CuAssertIntEquals(tc, ENDWHILE, token);
-    token = Token_RecognizeKeyword("if", strlen("if"));
-    CuAssertIntEquals(tc, IF, token);
-    token = Token_RecognizeKeyword("ifx", strlen("ifx"));
-    CuAssertIntEquals(tc, ID, token);
-    token = Token_RecognizeKeyword("then", strlen("then"));
-    CuAssertIntEquals(tc, THEN, token);
-    token = Token_RecognizeKeyword("tHeN", strlen("then"));
-    CuAssertIntEquals(tc, THEN, token);
-    token = Token_RecognizeKeyword("else", strlen("else"));
-    CuAssertIntEquals(tc, ELSE, token);
-    token = Token_RecognizeKeyword("endif", strlen("endif"));
-    CuAssertIntEquals(tc, ENDIF, token);
-    token = Token_RecognizeKeyword("endwoogie", strlen("endwoogie"));
-    CuAssertIntEquals(tc, ID, token);
-    token = Token_RecognizeKeyword("begin", strlen("begin"));
-    CuAssertIntEquals(tc, BEGIN, token);
-
-    token = Token_RecognizeKeyword("end", strlen("end"));
-    CuAssertIntEquals(tc, END, token);
-    token = Token_RecognizeKeyword("read", strlen("read"));
-    CuAssertIntEquals(tc, READ, token);
-
-    token = Token_RecognizeKeyword("true", strlen("true"));
-    CuAssertIntEquals(tc, TRUEOP, token);
-    token = Token_RecognizeKeyword("false", strlen("false"));
-    CuAssertIntEquals(tc, FALSEOP, token);
-    token = Token_RecognizeKeyword("null", strlen("null"));
-    CuAssertIntEquals(tc, NULLOP, token);
-    
-    token = Token_RecognizeKeyword("^&", strlen("^&"));
-    CuAssertIntEquals(tc, ERROR, token);
-    
-    token = Token_RecognizeKeyword("+++---5555", strlen("+++---5555"));
-    CuAssertIntEquals(tc, ERROR, token);
-    
-    token = Token_RecognizeKeyword("ab5", strlen("ab5"));
-    CuAssertIntEquals(tc, ID, token);
-
-}
 
 CuSuite* tokensTestGetSuite() {
     CuSuite *suite = CuSuiteNew();
     SUITE_ADD_TEST(suite, testToken_GetName);
-    SUITE_ADD_TEST(suite, testToken_Recognize);
     return suite;
 }

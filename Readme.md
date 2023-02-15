@@ -24,12 +24,17 @@ Place the `bin` directory on your system path if you want to be able to run tomp
     - main.c : Program entry point
     - compfiles.c / .h : struct for managing input output file access
     - file_util.c / .h : file i/o helpersfor the compiler
+    - dfa.c / .h : The DFA which drives the scanning process.
+    - 
 - tests : Contains source code for tests
-    - deps: Contains test dependencies
+    - lib: Contains test dependencies
         - CuTest.c / .h : CuTest micro test framework
         - std_swapper.c / .h : For swapping stdin and out with files.
-    - file_util_test.c / .h : tests for file util
+    - file_util_test.c  : tests for file util
+    - dfa_test.c : tests for dfa.
+    - tokens_test.c : test for token functions.
     - main_test.c : entry point for test compilation
+    - tests.h : each test file has one exported member, a function that returns the testing suite. They are all declared here.
 
 ## Included 3rd party library, CuTest.
 
@@ -39,7 +44,7 @@ This is a small bit of code (only 340 lines!) that provides a unit testing skele
 
 ## Credits
 
-- Tom Terhune, ter1023@pennwest.edu
-- Karl Miller, mil7865@pennnwest.edu
-- Anthony Stepich, ste4864@pennwest.edu
+- Tom Terhune
+- Karl Miller
+- Anthony Stepich
 

@@ -2,7 +2,18 @@
 #define dfa_h
 
 #include <stdio.h>
+/*!
+    \file dfa.h
+    \brief The DFA and related logic declarations.
 
+    The DFA is a 3 dimensional array that maps a given state and character input to a result consisting of the next state, token, and whether reading should continue.
+
+    The DFA was created in Excel, and the excel file is available in docs/fullDFA.xlsx.
+
+    \authors Tom Terhune, Karl Miller, Anthony Stepich
+    \date February 2023
+
+*/
 
 /*!
    Translates a given character into a column index of the state-transition table.

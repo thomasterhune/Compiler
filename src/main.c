@@ -18,7 +18,14 @@
   * 
   * - file_util.h
   * 
+  * - dfa.h
+  * 
+  * - tokens.h
+  * 
+  * - scan.h
+  * 
   * - ::TCompFiles
+  * - ::Scanner
   * 
   * ## About
   * 
@@ -30,7 +37,7 @@
 
 #include "file_util.h"
 #include "compfiles.h"
-#include "scanner.h"
+#include "scan.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
@@ -49,7 +56,7 @@ void Execute(int argc, char* argv[]) {
     terminate = CompFiles_Open(argc, argv);
     if(!terminate) {
         TCompFiles * files = CompFiles_GetFiles();
-        Scanner_Scan(files->in, files->out, files->listing, files->temp);
+        Scanner_ScanAndPrint(files->in, files->out, files->listing, files->temp);
     }
 }
 

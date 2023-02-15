@@ -9,9 +9,8 @@
                 "src/file_util.c",
                 "src/compfiles.c",
                 "src/tokens.c",
-                "src/scanner.c",
+                "src/scan.c",
                 "src/dfa.c",
-                "src/scanner_util.c",
                 "-ansi",
                 "-obin/tompiler"
             ],
@@ -35,8 +34,6 @@
                 "src/file_util.c",
                 "src/compfiles.c",
                 "src/tokens.c",
-                "src/scanner.c",
-                "src/scanner_util.c",
                 "src/dfa.c",
                 "tests/lib/CuTest.c",
                 "tests/lib/std_swapper.c",
@@ -45,8 +42,6 @@
                 "tests/dfa_test.c",
                 "tests/main_test.c",
                 "tests/tokens_test.c",
-                "tests/scanner_test.c",
-                "tests/scanner_util_test.c",
                 "-otests",
                 "-ansi"
             ],
