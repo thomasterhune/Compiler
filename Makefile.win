@@ -1,25 +1,25 @@
 # Project: Tompiler
-# Makefile created by Dev-C++ 5.11
+# Makefile created by Embarcadero Dev-C++ 6.3
 
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = src/compfiles.o src/file_util.o src/main.o
-LINKOBJ  = src/compfiles.o src/file_util.o src/main.o
-LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib32" -m32
-INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
-CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
+OBJ      = src/compfiles.o src/file_util.o src/main.o src/dfa.o src/scan.o src/tokens.o src/tompiler.o
+LINKOBJ  = src/compfiles.o src/file_util.o src/main.o src/dfa.o src/scan.o src/tokens.o src/tompiler.o
+LIBS     = -L"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib32" -static-libgcc -m32
+INCS     = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
+CXXINCS  = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
 BIN      = Tompiler.exe
-CXXFLAGS = $(CXXINCS) -m32 -std=c++11 -ansi
-CFLAGS   = $(INCS) -m32 -std=c90 -ansi
-RM       = rm.exe -f
+CXXFLAGS = $(CXXINCS) -m32
+CFLAGS   = $(INCS) -m32
+DEL      = C:\Program Files (x86)\Embarcadero\Dev-Cpp\DevCpp.exe INTERNAL_DEL
 
 .PHONY: all all-before all-after clean clean-custom
 
 all: all-before $(BIN) all-after
 
 clean: clean-custom
-	${RM} $(OBJ) $(BIN)
+	${DEL} $(OBJ) $(BIN)
 
 $(BIN): $(OBJ)
 	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
@@ -32,3 +32,15 @@ src/file_util.o: src/file_util.c
 
 src/main.o: src/main.c
 	$(CC) -c src/main.c -o src/main.o $(CFLAGS)
+
+src/dfa.o: src/dfa.c
+	$(CC) -c src/dfa.c -o src/dfa.o $(CFLAGS)
+
+src/scan.o: src/scan.c
+	$(CC) -c src/scan.c -o src/scan.o $(CFLAGS)
+
+src/tokens.o: src/tokens.c
+	$(CC) -c src/tokens.c -o src/tokens.o $(CFLAGS)
+
+src/tompiler.o: src/tompiler.c
+	$(CC) -c src/tompiler.c -o src/tompiler.o $(CFLAGS)
