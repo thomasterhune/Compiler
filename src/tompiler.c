@@ -41,36 +41,39 @@ void Tompiler_DeInit() {
 
 HANDLE handle; 
 
+
 void Enable_PrettyPrint() {
     handle = GetStdHandle(STD_OUTPUT_HANDLE);
     DWORD console_mode;
     GetConsoleMode(handle, &console_mode);
-    console_mode |= 0x0200;
+    console_mode |= 0x0004;
     SetConsoleMode(handle, console_mode);
 }
 
 void Tompiler_Hello() {
     printf("\n\n");
-    wprintf(BG_BRT_WHITE);
+    printf(BG_BRT_WHITE);
+    printf(FG_BLUE);
     printf("    TOMPILER");
-    wprintf(FG_BLACK);
+    printf(FG_BLACK);
     printf(" v 0.0.3    ");
-    wprintf(BG_DEFAULT);
-    wprintf(FG_DEFAULT);
+    printf(BG_DEFAULT);
+    printf(FG_DEFAULT);
     printf("\n");
 }
 
 void Tompiler_Goodbye() {
     printf("\n\n");
-    wprintf(BG_BRT_WHITE);
+    printf(BG_BRT_WHITE);
+    printf(FG_BLUE);
     printf("    TOMPILER");
-    wprintf(FG_BLACK);
+    printf(FG_BLACK);
     printf(" v 0.0.3    ");
-    wprintf(BG_BLUE);
-    wprintf(FG_BRT_YELLOW);
-    printf("  Tompiler finished scanning. ");
-    wprintf(BG_DEFAULT);
-    wprintf(FG_DEFAULT);
+    printf(BG_BLUE);
+    printf(FG_BRT_YELLOW);
+    printf("  Tompiler finished running. ");
+    printf(BG_DEFAULT);
+    printf(FG_DEFAULT);
     printf("\n\n");
 }
 

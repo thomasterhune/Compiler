@@ -1,3 +1,7 @@
+2/16/2023: Karl and Thomas
+- Changed DFA to result in error on strings like '99a'; identifiers must start with characters, can't start with numbers.
+- Changed DFA to not automatically process negative numbers. Rationale is that we want to allow cases like 100-100 to be read as INTLITERAL MINUSOP INTLITERAL not INTLITERAL INTLITERAL. Therefore, negatizing the intliterals is a context-sensitive activity that will occur at parse time instead of scan time. 
+
 2/15/2023: Karl and Thomas
 - Better printing for compfiles opening and closing and better print formatting.
 - Negative intliterals on dfa. 
@@ -30,7 +34,6 @@
 - print error count
 - Token_GetOpRaw
 - formatting line printing
-
 
 2/13/2023: All Group Members
 - Extract op
@@ -74,6 +77,8 @@
 - abstracted command line argument parse and calls to a new function, CompFiles_FileOpenFromCLIArgs, which also generates the Temp file.
 - created Tokens_GetName, the tokens Map, the tokens enum.
 - created a state transition table as a 3d array for a keyword recognizer Token_RecognizeKeyword. Used excel to design the table; .xlsx is in the /docs folder.
+
+ -------------------------------------------------------------------------
 
 2/1/2023 : All Group Members
  - used fileapi.h to create a getAbsolutePath function
