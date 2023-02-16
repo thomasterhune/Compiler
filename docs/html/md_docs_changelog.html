@@ -66,7 +66,15 @@ $(function() {
   <div class="headertitle"><div class="title">changelog </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p >2/15/2023: Karl</p><ul>
+<div class="textblock"><p >2/15/2023: Karl and Thomas</p><ul>
+<li>Better printing for compfiles opening and closing and better print formatting.</li>
+<li>Negative intliterals on dfa.</li>
+<li><a class="el" href="tompiler_8h.html">Tompiler.h</a></li>
+<li>Brought back the expanding buffer! Using it for actual token strings now instead of an entire line.</li>
+<li>Brought in <a class="el" href="terminal_8h.html" title="Windows Terminal Macros.">terminal.h</a> for virtual terminal color sequences and ported it to C.</li>
+<li>Pretty printing for Hello and Goodbye.</li>
+</ul>
+<p >2/15/2023: Karl</p><ul>
 <li>Finished debugging full DFA.</li>
 <li>Rewrote scanner in <a class="el" href="scan_8h.html" title="Scanner struct and &#39;methods&#39; declarations.">scan.h</a>. No more using memory allocation and <a class="el" href="struct_token_catch.html">TokenCatch</a> structures. It reads from file and writes directly to the listing and output files now.</li>
 <li>Deleted scanner.c, scanner.h, scanner_util.c, scanner_util.h and associated test files.</li>

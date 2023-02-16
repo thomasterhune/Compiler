@@ -7,6 +7,7 @@ var searchData=
   ['getnexttokeninbuffer_4',['GetNextTokenInBuffer',['../dfa_8c.html#af423b06c11054e1e080ca73d5b16d454',1,'GetNextTokenInBuffer(char *buffer, int *bufIndex, int *charsRead):&#160;dfa.c'],['../dfa_8h.html#af423b06c11054e1e080ca73d5b16d454',1,'GetNextTokenInBuffer(char *buffer, int *bufIndex, int *charsRead):&#160;dfa.c']]],
   ['getstatestring_5',['GetStateString',['../dfa_8c.html#abb34282ce845bba81c40efd978c4988f',1,'dfa.c']]],
   ['getstring_6',['getString',['../file__util_8c.html#ad44c1d6100c8292003fb4c47bee6be6a',1,'getString():&#160;file_util.c'],['../file__util_8h.html#ad44c1d6100c8292003fb4c47bee6be6a',1,'getString():&#160;file_util.c']]],
-  ['greaterequalop_7',['GREATEREQUALOP',['../tokens_8h.html#ac6f62333aafcf3546f487ccd7caa9928afcc10120243ba8b22984ebf7db3e86dc',1,'tokens.h']]],
-  ['greaterop_8',['GREATEROP',['../tokens_8h.html#ac6f62333aafcf3546f487ccd7caa9928a2766a01b72fc312a535d15461d3c0a10',1,'tokens.h']]]
+  ['graphic_7',['GRAPHIC',['../terminal_8h.html#ae6bf8b6749336942d74c4a95b5e6d5e3',1,'terminal.h']]],
+  ['greaterequalop_8',['GREATEREQUALOP',['../tokens_8h.html#ac6f62333aafcf3546f487ccd7caa9928afcc10120243ba8b22984ebf7db3e86dc',1,'tokens.h']]],
+  ['greaterop_9',['GREATEROP',['../tokens_8h.html#ac6f62333aafcf3546f487ccd7caa9928a2766a01b72fc312a535d15461d3c0a10',1,'tokens.h']]]
 ];

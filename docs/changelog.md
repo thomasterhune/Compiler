@@ -1,3 +1,10 @@
+2/15/2023: Karl and Thomas
+- Better printing for compfiles opening and closing and better print formatting.
+- Negative intliterals on dfa. 
+- Tompiler.h
+- Brought back the expanding buffer! Using it for actual token strings now instead of an entire line.
+- Brought in terminal.h for virtual terminal color sequences and ported it to C.
+- Pretty printing for Hello and Goodbye. 
 
 2/15/2023: Karl
 - Finished debugging full DFA. 

@@ -80,6 +80,8 @@ $(function() {
 <div class="textblock"><code>#include &quot;<a class="el" href="dfa_8h_source.html">dfa.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="tokens_8h_source.html">tokens.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="scan_8h_source.html">scan.h</a>&quot;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
+<code>#include &lt;stdlib.h&gt;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -96,6 +98,14 @@ Functions</h2></td></tr>
 <tr class="separator:ab5c1a90b9665d083ebf18b1025997fa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94b33bd04b8b00f8d1de8f76618c753c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scan_8c.html#a94b33bd04b8b00f8d1de8f76618c753c">Scanner_DeInit</a> ()</td></tr>
 <tr class="separator:a94b33bd04b8b00f8d1de8f76618c753c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae674b9c31f14d1633882d2f216082da7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scan_8c.html#ae674b9c31f14d1633882d2f216082da7">Scanner_clearBuffer</a> ()</td></tr>
+<tr class="separator:ae674b9c31f14d1633882d2f216082da7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73ba7c20cedc183ca3e321ba97a89523"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scan_8c.html#a73ba7c20cedc183ca3e321ba97a89523">Scanner_expandBuffer</a> ()</td></tr>
+<tr class="separator:a73ba7c20cedc183ca3e321ba97a89523"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11af05d7091caa8245138bad919ad320"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scan_8c.html#a11af05d7091caa8245138bad919ad320">Scanner_bufputc</a> (char c)</td></tr>
+<tr class="separator:a11af05d7091caa8245138bad919ad320"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1e78dfd62c2f7c91bc301b35cf8e396"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scan_8c.html#ad1e78dfd62c2f7c91bc301b35cf8e396">Scanner_ReadBackToBuffer</a> (int n_chars)</td></tr>
+<tr class="separator:ad1e78dfd62c2f7c91bc301b35cf8e396"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a471835eff173c380cbd29ee8cec7ebc9"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scan_8c.html#a471835eff173c380cbd29ee8cec7ebc9">Scanner_Lookahead</a> ()</td></tr>
 <tr class="separator:a471835eff173c380cbd29ee8cec7ebc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51351562e77dc93ff55c9fc8f637341a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scan_8c.html#a51351562e77dc93ff55c9fc8f637341a">Scanner_AdvanceLine</a> ()</td></tr>
@@ -108,6 +118,8 @@ Functions</h2></td></tr>
 <tr class="separator:a9df8f85b719a0f73dd0929f04ccf1f6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4be9e7aa76f8f7e31d5ae09f253a0015"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scan_8c.html#a4be9e7aa76f8f7e31d5ae09f253a0015">Scanner_BackprintIdentifier</a> (int nchars)</td></tr>
 <tr class="separator:a4be9e7aa76f8f7e31d5ae09f253a0015"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b1ebbf207c359a2f93816f86bb95fcf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scan_8c.html#a2b1ebbf207c359a2f93816f86bb95fcf">Scanner_PrintBufferToOutputFile</a> ()</td></tr>
+<tr class="separator:a2b1ebbf207c359a2f93816f86bb95fcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbe8c8d149a7ddb76839ee76305fa33e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scan_8c.html#abbe8c8d149a7ddb76839ee76305fa33e">Scanner_PrintTokenFront</a> (int token)</td></tr>
 <tr class="separator:abbe8c8d149a7ddb76839ee76305fa33e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a865c3cf5595f9645941090df87af5b55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scan_8c.html#a865c3cf5595f9645941090df87af5b55">Scanner_PrintErrorListing</a> ()</td></tr>
@@ -189,6 +201,44 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="a11af05d7091caa8245138bad919ad320" name="a11af05d7091caa8245138bad919ad320"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11af05d7091caa8245138bad919ad320">&#9670;&nbsp;</a></span>Scanner_bufputc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Scanner_bufputc </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Puts a character in the buffer. Increments scanner.l_buffer. Calls expandBuffer() if necessary. </p>
+
+</div>
+</div>
+<a id="ae674b9c31f14d1633882d2f216082da7" name="ae674b9c31f14d1633882d2f216082da7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae674b9c31f14d1633882d2f216082da7">&#9670;&nbsp;</a></span>Scanner_clearBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Scanner_clearBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >If scanner.buffer has been allocated, it is freed. <a class="el" href="struct_scanner.html#aff2566f4c366b48d73479bef43ee4d2e">Scanner.buffer</a> is given memory on the heap equal to the const SCANNER_BUFFER_INITIAL_CAPACITY.</p>
+<p >Also resets scanner.l_buffer to 0 and scanner.capacity. </p>
+
+</div>
+</div>
 <a id="a94b33bd04b8b00f8d1de8f76618c753c" name="a94b33bd04b8b00f8d1de8f76618c753c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a94b33bd04b8b00f8d1de8f76618c753c">&#9670;&nbsp;</a></span>Scanner_DeInit()</h2>
 
@@ -204,6 +254,24 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p >De-initializes scanner values, setting file pointers to NULL (but not closing files. ) </p>
+
+</div>
+</div>
+<a id="a73ba7c20cedc183ca3e321ba97a89523" name="a73ba7c20cedc183ca3e321ba97a89523"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73ba7c20cedc183ca3e321ba97a89523">&#9670;&nbsp;</a></span>Scanner_expandBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Scanner_expandBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Doubles the size of the buffer, preserving data in the buffer (But possibly moving it to a different location). <a class="el" href="struct_scanner.html#aff2566f4c366b48d73479bef43ee4d2e">Scanner.buffer</a> will point to a buffer twice as large and scanner.capacity will be doubled. If necessary, an old buffer may have been freed. Do not use scanner's buffer directly as it may be freed; copy the string to a new buffer when extraction is necessary. </p>
 
 </div>
 </div>
@@ -241,6 +309,24 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p >Looks ahead to determine if there are any more tokens on the line, or if there is a comment at the end of the line. Resets the fileposition after looking ahead.</p>
 <dl class="section return"><dt>Returns</dt><dd>0 = Clear to Scan, 1 = Newline next, 2 = EOF next, 3 = Comment next, </dd></dl>
+
+</div>
+</div>
+<a id="a2b1ebbf207c359a2f93816f86bb95fcf" name="a2b1ebbf207c359a2f93816f86bb95fcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b1ebbf207c359a2f93816f86bb95fcf">&#9670;&nbsp;</a></span>Scanner_PrintBufferToOutputFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Scanner_PrintBufferToOutputFile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Prints the buffer to the output file, expecting a null-terminated string. Also prints it to the console if console printing is enabled. </p>
 
 </div>
 </div>
@@ -314,6 +400,25 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad1e78dfd62c2f7c91bc301b35cf8e396" name="ad1e78dfd62c2f7c91bc301b35cf8e396"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1e78dfd62c2f7c91bc301b35cf8e396">&#9670;&nbsp;</a></span>Scanner_ReadBackToBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Scanner_ReadBackToBuffer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n_chars</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Reads back a number of characters from scanner.in into the buffer. The file pointer will be in the same position after execution. </p>
 
 </div>
 </div>

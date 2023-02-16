@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['set_5fcolor_0',['SET_COLOR',['../terminal_8h.html#a68108461458bb83e59295f4c68385aaf',1,'terminal.h']]]
+  ['underline_0',['UNDERLINE',['../terminal_8h.html#aaec1a65734e33bc49e8dc8d90e9546bc',1,'terminal.h']]]
 ];
