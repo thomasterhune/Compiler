@@ -35,43 +35,15 @@
   */
 
 
-#include "file_util.h"
-#include "compfiles.h"
-#include "scan.h"
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
-#include <stdlib.h>
+#include "tompiler.h"
 
-/*!
-  Start the program by initializing the needed modules in the correct order. 
-*/
-void Init() {
-    CompFiles_Init();
-    Scanner_Init();
-}
-
-void Execute(int argc, char* argv[]) {
-    short terminate;
-    terminate = CompFiles_Open(argc, argv);
-    if(!terminate) {
-        TCompFiles * files = CompFiles_GetFiles();
-        Scanner_ScanAndPrint(files->in, files->out, files->listing, files->temp);
-    }
-}
-
-void DeInit() {
-    Scanner_DeInit();
-    CompFiles_DeInit();
-}
 
 /*!
    Program entry point.
 */
 int main(int argc, char *argv[]) {
-    Init();
-    Execute(argc, argv);
-    DeInit();
-    printf("\n\nDone running... for now. \0\n");
+    Tompiler_Init();
+    Tompiler_Execute(argc, argv);
+    Tompiler_DeInit();
     return 2023;
  }

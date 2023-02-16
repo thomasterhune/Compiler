@@ -3,11 +3,11 @@ var indexSectionsWithContent =
   0: "abcdefghilmnoprstuvw",
   1: "st",
   2: "cdfmrstv",
-  3: "abcdefgimprst",
-  4: "cdehilorst",
+  3: "abcefgmprst",
+  4: "bcdehilorst",
   5: "cdfltu",
   6: "abcdefgilmnprstuw",
-  7: "s",
+  7: "bcefgnsu",
   8: "ctv"
 };
 

@@ -1,6 +1,8 @@
 #include "dfa.h"
 #include "tokens.h"
 #include "scan.h"
+#include <string.h>
+#include <stdlib.h>
 
 /*!
     \file scan.c
@@ -20,6 +22,7 @@
 */
 
 
+
 /*
 -------------------
 Scanner lifecycle
@@ -36,13 +39,69 @@ void Scanner_Init() {
     scanner.in = NULL;
     scanner.out = NULL;
     scanner.temp = NULL;
-    scanner.listing = NULL; 
+    scanner.listing = NULL;
+    scanner.buffer = NULL;
+    Scanner_clearBuffer(); /* will serve to initialize the malloced buffer. */
 }
 
 void Scanner_DeInit() {
     /* For now, simply call Scanner Init to reset values to zero. If additional de-initialization features are needed in the future, this is where they will go. */
     Scanner_Init();
+    free(scanner.buffer);
+    scanner.buffer = NULL;
 }
+
+/*
+-------------------
+Scanner buffer
+-------------------
+*/
+#pragma region buffer
+
+void Scanner_clearBuffer() {
+    if(scanner.buffer != NULL) {
+        free(scanner.buffer);
+    }
+    scanner.buffer = malloc(sizeof(char) * SCANNER_BUFFER_INITIAL_CAPACITY);
+    scanner.capacity = SCANNER_BUFFER_INITIAL_CAPACITY;
+    scanner.l_buffer = 0;
+}
+
+void Scanner_expandBuffer() {
+    int new_capacity = scanner.capacity * 2;
+    char * original_buffer = scanner.buffer; 
+    scanner.buffer = realloc(scanner.buffer, new_capacity);
+    if(scanner.buffer == NULL) {
+        /* Try this if realloc fails. */
+        scanner.buffer = malloc(new_capacity);
+        strcpy(scanner.buffer, original_buffer);
+        free(original_buffer);
+    }
+    scanner.capacity = new_capacity;
+}
+
+void Scanner_bufputc(char c) {
+    if(scanner.l_buffer >= scanner.capacity) {
+        Scanner_expandBuffer();
+    }
+    scanner.buffer[scanner.l_buffer] = c; 
+    scanner.l_buffer += 1;
+}
+
+void Scanner_ReadBackToBuffer(int n_chars) {
+    scanner.l_buffer = 0;
+    fpos_t pos;
+    fgetpos(scanner.in, &pos);
+    pos -= n_chars;
+    fsetpos(scanner.in, &pos);
+    int i = 0;
+    while(i < n_chars) {
+        Scanner_bufputc(getc(scanner.in));
+        i += 1;
+    }
+}
+
+#pragma endregion buffer
 
 #pragma endregion lifecycle
 
@@ -134,7 +193,8 @@ void Scanner_ScanAndPrint(FILE *input, FILE *output, FILE *listing,  FILE *temp)
                 scanner.col_no += Scanner_SkipWhitespace();
                 token = GetNextToken(scanner.in, &charsRead);
                 Scanner_PrintTokenFront(token);
-                Scanner_BackprintIdentifier(charsRead);
+                Scanner_ReadBackToBuffer(charsRead);
+                Scanner_PrintBufferToOutputFile();
                 if(token == ERROR) {
                     Scanner_PrintErrorListing();
                     scanner.errors += 1;
@@ -166,7 +226,8 @@ void Scanner_PrintLine() {
     fgetpos(scanner.in, &start);
     fprintf(scanner.listing, " %3d :\t", scanner.line_no);
     if(SCANNER_PRINTS_LINES_TO_CONSOLE) {
-        printf(" %3d :\t", scanner.line_no);
+        printf("\n\n>> LINE");
+        printf("\n %3d :\t", scanner.line_no);
     }
 
     /* Print the line. */
@@ -209,10 +270,26 @@ void Scanner_BackprintIdentifier(int nchars) {
     }
 }
 
+void Scanner_PrintBufferToOutputFile() {
+    int i = 0;
+    char c;
+    while(i < scanner.l_buffer) {
+        c = scanner.buffer[i];
+        if(c == '\n') {
+            printf("<< newline at %d of %d>>>", i , scanner.l_buffer);
+        }
+        fputc(c, scanner.out);
+        if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
+            putchar(c);
+        }
+        i++;
+    }
+}
+
 void Scanner_PrintTokenFront(int token) {
-    fprintf(scanner.out, "\ntoken number:  %d\ttoken type:  %10.10s \t actual token:  ", token, Token_GetName(token));
+    fprintf(scanner.out, "\ntoken number:  %d\ttoken type:  %12s \t actual token:  ", token, Token_GetName(token));
     if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
-        printf("\ntoken number:  %d\ttoken type:  %10.10s \t actual token:  ", token, Token_GetName(token));
+        printf("\ntoken number: %4d  token type:  %12s   actual token:  ", token, Token_GetName(token));
     }
 }
 

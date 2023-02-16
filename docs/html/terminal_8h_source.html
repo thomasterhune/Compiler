@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: src/terminal.h Source File</title>
+<title>TomPiler: src/terminal.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,8 +21,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">My Project
+   <div id="projectname">TomPiler<span id="projectnumber">&#160;0.2.5</span>
    </div>
+   <div id="projectbrief">A school project.</div>
   </td>
  </tr>
  </tbody>
@@ -69,106 +70,60 @@ $(function() {
   <div class="headertitle"><div class="title">terminal.h</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="terminal_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#ifndef k_terminal</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#define k_terminal</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<a href="terminal_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef k_terminal</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define k_terminal</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">/* Call with &#39;wprintf&#39; */</span></div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="terminal_8h.html#a4af1b6159e447ba72652bb7fcdfa726e">   29</a></span><span class="preprocessor">#define ESC &quot;\x1B[&quot;</span>    <span class="comment">// its not quite clear whether this should be &quot;\x1b&quot; or &quot;\x1B[&quot;. This is working though.</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="terminal_8h.html#abc85bb07f8fa1e7c2eba467b6c8e8624">   30</a></span><span class="preprocessor">#define CSI &quot;\x1B&quot;</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="terminal_8h.html#a5351da0a4288f75dbe348d5c50c9bbf5">   45</a></span><span class="preprocessor">#define CURSOR_TO(x, y) std::cout &lt;&lt; ESC &lt;&lt; y &lt;&lt; &quot;;&quot;</span> &lt;&lt; x &lt;&lt; &quot;f&quot;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="terminal_8h.html#a1a1db1979a41b4a7c34910a3503f2e48">   46</a></span><span class="preprocessor">#define CURSOR_BACK(n) std::cout &lt;&lt; ESC &lt;&lt; n &lt;&lt; &quot;D&quot;</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="terminal_8h.html#ae6bf8b6749336942d74c4a95b5e6d5e3">   64</a></span><span class="preprocessor">#define GRAPHIC &quot;m&quot;</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="terminal_8h.html#aaec1a65734e33bc49e8dc8d90e9546bc">   66</a></span><span class="preprocessor">#define UNDERLINE 4</span></div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="terminal_8h.html#a7c4a25a390c918f433280bf5c76697a1">   67</a></span><span class="preprocessor">#define NO_UNDERLINE 24</span></div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="terminal_8h.html#a266aa539aa271da1b1f711d2413b1bfa">   69</a></span><span class="preprocessor">#define FG_YELLOW 33</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="terminal_8h.html#aacf8f7d7b2a3f4ba0d0a131fcd1f1933">   70</a></span><span class="preprocessor">#define FG_MAGENTA 35</span></div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno"><a class="line" href="terminal_8h.html#a1daa940dfc43b2a87eab5722f9f63e06">   71</a></span><span class="preprocessor">#define FG_DEFAULT 39</span></div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="terminal_8h.html#afb40e6e076755308612ed6e18a34dbeb">   72</a></span><span class="preprocessor">#define FG_CYAN 36</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="terminal_8h.html#a7fbb956b9e769a1020c2eff1f6743857">   73</a></span><span class="preprocessor">#define FG_WHITE 37</span></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno"><a class="line" href="terminal_8h.html#a4e411f6bd6ac8d6c2bd23d866c097e91">   74</a></span><span class="preprocessor">#define FG_BLUE 34</span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="terminal_8h.html#a9b32d0a26f9909c5b63ccd474f56420e">   75</a></span><span class="preprocessor">#define FG_BLACK 30</span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="terminal_8h.html#a1dc5215d084174df6f00a9267cec2f17">   76</a></span><span class="preprocessor">#define FG_RED 31</span></div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="terminal_8h.html#a0af1e03653ace4d21aebf3b2e03a6535">   77</a></span><span class="preprocessor">#define FG_GREEN 32</span></div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="terminal_8h.html#ab4defaff7aef98345ab26bddcbff7711">   79</a></span><span class="preprocessor">#define FG_BRT_RED 91</span></div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="preprocessor">#define FG_BRT_GREEN 92</span></div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="terminal_8h.html#af60f08673b68c498cd80ebea84795157">   81</a></span><span class="preprocessor">#define FG_BRT_BLACK 90</span></div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno"><a class="line" href="terminal_8h.html#ac64a2960648ba0c86daec4ce1aaa5fc3">   82</a></span><span class="preprocessor">#define FG_BRT_YELLOW 93</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno"><a class="line" href="terminal_8h.html#afa6e37705e8abebfa361587d2d1a12c8">   83</a></span><span class="preprocessor">#define FG_BRT_BLUE 94</span></div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno"><a class="line" href="terminal_8h.html#ae257d948c4892f94a9a68db48b4299ee">   84</a></span><span class="preprocessor">#define FG_BRT_GREEN 92</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="terminal_8h.html#a8df0ef81783124988328a98f3439fdda">   85</a></span><span class="preprocessor">#define FG_BRT_MAGENTA 95</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno"><a class="line" href="terminal_8h.html#a52c7ec7aa168487b1fc7e18546b03369">   86</a></span><span class="preprocessor">#define FG_BRT_CYAN 96</span></div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno"><a class="line" href="terminal_8h.html#a75c9a92213b10cb5c2eaa90049bd1464">   87</a></span><span class="preprocessor">#define FG_BRT_WHITE 97</span></div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno"><a class="line" href="terminal_8h.html#a9afd14c731aa8c62d9471913c1b23b9f">   89</a></span><span class="preprocessor">#define BG_BLUE 44</span></div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno"><a class="line" href="terminal_8h.html#ac08aa3f07e012f1b0edafa632d5300ba">   90</a></span><span class="preprocessor">#define BG_MAGENTA 45</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno"><a class="line" href="terminal_8h.html#ac317d04c219b630f9c36b0241d9d4be7">   91</a></span><span class="preprocessor">#define BG_RED 41</span></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="terminal_8h.html#afa3f152fd3f35cbbb2d6492ae143f8f9">   92</a></span><span class="preprocessor">#define BG_DEFAULT 49</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno"><a class="line" href="terminal_8h.html#ac351fb4567ed6655a5b39769cc5dfd04">   93</a></span><span class="preprocessor">#define BG_GREEN 42</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="terminal_8h.html#a0e5ebbe291d95cf1b8f1661252722fe0">   94</a></span><span class="preprocessor">#define BG_BLACK 40</span></div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno"><a class="line" href="terminal_8h.html#a6beded3f171517df3902c52f79f6fea2">   95</a></span><span class="preprocessor">#define BG_WHITE 47</span></div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="terminal_8h.html#ab31fe3e74b1137650d30ede5c9b86218">   96</a></span><span class="preprocessor">#define BG_YELLOW 43</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="terminal_8h.html#a995ae66606a0567c5b3c203e768c4343">   98</a></span><span class="preprocessor">#define BG_BRT_BLACK 100</span></div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno"><a class="line" href="terminal_8h.html#a79def610e183bd617a53ad096e3e80fb">   99</a></span><span class="preprocessor">#define BG_BRT_RED 101</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="terminal_8h.html#a8b49a8c668be08aa9977624bb9ed5b3a">  100</a></span><span class="preprocessor">#define BG_BRT_GREEN 102</span></div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="terminal_8h.html#a672c48c624dc17424026bd82164336db">  101</a></span><span class="preprocessor">#define BG_BRT_YELLOW 103</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="terminal_8h.html#ac59b31e653e97bf6c8bfab3dfe29c037">  102</a></span><span class="preprocessor">#define BG_BRT_BLUE 104</span></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno"><a class="line" href="terminal_8h.html#a3d7da0bcf44a72acdafd04edbaa45a8a">  103</a></span><span class="preprocessor">#define BG_BRT_MAGENTA 105</span></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno"><a class="line" href="terminal_8h.html#a01e43faa6c0bd6308c990d3859df03df">  104</a></span><span class="preprocessor">#define BG_BRT_CYAN 106</span></div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno"><a class="line" href="terminal_8h.html#a25a78a1c665b0d6cdab6e1bdb2f57d1c">  105</a></span><span class="preprocessor">#define BG_BRT_WHITE 107</span></div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="terminal_8h.html#a68108461458bb83e59295f4c68385aaf">  107</a></span><span class="preprocessor">#define SET_COLOR(fg, bg) std::cout &lt;&lt; ESC &lt;&lt; fg &lt;&lt; GRAPHIC &lt;&lt; ESC &lt;&lt; bg &lt;&lt; GRAPHIC;</span></div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno"><a class="line" href="terminal_8h.html#a663f9c33fb0d3c5ef6573855d9d099ec">  108</a></span><span class="preprocessor">#define COLOR_DEFAULT() std::cout &lt;&lt; ESC &lt;&lt; FG_DEFAULT &lt;&lt; GRAPHIC &lt;&lt; ESC &lt;&lt; BG_DEFAULT &lt;&lt; GRAPHIC &lt;&lt; ESC &lt;&lt; NO_UNDERLINE &lt;&lt; GRAPHIC;</span></div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="terminal_8h.html#a26591f5662d8b634138b63c7139a51ff">  118</a></span><span class="preprocessor">#define CURSOR_BLINK_ENABLE() std::cout &lt;&lt; ESC &lt;&lt; &quot;?12h&quot;</span></div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno"><a class="line" href="terminal_8h.html#a69d35aab50de2aaa3309c7ecca55e50b">  119</a></span><span class="preprocessor">#define CURSOR_BLINK_DISABLE() std::cout &lt;&lt; ESC &lt;&lt; &quot;?12l&quot;</span></div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno"><a class="line" href="terminal_8h.html#ae7277351b1fe7e731ed202680c2bf759">  120</a></span><span class="preprocessor">#define CURSOR_HIDE() std::cout &lt;&lt; ESC &lt;&lt; &quot;?25l&quot;</span></div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno"><a class="line" href="terminal_8h.html#ace24eb75e6c95d47320bd5fa1b8107b0">  121</a></span><span class="preprocessor">#define CURSOR_SHOW() std::cout &lt;&lt; ESC &lt;&lt; &quot;?25h&quot;</span></div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno"><a class="line" href="terminal_8h.html#a61c18276ccbc465d3a57f73e272109e0">  135</a></span><span class="preprocessor">#define ESC_S &quot;\x1b&quot;</span></div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno"><a class="line" href="terminal_8h.html#a8473dccc197dc6875e8a76ce2d0520d0">  137</a></span><span class="preprocessor">#define LINE_BOTTOM_RIGHT &quot;j&quot;</span></div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno"><a class="line" href="terminal_8h.html#a64b5044313c151cb532ac3b2bd5baecf">  138</a></span><span class="preprocessor">#define LINE_TOP_RIGHT &quot;k&quot;</span></div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno"><a class="line" href="terminal_8h.html#a3cf237bbdea9705cd35e31cb60617b92">  139</a></span><span class="preprocessor">#define LINE_TOP_LEFT &quot;l&quot;</span></div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno"><a class="line" href="terminal_8h.html#adb712f719e1653686dd0b21f3616b1ea">  140</a></span><span class="preprocessor">#define LINE_BOTTOM_LEFT &quot;m&quot;</span></div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno"><a class="line" href="terminal_8h.html#aa6f9ddec162858cb4e25bee0b292ab58">  141</a></span><span class="preprocessor">#define LINE_HORIZONTAL &quot;q&quot;</span></div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno"><a class="line" href="terminal_8h.html#a78502eeaa77904c09694b9c209bf2a9e">  142</a></span><span class="preprocessor">#define LINE_VERTICAL &quot;x&quot;</span></div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span> </div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno"><a class="line" href="terminal_8h.html#a5639bcb7b37aa0b91a28fa2bc037c0a5">  144</a></span><span class="preprocessor">#define LINE_ENABLE() std::cout &lt;&lt; &quot;\x1b(0&quot;</span></div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno"><a class="line" href="terminal_8h.html#a7ad05adb8a4af671caa60fd03aeac674">  145</a></span><span class="preprocessor">#define LINE_DISABLE() std::cout &lt;&lt; &quot;\x1b(B&quot;</span></div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span> </div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno"><a class="line" href="terminal_8h.html#ae1ec2006e55ae2f30c00bf0916622108">  161</a></span><span class="preprocessor">#define ERASE_DISPLAY ESC &quot;[2J&quot;</span></div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno"><a class="line" href="terminal_8h.html#ae6971e9e8e5dbed606c6b0715a9c224f">  162</a></span><span class="preprocessor">#define CURSOR_FORWARD ESC &quot;[%dC&quot;</span></div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno"><a class="line" href="terminal_8h.html#ab222bed94f6c29e3c1970935f0d6e5e5">  163</a></span><span class="preprocessor">#define CURSOR_DOWN ESC &quot;[%dB&quot;</span></div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno"><a class="line" href="terminal_8h.html#a70efb5dccaa6fceb0309f24ca94c7a11">  164</a></span><span class="preprocessor">#define CURSOR_UP ESC &quot;[%dA&quot;</span></div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno"><a class="line" href="terminal_8h.html#a7450fbd4abcc8b0c31e02c636a3510aa">  166</a></span><span class="preprocessor">#define CURSOR_MOVE_HOR ESC &quot;[%dG&quot;</span></div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno"><a class="line" href="terminal_8h.html#a59c513db92112e172caa941e8278a70a">  167</a></span><span class="preprocessor">#define CURSOR_MOVE_VER ESC &quot;[%dd&quot;</span></div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno"><a class="line" href="terminal_8h.html#ad6f84e8785a6eaf8fce8194e2ea15307">  168</a></span><span class="preprocessor">#define CURSOR_MOVE_TO ESC &quot;[%d;%df&quot;</span></div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span> </div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="terminal_8h.html#a4af1b6159e447ba72652bb7fcdfa726e">   22</a></span><span class="preprocessor">#define ESC &quot;\x1B[&quot;</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="terminal_8h.html#abc85bb07f8fa1e7c2eba467b6c8e8624">   23</a></span><span class="preprocessor">#define CSI &quot;\x1B&quot;</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="terminal_8h.html#ae6bf8b6749336942d74c4a95b5e6d5e3">   25</a></span><span class="preprocessor">#define GRAPHIC &quot;m&quot;</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="terminal_8h.html#aaec1a65734e33bc49e8dc8d90e9546bc">   27</a></span><span class="preprocessor">#define UNDERLINE 4</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="terminal_8h.html#a7c4a25a390c918f433280bf5c76697a1">   28</a></span><span class="preprocessor">#define NO_UNDERLINE 24</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="terminal_8h.html#a9b32d0a26f9909c5b63ccd474f56420e">   30</a></span><span class="preprocessor">#define FG_BLACK L&quot;\x1b[30m&quot;</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="terminal_8h.html#a1daa940dfc43b2a87eab5722f9f63e06">   31</a></span><span class="preprocessor">#define FG_DEFAULT L&quot;\x1b[39m&quot;</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="terminal_8h.html#a266aa539aa271da1b1f711d2413b1bfa">   32</a></span><span class="preprocessor">#define FG_YELLOW L&quot;\x1b[33m&quot;</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="terminal_8h.html#aacf8f7d7b2a3f4ba0d0a131fcd1f1933">   33</a></span><span class="preprocessor">#define FG_MAGENTA L&quot;\x1b[35m&quot;</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="terminal_8h.html#afb40e6e076755308612ed6e18a34dbeb">   34</a></span><span class="preprocessor">#define FG_CYAN L&quot;\x1b[36m&quot;</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="terminal_8h.html#a7fbb956b9e769a1020c2eff1f6743857">   35</a></span><span class="preprocessor">#define FG_WHITE L&quot;\x1b[37m&quot;</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="terminal_8h.html#a4e411f6bd6ac8d6c2bd23d866c097e91">   36</a></span><span class="preprocessor">#define FG_BLUE L&quot;\x1b[34m&quot;</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="terminal_8h.html#a1dc5215d084174df6f00a9267cec2f17">   37</a></span><span class="preprocessor">#define FG_RED L&quot;\x1b[31m&quot;</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="terminal_8h.html#a0af1e03653ace4d21aebf3b2e03a6535">   38</a></span><span class="preprocessor">#define FG_GREEN L&quot;\x1b[32m&quot;</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="terminal_8h.html#ab4defaff7aef98345ab26bddcbff7711">   40</a></span><span class="preprocessor">#define FG_BRT_RED L&quot;\x1b[91m&quot;</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="preprocessor">#define FG_BRT_GREEN L&quot;\x1b[92m&quot;</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="terminal_8h.html#af60f08673b68c498cd80ebea84795157">   42</a></span><span class="preprocessor">#define FG_BRT_BLACK L&quot;\x1b[90m&quot;</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="terminal_8h.html#ac64a2960648ba0c86daec4ce1aaa5fc3">   43</a></span><span class="preprocessor">#define FG_BRT_YELLOW L&quot;\x1b[93m&quot;</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="terminal_8h.html#afa6e37705e8abebfa361587d2d1a12c8">   44</a></span><span class="preprocessor">#define FG_BRT_BLUE L&quot;\x1b[94m&quot;</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="terminal_8h.html#ae257d948c4892f94a9a68db48b4299ee">   45</a></span><span class="preprocessor">#define FG_BRT_GREEN L&quot;\x1b[92m&quot;</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="terminal_8h.html#a8df0ef81783124988328a98f3439fdda">   46</a></span><span class="preprocessor">#define FG_BRT_MAGENTA L&quot;\x1b[95m&quot;</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="terminal_8h.html#a52c7ec7aa168487b1fc7e18546b03369">   47</a></span><span class="preprocessor">#define FG_BRT_CYAN L&quot;\x1b[96m&quot;</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="terminal_8h.html#a75c9a92213b10cb5c2eaa90049bd1464">   48</a></span><span class="preprocessor">#define FG_BRT_WHITE L&quot;\x1b[97m&quot;</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="terminal_8h.html#afa3f152fd3f35cbbb2d6492ae143f8f9">   50</a></span><span class="preprocessor">#define BG_DEFAULT L&quot;\x1b[49m&quot;</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="terminal_8h.html#a9afd14c731aa8c62d9471913c1b23b9f">   51</a></span><span class="preprocessor">#define BG_BLUE L&quot;\x1b[44m&quot;</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="terminal_8h.html#ac08aa3f07e012f1b0edafa632d5300ba">   52</a></span><span class="preprocessor">#define BG_MAGENTA L&quot;\x1b[45m&quot;</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="terminal_8h.html#ac317d04c219b630f9c36b0241d9d4be7">   53</a></span><span class="preprocessor">#define BG_RED L&quot;\x1b[41m&quot;</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="terminal_8h.html#ac351fb4567ed6655a5b39769cc5dfd04">   54</a></span><span class="preprocessor">#define BG_GREEN L&quot;\x1b[42m&quot;</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="terminal_8h.html#a0e5ebbe291d95cf1b8f1661252722fe0">   55</a></span><span class="preprocessor">#define BG_BLACK L&quot;\x1b[40m&quot;</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="terminal_8h.html#a6beded3f171517df3902c52f79f6fea2">   56</a></span><span class="preprocessor">#define BG_WHITE L&quot;\x1b[47m&quot;</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="terminal_8h.html#ab31fe3e74b1137650d30ede5c9b86218">   57</a></span><span class="preprocessor">#define BG_YELLOW L&quot;\x1b[43m&quot;</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="terminal_8h.html#a79def610e183bd617a53ad096e3e80fb">   59</a></span><span class="preprocessor">#define BG_BRT_RED L&quot;\x1b[101m&quot;</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="terminal_8h.html#a995ae66606a0567c5b3c203e768c4343">   60</a></span><span class="preprocessor">#define BG_BRT_BLACK L&quot;\x1b[100m&quot;</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="terminal_8h.html#a8b49a8c668be08aa9977624bb9ed5b3a">   61</a></span><span class="preprocessor">#define BG_BRT_GREEN L&quot;\x1b[102m&quot;</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="terminal_8h.html#a672c48c624dc17424026bd82164336db">   62</a></span><span class="preprocessor">#define BG_BRT_YELLOW L&quot;\x1b[103m&quot;</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="terminal_8h.html#ac59b31e653e97bf6c8bfab3dfe29c037">   63</a></span><span class="preprocessor">#define BG_BRT_BLUE L&quot;\x1b[104m&quot;</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="terminal_8h.html#a3d7da0bcf44a72acdafd04edbaa45a8a">   64</a></span><span class="preprocessor">#define BG_BRT_MAGENTA L&quot;\x1b[105m&quot;</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="terminal_8h.html#a01e43faa6c0bd6308c990d3859df03df">   65</a></span><span class="preprocessor">#define BG_BRT_CYAN L&quot;\x1b[106m&quot;</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="terminal_8h.html#a25a78a1c665b0d6cdab6e1bdb2f57d1c">   66</a></span><span class="preprocessor">#define BG_BRT_WHITE L&quot;\x1b[107m&quot;</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

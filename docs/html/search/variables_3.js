@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['has_5frequested_5fdefault_5ffilename_0',['has_requested_default_filename',['../struct_t_comp_files.html#ac30df1dc2c3a06e883d45b2495d65197',1,'TCompFiles']]]
+  ['errors_0',['errors',['../struct_scanner.html#a433c7fadd13f3a906e01c9d9f5c8fb09',1,'Scanner']]]
 ];

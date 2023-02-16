@@ -88,86 +88,120 @@ $(function() {
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="scan_8h.html#ab8eb12cf7479579d7a70a21a167a6ef6">   27</a></span><span class="preprocessor">#define SCANNER_PRINTS_TOKENS_TO_CONSOLE 1</span></div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#endif </span></div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">/*</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">-------------------</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">Scanner lifecycle</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment">-------------------</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment">*/</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#pragma region lifecycle</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="struct_scanner.html">   39</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_scanner.html">Scanner</a> {</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="comment">/* The line number being scanned. */</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="struct_scanner.html#a8fddd353ec4294a8adb68819813ab390">   41</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_scanner.html#a8fddd353ec4294a8adb68819813ab390">line_no</a>;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="comment">/* The column number. */</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="struct_scanner.html#a43435fb3d448d65fdde57a237e8083d0">   43</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_scanner.html#a43435fb3d448d65fdde57a237e8083d0">col_no</a>;</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="comment">/* The error count. */</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="struct_scanner.html#a433c7fadd13f3a906e01c9d9f5c8fb09">   45</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_scanner.html#a433c7fadd13f3a906e01c9d9f5c8fb09">errors</a>;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="comment">/* File pointers. */</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="struct_scanner.html#aca392a8d3941cd0740aef3ad92545d67">   47</a></span>    FILE * <a class="code hl_variable" href="struct_scanner.html#aca392a8d3941cd0740aef3ad92545d67">in</a>;</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="struct_scanner.html#a1277960b5f2b37137fe9b0b5a1ea0beb">   48</a></span>    FILE * <a class="code hl_variable" href="struct_scanner.html#a1277960b5f2b37137fe9b0b5a1ea0beb">out</a>;</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="struct_scanner.html#a92de8149fb2c9648cec956cb047d20ca">   49</a></span>    FILE * <a class="code hl_variable" href="struct_scanner.html#a92de8149fb2c9648cec956cb047d20ca">temp</a>;</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="struct_scanner.html#a2923b4c08e76d16c25d733c0051d347b">   50</a></span>    FILE * <a class="code hl_variable" href="struct_scanner.html#a2923b4c08e76d16c25d733c0051d347b">listing</a>;</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>};</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#ab5c1a90b9665d083ebf18b1025997fa5">Scanner_Init</a>();</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a94b33bd04b8b00f8d1de8f76618c753c">Scanner_DeInit</a>();</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="preprocessor">#pragma endregion lifecycle</span></div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment">/*</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment">-------------------</span></div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment">Scanning methods</span></div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment">-------------------</span></div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment">*/</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="preprocessor">#pragma region scanning</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a67c3b83e3afcbdce34dfa9366e0e3a69">Scanner_ScanAndPrint</a>(FILE *input, FILE *listing, FILE *output, FILE *temp);</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="keywordtype">short</span> <a class="code hl_function" href="scan_8h.html#a471835eff173c380cbd29ee8cec7ebc9">Scanner_Lookahead</a>();</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#ifndef SCANNER_BUFFER_INITIAL_CAPACITY</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="scan_8h.html#a43ff2dba1fe00b981749283ea2733d02">   31</a></span><span class="preprocessor">#define SCANNER_BUFFER_INITIAL_CAPACITY 100</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#endif </span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment">-------------------</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment">Scanner lifecycle</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment">-------------------</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment">*/</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="preprocessor">#pragma region lifecycle</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="struct_scanner.html">   43</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_scanner.html">Scanner</a> {</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="struct_scanner.html#a8fddd353ec4294a8adb68819813ab390">   45</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_scanner.html#a8fddd353ec4294a8adb68819813ab390">line_no</a>;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="struct_scanner.html#a43435fb3d448d65fdde57a237e8083d0">   47</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_scanner.html#a43435fb3d448d65fdde57a237e8083d0">col_no</a>;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="struct_scanner.html#a433c7fadd13f3a906e01c9d9f5c8fb09">   49</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_scanner.html#a433c7fadd13f3a906e01c9d9f5c8fb09">errors</a>;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="comment">/* A buffer, primarily for capturing identifiers. */</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="struct_scanner.html#aff2566f4c366b48d73479bef43ee4d2e">   51</a></span>    <span class="keywordtype">char</span> * <a class="code hl_variable" href="struct_scanner.html#aff2566f4c366b48d73479bef43ee4d2e">buffer</a>;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="comment">/* The current capcity of the buffer */</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="struct_scanner.html#adbe66a087ac3fd4a5b0566f64ca2d12b">   53</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_scanner.html#adbe66a087ac3fd4a5b0566f64ca2d12b">capacity</a>;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="comment">/* The length of relevant characters in the buffer, also the write index.  */</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="struct_scanner.html#aa91a2d285d3ce6b9e451b9949bf40eba">   55</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_scanner.html#aa91a2d285d3ce6b9e451b9949bf40eba">l_buffer</a>; </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="comment">/* File pointers. */</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="struct_scanner.html#aca392a8d3941cd0740aef3ad92545d67">   57</a></span>    FILE * <a class="code hl_variable" href="struct_scanner.html#aca392a8d3941cd0740aef3ad92545d67">in</a>;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="struct_scanner.html#a1277960b5f2b37137fe9b0b5a1ea0beb">   58</a></span>    FILE * <a class="code hl_variable" href="struct_scanner.html#a1277960b5f2b37137fe9b0b5a1ea0beb">out</a>;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="struct_scanner.html#a92de8149fb2c9648cec956cb047d20ca">   59</a></span>    FILE * <a class="code hl_variable" href="struct_scanner.html#a92de8149fb2c9648cec956cb047d20ca">temp</a>;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="struct_scanner.html#a2923b4c08e76d16c25d733c0051d347b">   60</a></span>    FILE * <a class="code hl_variable" href="struct_scanner.html#a2923b4c08e76d16c25d733c0051d347b">listing</a>;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>};</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#ab5c1a90b9665d083ebf18b1025997fa5">Scanner_Init</a>();</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a94b33bd04b8b00f8d1de8f76618c753c">Scanner_DeInit</a>();</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="preprocessor">#pragma endregion lifecycle</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment">-------------------</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment">Scanner buffer</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment">-------------------</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment">*/</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="preprocessor">#pragma region buffer</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#ae674b9c31f14d1633882d2f216082da7">Scanner_clearBuffer</a>();</div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a51351562e77dc93ff55c9fc8f637341a">Scanner_AdvanceLine</a>();</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a73ba7c20cedc183ca3e321ba97a89523">Scanner_expandBuffer</a>();</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="keywordtype">int</span> <a class="code hl_function" href="scan_8h.html#a0be2f1a07d6668975233bef686cc7f9a">Scanner_SkipWhitespace</a>();</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="preprocessor">#pragma endregion scanning</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a11af05d7091caa8245138bad919ad320">Scanner_bufputc</a>(<span class="keywordtype">char</span> c);</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#ad1e78dfd62c2f7c91bc301b35cf8e396">Scanner_ReadBackToBuffer</a>(<span class="keywordtype">int</span> n_chars);</div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment">/*</span></div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment">-------------------</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment">Printing methods</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="preprocessor">#pragma endregion buffer</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment">/*</span></div>
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment">-------------------</span></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment">*/</span></div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="preprocessor">#pragma region printing</span></div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a9df8f85b719a0f73dd0929f04ccf1f6c">Scanner_PrintLine</a>();</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a4be9e7aa76f8f7e31d5ae09f253a0015">Scanner_BackprintIdentifier</a>(<span class="keywordtype">int</span> nchars);</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno"><a class="line" href="scan_8h.html#aa1e6b201f23a483b067beb8870ab3a8f">  121</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#aa1e6b201f23a483b067beb8870ab3a8f">Scanner_PrintTokenFront</a>();</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a865c3cf5595f9645941090df87af5b55">Scanner_PrintErrorListing</a>();</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a32481718a927d35d45554c19c618e4ce">Scanner_PrintErrorSummary</a>();</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="preprocessor">#pragma endregion printing</span></div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="ascan_8h_html_a0be2f1a07d6668975233bef686cc7f9a"><div class="ttname"><a href="scan_8h.html#a0be2f1a07d6668975233bef686cc7f9a">Scanner_SkipWhitespace</a></div><div class="ttdeci">int Scanner_SkipWhitespace()</div><div class="ttdef"><b>Definition:</b> scan.c:98</div></div>
-<div class="ttc" id="ascan_8h_html_a32481718a927d35d45554c19c618e4ce"><div class="ttname"><a href="scan_8h.html#a32481718a927d35d45554c19c618e4ce">Scanner_PrintErrorSummary</a></div><div class="ttdeci">void Scanner_PrintErrorSummary()</div><div class="ttdef"><b>Definition:</b> scan.c:259</div></div>
-<div class="ttc" id="ascan_8h_html_a471835eff173c380cbd29ee8cec7ebc9"><div class="ttname"><a href="scan_8h.html#a471835eff173c380cbd29ee8cec7ebc9">Scanner_Lookahead</a></div><div class="ttdeci">short Scanner_Lookahead()</div><div class="ttdef"><b>Definition:</b> scan.c:60</div></div>
-<div class="ttc" id="ascan_8h_html_a4be9e7aa76f8f7e31d5ae09f253a0015"><div class="ttname"><a href="scan_8h.html#a4be9e7aa76f8f7e31d5ae09f253a0015">Scanner_BackprintIdentifier</a></div><div class="ttdeci">void Scanner_BackprintIdentifier(int nchars)</div><div class="ttdef"><b>Definition:</b> scan.c:193</div></div>
-<div class="ttc" id="ascan_8h_html_a51351562e77dc93ff55c9fc8f637341a"><div class="ttname"><a href="scan_8h.html#a51351562e77dc93ff55c9fc8f637341a">Scanner_AdvanceLine</a></div><div class="ttdeci">void Scanner_AdvanceLine()</div><div class="ttdef"><b>Definition:</b> scan.c:89</div></div>
-<div class="ttc" id="ascan_8h_html_a67c3b83e3afcbdce34dfa9366e0e3a69"><div class="ttname"><a href="scan_8h.html#a67c3b83e3afcbdce34dfa9366e0e3a69">Scanner_ScanAndPrint</a></div><div class="ttdeci">void Scanner_ScanAndPrint(FILE *input, FILE *listing, FILE *output, FILE *temp)</div><div class="ttdef"><b>Definition:</b> scan.c:110</div></div>
-<div class="ttc" id="ascan_8h_html_a865c3cf5595f9645941090df87af5b55"><div class="ttname"><a href="scan_8h.html#a865c3cf5595f9645941090df87af5b55">Scanner_PrintErrorListing</a></div><div class="ttdeci">void Scanner_PrintErrorListing()</div><div class="ttdef"><b>Definition:</b> scan.c:219</div></div>
-<div class="ttc" id="ascan_8h_html_a94b33bd04b8b00f8d1de8f76618c753c"><div class="ttname"><a href="scan_8h.html#a94b33bd04b8b00f8d1de8f76618c753c">Scanner_DeInit</a></div><div class="ttdeci">void Scanner_DeInit()</div><div class="ttdef"><b>Definition:</b> scan.c:42</div></div>
-<div class="ttc" id="ascan_8h_html_a9df8f85b719a0f73dd0929f04ccf1f6c"><div class="ttname"><a href="scan_8h.html#a9df8f85b719a0f73dd0929f04ccf1f6c">Scanner_PrintLine</a></div><div class="ttdeci">void Scanner_PrintLine()</div><div class="ttdef"><b>Definition:</b> scan.c:163</div></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment">Scanning methods</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment">-------------------</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment">*/</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="preprocessor">#pragma region scanning</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a67c3b83e3afcbdce34dfa9366e0e3a69">Scanner_ScanAndPrint</a>(FILE *input, FILE *listing, FILE *output, FILE *temp);</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="keywordtype">short</span> <a class="code hl_function" href="scan_8h.html#a471835eff173c380cbd29ee8cec7ebc9">Scanner_Lookahead</a>();</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a51351562e77dc93ff55c9fc8f637341a">Scanner_AdvanceLine</a>();</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span> </div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span><span class="keywordtype">int</span> <a class="code hl_function" href="scan_8h.html#a0be2f1a07d6668975233bef686cc7f9a">Scanner_SkipWhitespace</a>();</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="preprocessor">#pragma endregion scanning</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="comment">-------------------</span></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="comment">Printing methods</span></div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="comment">-------------------</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span><span class="comment">*/</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="preprocessor">#pragma region printing</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a9df8f85b719a0f73dd0929f04ccf1f6c">Scanner_PrintLine</a>();</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span> </div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a4be9e7aa76f8f7e31d5ae09f253a0015">Scanner_BackprintIdentifier</a>(<span class="keywordtype">int</span> nchars);</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span> </div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a2b1ebbf207c359a2f93816f86bb95fcf">Scanner_PrintBufferToOutputFile</a>();</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span> </div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno"><a class="line" href="scan_8h.html#aa1e6b201f23a483b067beb8870ab3a8f">  168</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#aa1e6b201f23a483b067beb8870ab3a8f">Scanner_PrintTokenFront</a>();</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a865c3cf5595f9645941090df87af5b55">Scanner_PrintErrorListing</a>();</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="keywordtype">void</span> <a class="code hl_function" href="scan_8h.html#a32481718a927d35d45554c19c618e4ce">Scanner_PrintErrorSummary</a>();</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span> </div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="preprocessor">#pragma endregion printing</span></div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span> </div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="ascan_8h_html_a0be2f1a07d6668975233bef686cc7f9a"><div class="ttname"><a href="scan_8h.html#a0be2f1a07d6668975233bef686cc7f9a">Scanner_SkipWhitespace</a></div><div class="ttdeci">int Scanner_SkipWhitespace()</div><div class="ttdef"><b>Definition:</b> scan.c:157</div></div>
+<div class="ttc" id="ascan_8h_html_a11af05d7091caa8245138bad919ad320"><div class="ttname"><a href="scan_8h.html#a11af05d7091caa8245138bad919ad320">Scanner_bufputc</a></div><div class="ttdeci">void Scanner_bufputc(char c)</div><div class="ttdef"><b>Definition:</b> scan.c:83</div></div>
+<div class="ttc" id="ascan_8h_html_a2b1ebbf207c359a2f93816f86bb95fcf"><div class="ttname"><a href="scan_8h.html#a2b1ebbf207c359a2f93816f86bb95fcf">Scanner_PrintBufferToOutputFile</a></div><div class="ttdeci">void Scanner_PrintBufferToOutputFile()</div><div class="ttdef"><b>Definition:</b> scan.c:273</div></div>
+<div class="ttc" id="ascan_8h_html_a32481718a927d35d45554c19c618e4ce"><div class="ttname"><a href="scan_8h.html#a32481718a927d35d45554c19c618e4ce">Scanner_PrintErrorSummary</a></div><div class="ttdeci">void Scanner_PrintErrorSummary()</div><div class="ttdef"><b>Definition:</b> scan.c:336</div></div>
+<div class="ttc" id="ascan_8h_html_a471835eff173c380cbd29ee8cec7ebc9"><div class="ttname"><a href="scan_8h.html#a471835eff173c380cbd29ee8cec7ebc9">Scanner_Lookahead</a></div><div class="ttdeci">short Scanner_Lookahead()</div><div class="ttdef"><b>Definition:</b> scan.c:119</div></div>
+<div class="ttc" id="ascan_8h_html_a4be9e7aa76f8f7e31d5ae09f253a0015"><div class="ttname"><a href="scan_8h.html#a4be9e7aa76f8f7e31d5ae09f253a0015">Scanner_BackprintIdentifier</a></div><div class="ttdeci">void Scanner_BackprintIdentifier(int nchars)</div><div class="ttdef"><b>Definition:</b> scan.c:254</div></div>
+<div class="ttc" id="ascan_8h_html_a51351562e77dc93ff55c9fc8f637341a"><div class="ttname"><a href="scan_8h.html#a51351562e77dc93ff55c9fc8f637341a">Scanner_AdvanceLine</a></div><div class="ttdeci">void Scanner_AdvanceLine()</div><div class="ttdef"><b>Definition:</b> scan.c:148</div></div>
+<div class="ttc" id="ascan_8h_html_a67c3b83e3afcbdce34dfa9366e0e3a69"><div class="ttname"><a href="scan_8h.html#a67c3b83e3afcbdce34dfa9366e0e3a69">Scanner_ScanAndPrint</a></div><div class="ttdeci">void Scanner_ScanAndPrint(FILE *input, FILE *listing, FILE *output, FILE *temp)</div><div class="ttdef"><b>Definition:</b> scan.c:169</div></div>
+<div class="ttc" id="ascan_8h_html_a73ba7c20cedc183ca3e321ba97a89523"><div class="ttname"><a href="scan_8h.html#a73ba7c20cedc183ca3e321ba97a89523">Scanner_expandBuffer</a></div><div class="ttdeci">void Scanner_expandBuffer()</div><div class="ttdef"><b>Definition:</b> scan.c:70</div></div>
+<div class="ttc" id="ascan_8h_html_a865c3cf5595f9645941090df87af5b55"><div class="ttname"><a href="scan_8h.html#a865c3cf5595f9645941090df87af5b55">Scanner_PrintErrorListing</a></div><div class="ttdeci">void Scanner_PrintErrorListing()</div><div class="ttdef"><b>Definition:</b> scan.c:296</div></div>
+<div class="ttc" id="ascan_8h_html_a94b33bd04b8b00f8d1de8f76618c753c"><div class="ttname"><a href="scan_8h.html#a94b33bd04b8b00f8d1de8f76618c753c">Scanner_DeInit</a></div><div class="ttdeci">void Scanner_DeInit()</div><div class="ttdef"><b>Definition:</b> scan.c:47</div></div>
+<div class="ttc" id="ascan_8h_html_a9df8f85b719a0f73dd0929f04ccf1f6c"><div class="ttname"><a href="scan_8h.html#a9df8f85b719a0f73dd0929f04ccf1f6c">Scanner_PrintLine</a></div><div class="ttdeci">void Scanner_PrintLine()</div><div class="ttdef"><b>Definition:</b> scan.c:223</div></div>
 <div class="ttc" id="ascan_8h_html_aa1e6b201f23a483b067beb8870ab3a8f"><div class="ttname"><a href="scan_8h.html#aa1e6b201f23a483b067beb8870ab3a8f">Scanner_PrintTokenFront</a></div><div class="ttdeci">void Scanner_PrintTokenFront()</div></div>
-<div class="ttc" id="ascan_8h_html_ab5c1a90b9665d083ebf18b1025997fa5"><div class="ttname"><a href="scan_8h.html#ab5c1a90b9665d083ebf18b1025997fa5">Scanner_Init</a></div><div class="ttdeci">void Scanner_Init()</div><div class="ttdef"><b>Definition:</b> scan.c:32</div></div>
-<div class="ttc" id="astruct_scanner_html"><div class="ttname"><a href="struct_scanner.html">Scanner</a></div><div class="ttdef"><b>Definition:</b> scan.h:39</div></div>
-<div class="ttc" id="astruct_scanner_html_a1277960b5f2b37137fe9b0b5a1ea0beb"><div class="ttname"><a href="struct_scanner.html#a1277960b5f2b37137fe9b0b5a1ea0beb">Scanner::out</a></div><div class="ttdeci">FILE * out</div><div class="ttdef"><b>Definition:</b> scan.h:48</div></div>
-<div class="ttc" id="astruct_scanner_html_a2923b4c08e76d16c25d733c0051d347b"><div class="ttname"><a href="struct_scanner.html#a2923b4c08e76d16c25d733c0051d347b">Scanner::listing</a></div><div class="ttdeci">FILE * listing</div><div class="ttdef"><b>Definition:</b> scan.h:50</div></div>
-<div class="ttc" id="astruct_scanner_html_a433c7fadd13f3a906e01c9d9f5c8fb09"><div class="ttname"><a href="struct_scanner.html#a433c7fadd13f3a906e01c9d9f5c8fb09">Scanner::errors</a></div><div class="ttdeci">int errors</div><div class="ttdef"><b>Definition:</b> scan.h:45</div></div>
-<div class="ttc" id="astruct_scanner_html_a43435fb3d448d65fdde57a237e8083d0"><div class="ttname"><a href="struct_scanner.html#a43435fb3d448d65fdde57a237e8083d0">Scanner::col_no</a></div><div class="ttdeci">int col_no</div><div class="ttdef"><b>Definition:</b> scan.h:43</div></div>
-<div class="ttc" id="astruct_scanner_html_a8fddd353ec4294a8adb68819813ab390"><div class="ttname"><a href="struct_scanner.html#a8fddd353ec4294a8adb68819813ab390">Scanner::line_no</a></div><div class="ttdeci">int line_no</div><div class="ttdef"><b>Definition:</b> scan.h:41</div></div>
-<div class="ttc" id="astruct_scanner_html_a92de8149fb2c9648cec956cb047d20ca"><div class="ttname"><a href="struct_scanner.html#a92de8149fb2c9648cec956cb047d20ca">Scanner::temp</a></div><div class="ttdeci">FILE * temp</div><div class="ttdef"><b>Definition:</b> scan.h:49</div></div>
-<div class="ttc" id="astruct_scanner_html_aca392a8d3941cd0740aef3ad92545d67"><div class="ttname"><a href="struct_scanner.html#aca392a8d3941cd0740aef3ad92545d67">Scanner::in</a></div><div class="ttdeci">FILE * in</div><div class="ttdef"><b>Definition:</b> scan.h:47</div></div>
+<div class="ttc" id="ascan_8h_html_ab5c1a90b9665d083ebf18b1025997fa5"><div class="ttname"><a href="scan_8h.html#ab5c1a90b9665d083ebf18b1025997fa5">Scanner_Init</a></div><div class="ttdeci">void Scanner_Init()</div><div class="ttdef"><b>Definition:</b> scan.c:35</div></div>
+<div class="ttc" id="ascan_8h_html_ad1e78dfd62c2f7c91bc301b35cf8e396"><div class="ttname"><a href="scan_8h.html#ad1e78dfd62c2f7c91bc301b35cf8e396">Scanner_ReadBackToBuffer</a></div><div class="ttdeci">void Scanner_ReadBackToBuffer(int n_chars)</div><div class="ttdef"><b>Definition:</b> scan.c:91</div></div>
+<div class="ttc" id="ascan_8h_html_ae674b9c31f14d1633882d2f216082da7"><div class="ttname"><a href="scan_8h.html#ae674b9c31f14d1633882d2f216082da7">Scanner_clearBuffer</a></div><div class="ttdeci">void Scanner_clearBuffer()</div><div class="ttdef"><b>Definition:</b> scan.c:61</div></div>
+<div class="ttc" id="astruct_scanner_html"><div class="ttname"><a href="struct_scanner.html">Scanner</a></div><div class="ttdef"><b>Definition:</b> scan.h:43</div></div>
+<div class="ttc" id="astruct_scanner_html_a1277960b5f2b37137fe9b0b5a1ea0beb"><div class="ttname"><a href="struct_scanner.html#a1277960b5f2b37137fe9b0b5a1ea0beb">Scanner::out</a></div><div class="ttdeci">FILE * out</div><div class="ttdef"><b>Definition:</b> scan.h:58</div></div>
+<div class="ttc" id="astruct_scanner_html_a2923b4c08e76d16c25d733c0051d347b"><div class="ttname"><a href="struct_scanner.html#a2923b4c08e76d16c25d733c0051d347b">Scanner::listing</a></div><div class="ttdeci">FILE * listing</div><div class="ttdef"><b>Definition:</b> scan.h:60</div></div>
+<div class="ttc" id="astruct_scanner_html_a433c7fadd13f3a906e01c9d9f5c8fb09"><div class="ttname"><a href="struct_scanner.html#a433c7fadd13f3a906e01c9d9f5c8fb09">Scanner::errors</a></div><div class="ttdeci">int errors</div><div class="ttdef"><b>Definition:</b> scan.h:49</div></div>
+<div class="ttc" id="astruct_scanner_html_a43435fb3d448d65fdde57a237e8083d0"><div class="ttname"><a href="struct_scanner.html#a43435fb3d448d65fdde57a237e8083d0">Scanner::col_no</a></div><div class="ttdeci">int col_no</div><div class="ttdef"><b>Definition:</b> scan.h:47</div></div>
+<div class="ttc" id="astruct_scanner_html_a8fddd353ec4294a8adb68819813ab390"><div class="ttname"><a href="struct_scanner.html#a8fddd353ec4294a8adb68819813ab390">Scanner::line_no</a></div><div class="ttdeci">int line_no</div><div class="ttdef"><b>Definition:</b> scan.h:45</div></div>
+<div class="ttc" id="astruct_scanner_html_a92de8149fb2c9648cec956cb047d20ca"><div class="ttname"><a href="struct_scanner.html#a92de8149fb2c9648cec956cb047d20ca">Scanner::temp</a></div><div class="ttdeci">FILE * temp</div><div class="ttdef"><b>Definition:</b> scan.h:59</div></div>
+<div class="ttc" id="astruct_scanner_html_aa91a2d285d3ce6b9e451b9949bf40eba"><div class="ttname"><a href="struct_scanner.html#aa91a2d285d3ce6b9e451b9949bf40eba">Scanner::l_buffer</a></div><div class="ttdeci">int l_buffer</div><div class="ttdef"><b>Definition:</b> scan.h:55</div></div>
+<div class="ttc" id="astruct_scanner_html_aca392a8d3941cd0740aef3ad92545d67"><div class="ttname"><a href="struct_scanner.html#aca392a8d3941cd0740aef3ad92545d67">Scanner::in</a></div><div class="ttdeci">FILE * in</div><div class="ttdef"><b>Definition:</b> scan.h:57</div></div>
+<div class="ttc" id="astruct_scanner_html_adbe66a087ac3fd4a5b0566f64ca2d12b"><div class="ttname"><a href="struct_scanner.html#adbe66a087ac3fd4a5b0566f64ca2d12b">Scanner::capacity</a></div><div class="ttdeci">int capacity</div><div class="ttdef"><b>Definition:</b> scan.h:53</div></div>
+<div class="ttc" id="astruct_scanner_html_aff2566f4c366b48d73479bef43ee4d2e"><div class="ttname"><a href="struct_scanner.html#aff2566f4c366b48d73479bef43ee4d2e">Scanner::buffer</a></div><div class="ttdeci">char * buffer</div><div class="ttdef"><b>Definition:</b> scan.h:51</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

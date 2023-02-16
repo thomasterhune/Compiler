@@ -67,20 +67,23 @@ void CompFiles_DeInit()
     if (CompFiles.in != NULL)
     {
         fclose(CompFiles.in);
+        printf("\n\n\tClosed input file   %s.", CompFiles.input_file_name);
+    }
+    if (CompFiles.listing != NULL)
+    {
+        fclose(CompFiles.in);
+        printf("\n\tClosed listing file %s.", CompFiles.listing_file_name);
     }
     if (CompFiles.out != NULL)
     {
         fclose(CompFiles.out);
+        printf("\n\tClosed output file  %s.", CompFiles.output_file_name);
     }
     if (CompFiles.temp != NULL)
     {
         fclose(CompFiles.temp);
         remove(CompFiles.temp_file_name);
-        printf("\n\t- Removed temp file %s.\n", CompFiles.temp_file_name);
-    }
-    if (CompFiles.listing != NULL)
-    {
-        fclose(CompFiles.in);
+        printf("\n\tRemoved temp file   %s.\n", CompFiles.temp_file_name);
     }
     if (CompFiles.input_file_name != NULL)
     {
@@ -397,7 +400,7 @@ short CompFiles_AcquireValidatedOutputFile(const char *filename)
     if (CompFiles.terminate_requested != 1)
     {
         CompFiles_LoadOutputFile(fopen(tempfilename, "w"));
-        printf("\n\t- Created output file: %s.\n", tempfilename);
+        printf("\n\n\t- Created output file: %s.\n", tempfilename);
         char *listfile_nx = removeExtension(tempfilename);
         char *listfile_ex = addExtension(listfile_nx, "list");
         free(listfile_nx);

@@ -79,6 +79,12 @@ Data Fields</h2></td></tr>
 <tr class="separator:a43435fb3d448d65fdde57a237e8083d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a433c7fadd13f3a906e01c9d9f5c8fb09"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_scanner.html#a433c7fadd13f3a906e01c9d9f5c8fb09">errors</a></td></tr>
 <tr class="separator:a433c7fadd13f3a906e01c9d9f5c8fb09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff2566f4c366b48d73479bef43ee4d2e"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_scanner.html#aff2566f4c366b48d73479bef43ee4d2e">buffer</a></td></tr>
+<tr class="separator:aff2566f4c366b48d73479bef43ee4d2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbe66a087ac3fd4a5b0566f64ca2d12b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_scanner.html#adbe66a087ac3fd4a5b0566f64ca2d12b">capacity</a></td></tr>
+<tr class="separator:adbe66a087ac3fd4a5b0566f64ca2d12b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa91a2d285d3ce6b9e451b9949bf40eba"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_scanner.html#aa91a2d285d3ce6b9e451b9949bf40eba">l_buffer</a></td></tr>
+<tr class="separator:aa91a2d285d3ce6b9e451b9949bf40eba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca392a8d3941cd0740aef3ad92545d67"><td class="memItemLeft" align="right" valign="top">FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_scanner.html#aca392a8d3941cd0740aef3ad92545d67">in</a></td></tr>
 <tr class="separator:aca392a8d3941cd0740aef3ad92545d67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1277960b5f2b37137fe9b0b5a1ea0beb"><td class="memItemLeft" align="right" valign="top">FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_scanner.html#a1277960b5f2b37137fe9b0b5a1ea0beb">out</a></td></tr>
@@ -91,6 +97,34 @@ Data Fields</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p ><a class="el" href="struct_scanner.html">Scanner</a> struct holds references to the files being read and keeps track of the line and column position. It is a singleton. </p>
 </div><h2 class="groupheader">Field Documentation</h2>
+<a id="aff2566f4c366b48d73479bef43ee4d2e" name="aff2566f4c366b48d73479bef43ee4d2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff2566f4c366b48d73479bef43ee4d2e">&#9670;&nbsp;</a></span>buffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* buffer</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adbe66a087ac3fd4a5b0566f64ca2d12b" name="adbe66a087ac3fd4a5b0566f64ca2d12b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbe66a087ac3fd4a5b0566f64ca2d12b">&#9670;&nbsp;</a></span>capacity</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int capacity</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a43435fb3d448d65fdde57a237e8083d0" name="a43435fb3d448d65fdde57a237e8083d0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a43435fb3d448d65fdde57a237e8083d0">&#9670;&nbsp;</a></span>col_no</h2>
 
@@ -102,6 +136,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p >The column number. </p>
 
 </div>
 </div>
@@ -116,6 +151,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p >The error count. </p>
 
 </div>
 </div>
@@ -133,6 +169,20 @@ Data Fields</h2></td></tr>
 
 </div>
 </div>
+<a id="aa91a2d285d3ce6b9e451b9949bf40eba" name="aa91a2d285d3ce6b9e451b9949bf40eba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa91a2d285d3ce6b9e451b9949bf40eba">&#9670;&nbsp;</a></span>l_buffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int l_buffer</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a8fddd353ec4294a8adb68819813ab390" name="a8fddd353ec4294a8adb68819813ab390"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8fddd353ec4294a8adb68819813ab390">&#9670;&nbsp;</a></span>line_no</h2>
 
@@ -144,6 +194,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p >The line number being scanned. </p>
 
 </div>
 </div>
