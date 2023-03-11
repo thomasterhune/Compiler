@@ -44,12 +44,21 @@ void Scanner_Init() {
     Scanner_clearBuffer(); /* will serve to initialize the malloced buffer. */
 }
 
+void Scanner_LoadFiles(FILE * input, FILE * output, FILE * listing, FILE * temp) {
+    scanner.in = input;
+    scanner.out = output;
+    scanner.listing = listing;
+    scanner.temp = temp;
+}
+
 void Scanner_DeInit() {
     /* For now, simply call Scanner Init to reset values to zero. If additional de-initialization features are needed in the future, this is where they will go. */
     Scanner_Init();
     free(scanner.buffer);
     scanner.buffer = NULL;
 }
+
+#pragma endregion lifecycle
 
 /*
 -------------------
@@ -101,9 +110,16 @@ void Scanner_ReadBackToBuffer(int n_chars) {
     }
 }
 
-#pragma endregion buffer
+void Scanner_CopyBuffer(char * destination) {
+    int i = 0;
+    while(i < scanner.l_buffer) {
+        destination[i] = scanner.buffer[i];
+        i++;
+    }
+    destination[i] = '\0';
+}
 
-#pragma endregion lifecycle
+#pragma endregion buffer
 
 /*
 -------------------
@@ -120,6 +136,7 @@ short Scanner_Lookahead() {
 
     fpos_t start_position;
     fgetpos(scanner.in, &start_position);
+    
 
     short lookahead_result = LH_CLEAR; 
 
@@ -166,6 +183,15 @@ int Scanner_SkipWhitespace() {
     return n;
 }
 
+void Scanner_SkipAllWhitespaceForNextToken() {
+    char c = getc(scanner.in);
+    while(c == ' ' || c == '\t' || c == '\n') {
+        c = getc(scanner.in);
+    }
+    /* put the last character back in because it was non-ws*/
+    ungetc(c, scanner.in);
+}
+
 void Scanner_ScanAndPrint(FILE *input, FILE *output, FILE *listing,  FILE *temp) {
     scanner.in = input;
     scanner.listing = listing;
@@ -210,8 +236,67 @@ void Scanner_ScanAndPrint(FILE *input, FILE *output, FILE *listing,  FILE *temp)
 
 }
 
-#pragma endregion scanning 
+int Scanner_NextToken() {
+    fpos_t pos;
+    fgetpos(scanner.in, &pos);
+    Scanner_SkipAllWhitespaceForNextToken();
+    int charsRead = 0;
+    int token = GetNextToken(scanner.in, &charsRead);
+    Scanner_ReadBackToBuffer(charsRead);
+    int v = fsetpos(scanner.in, &pos);
+    return token;
+}
 
+short Scanner_Match(int target_token) {
+    int token;
+    int charsRead = 0;
+    short look = 1;
+    short result;
+    short hitEOF = 0;
+    while(look != LH_CLEAR && hitEOF == 0) {
+        /* while look is not 'clear to scan' */
+        look = Scanner_Lookahead();
+        fflush(stdout);
+        switch(look) {
+            case LH_NLINE:
+                Scanner_AdvanceLine();
+                Scanner_PrintLine();
+                break;
+            case LH_COMMENT:
+                Scanner_AdvanceLine();
+                Scanner_PrintLine();
+                break;
+            case LH_EOF:
+                hitEOF = 1;
+                break;
+            default: /* clear to scan */
+                break;
+        }
+    }
+    if(hitEOF == 1) {
+        if(target_token == SCANEOF) {
+            result = 1;
+        } else {
+            result = 0;
+        }
+    } else {
+        token = GetNextToken(scanner.in, &charsRead);
+        Scanner_ReadBackToBuffer(charsRead);
+        if(token == ERROR) {
+            Scanner_PrintErrorListing();
+            scanner.errors += 1;
+        }
+        scanner.col_no += charsRead;
+        if(token == target_token) {
+            result = 1;
+        } else {
+            result = 0;
+        }
+    }
+    return result;
+}
+
+#pragma endregion scanning 
 
 /*
 -------------------
@@ -331,7 +416,6 @@ void Scanner_PrintErrorListing() {
         printf("Error. '%c' not recognized at line %d col %d.\n", problem, scanner.line_no, scanner.col_no);
     }
 }
-
 
 void Scanner_PrintErrorSummary() {
     fprintf(scanner.listing, "\n\n%d Lexical Errors.", scanner.errors);

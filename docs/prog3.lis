@@ -1,0 +1,39 @@
+ 1   begin
+ 2   read (A, BB);
+ 3   X:= A + BB;
+ 4   Y := A - BB;  --a comment
+ 5   write (A, BB, X, Y);
+ 6   X := A - 5;
+ 7   write (A, 5, X);
+ 8   X := BB * -5;
+ 9   write (BB, 5, X);
+10   IF (!(A / 2 > 7)) then
+11   Write (A);
+12   else
+13   a:=7;
+14   ENDif
+15   while (fred > 4)
+16   if ( t >= true) then
+17   write(G);
+18   endif
+19   endwhile
+20   if(6 < O) then
+21   write(o);
+22   if(a <= false)
+23   then
+24   if(x = null)
+25   then
+26   write(x);
+27   endif
+28   else
+29   if(a <> false)
+30   then
+31   write(a);
+32   endif
+33   endif
+34   endif
+35   end
+36   
+
+Input File Compiled without Errors
+Total Number of Lexical Errors: 0     Total Number of Syntax Errors: 0

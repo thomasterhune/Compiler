@@ -15,4 +15,6 @@ CuSuite* tokensTestGetSuite();
 
 CuSuite* dfaTestGetSuite();
 
+CuSuite* scannerGetSuite();
+
 #endif
