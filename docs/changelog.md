@@ -1,3 +1,14 @@
+3/11/2023: Karl
+- Added rubric, examples to /doc
+- Renamed terminal.h to console.h because terminal has a different meaning in the context of parsing.
+- Added CONSOLE_COLOR and CONSOLE_COLOR_DEFAULT macros in console.h
+- Added Scanner_LoadFiles(input,output,listing,temp) as part of scanner lifecycle methods. *note* professor may want us to pass in the input file at each call... I prefer to do this the object oriented way but I'll want to check to make sure he won't dock us for that.
+- Added Scanner_CopyBuffer(char * destination) which copies the contents of scanner's buffer to another chararray and adds a null terminator.
+- Added Scanner_SkipAllWhitespaceForNextToken() which also skips newlines, which is used for Scanner_NextToken checks (because the next token may be on a new line)
+- Added Scanner_NextToken() which gets the next token in the input file, then returns the file pointer to its original position (before all whitespace)
+- Removed leftover dfa test that was confirming minusop read as minusop when adjacent to intliteral; we changed this just before submission to read the way he wanted (as a negative intliteral) but I never removed the test.
+- Added scanner_test.c which will be used to validate Scanner_NextToken and Scanner_Match. Utility functions for creating temp input files and initing scanner. Wrote tests to validate LookAhead and Match.
+
 2/16/2023: Karl and Thomas
 - Changed DFA to result in error on strings like '99a'; identifiers must start with characters, can't start with numbers.
 - Changed DFA to not automatically process negative numbers. Rationale is that we want to allow cases like 100-100 to be read as INTLITERAL MINUSOP INTLITERAL not INTLITERAL INTLITERAL. Therefore, negatizing the intliterals is a context-sensitive activity that will occur at parse time instead of scan time. 

@@ -62,7 +62,17 @@ struct Scanner {
 
 /*! Initializes scanner values to zero. */
 void Scanner_Init();
-/*! De-initializes scanner values, setting file pointers to NULL (but not closing files. ) */
+
+/*! Loads input, output, listing, and temp files for scanner referencing.
+
+    \param input The input file which will be scanned. 
+    \param output The output file.
+    \param listing The listing file.
+    \param temp The temp file. 
+*/
+void Scanner_LoadFiles(FILE * input, FILE * output, FILE * listing, FILE * temp);
+
+/*! De-initializes scanner values, setting file pointers to NULL ( but not closing files. ) */
 void Scanner_DeInit();
 
 #pragma endregion lifecycle
@@ -97,6 +107,14 @@ void Scanner_bufputc(char c);
 */
 void Scanner_ReadBackToBuffer(int n_chars);
 
+
+/*! 
+    Copies the contents of scanners buffer to another char array destination. Appends a null terminator '\0' to the end of that buffer as well.
+    \param destination The string to copy to. 
+*/
+void Scanner_CopyBuffer(char * destination);
+
+
 #pragma endregion buffer
 
 /*
@@ -106,7 +124,11 @@ Scanning methods
 */
 #pragma region scanning
 /*!
-    Scans a file for tokens and prints detailed information to the listing and output files. 
+    Scans a file for tokens and prints detailed information to the listing and output files.
+
+    \warning This function was used for validating scanner functionality, it is not used when the program is parsing. 
+    \deprecated
+
     \param input An input file pointer, already opened for reading.
     \param listing An listing file pointer, already opened for writing.
     \param output An output file pointer, already opened for writing.
@@ -116,6 +138,9 @@ void Scanner_ScanAndPrint(FILE *input, FILE *listing, FILE *output, FILE *temp);
 
 /*!
     Looks ahead to determine if there are any more tokens on the line, or if there is a comment at the end of the line. Resets the fileposition after looking ahead.
+
+    This is an internal method of scanner used to determine how it should scan. It should not be called by external modules. 
+    \private
 
     \returns 0 = Clear to Scan,
             1 = Newline next,
@@ -134,9 +159,40 @@ void Scanner_AdvanceLine();
 
     While the DFA can skip whitespace independently, using this method allows tracking the number of characters that were skipped to maintain an accurate column number.
 
+    \private
+
     \returns The number of whitespace characters skipped. 
 */
 int Scanner_SkipWhitespace();
+
+/*!
+    Advances the file pointer until a nonwhitespace character (not space or tab or newline) and returns the number of characters skipped.
+
+    It does NOT advance the column number.
+
+    This is used for Scanner_NextToken, so that the next token can be checked without advancing the column count or printing the lines (which will only occur on match.)
+*/
+void Scanner_SkipAllWhitespaceForNextToken();
+
+/*!
+    Scans the next token in scanner.in. Moves the file pointer back where it started.
+
+    \returns The next token in the input file. 
+
+*/
+int Scanner_NextToken();
+
+/*!
+    Consumes the next token in scanner.in.
+
+    \todo Checks for newlines and prints to the listing file the line if one is found. 
+    \todo Advances column position.
+
+    \returns 1 if token is matched correctly. 0 if the tokens do not match. 
+
+*/
+short Scanner_Match(int target_token);
+
 #pragma endregion scanning
 
 /*

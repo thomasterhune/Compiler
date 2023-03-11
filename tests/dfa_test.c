@@ -86,8 +86,6 @@ void test_GetNextTokenInBuffer(CuTest * tc) {
     token = GetNextTokenInBuffer(buffer, &i, &charsRead);
     CuAssertIntEquals(tc, GREATEROP, token);
     token = GetNextTokenInBuffer(buffer, &i, &charsRead);
-    CuAssertIntEquals(tc, MINUSOP, token);
-    token = GetNextTokenInBuffer(buffer, &i, &charsRead);
     CuAssertIntEquals(tc, INTLITERAL, token);
     token = GetNextTokenInBuffer(buffer, &i, &charsRead);
     CuAssertIntEquals(tc, MULTOP, token);

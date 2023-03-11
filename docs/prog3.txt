@@ -1,0 +1,262 @@
+Expected Token: BEGIN        Actual Token: BEGIN          
+
+Statement: BEGIN
+
+Expected Token: READ         Actual Token: READ           
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: ID           Actual Token: A              
+Expected Token: COMMA        Actual Token: ,              
+Expected Token: ID           Actual Token: BB             
+Expected Token: RPAREN       Actual Token: )              
+Expected Token: SEMICOLON    Actual Token: ;              
+
+Statement: READ(A,BB);
+
+Expected Token: ID           Actual Token: X              
+Expected Token: ASSIGNOP     Actual Token: :=             
+Expected Token: ID           Actual Token: A              
+Expected Token: PLUSOP       Actual Token: +              
+Expected Token: ID           Actual Token: BB             
+Expected Token: SEMICOLON    Actual Token: ;              
+
+Statement: X:=A+BB;
+
+Expected Token: ID           Actual Token: Y              
+Expected Token: ASSIGNOP     Actual Token: :=             
+Expected Token: ID           Actual Token: A              
+Expected Token: MINUSOP      Actual Token: -              
+Expected Token: ID           Actual Token: BB             
+Expected Token: SEMICOLON    Actual Token: ;              
+
+Statement: Y:=A-BB;
+
+Expected Token: WRITE        Actual Token: WRITE          
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: ID           Actual Token: A              
+Expected Token: COMMA        Actual Token: ,              
+Expected Token: ID           Actual Token: BB             
+Expected Token: COMMA        Actual Token: ,              
+Expected Token: ID           Actual Token: X              
+Expected Token: COMMA        Actual Token: ,              
+Expected Token: ID           Actual Token: Y              
+Expected Token: RPAREN       Actual Token: )              
+Expected Token: SEMICOLON    Actual Token: ;              
+
+Statement: WRITE(A,BB,X,Y);
+
+Expected Token: ID           Actual Token: X              
+Expected Token: ASSIGNOP     Actual Token: :=             
+Expected Token: ID           Actual Token: A              
+Expected Token: MINUSOP      Actual Token: -              
+Expected Token: INTLITERAL   Actual Token: 5              
+Expected Token: SEMICOLON    Actual Token: ;              
+
+Statement: X:=A-5;
+
+Expected Token: WRITE        Actual Token: WRITE          
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: ID           Actual Token: A              
+Expected Token: COMMA        Actual Token: ,              
+Expected Token: INTLITERAL   Actual Token: 5              
+Expected Token: COMMA        Actual Token: ,              
+Expected Token: ID           Actual Token: X              
+Expected Token: RPAREN       Actual Token: )              
+Expected Token: SEMICOLON    Actual Token: ;              
+
+Statement: WRITE(A,5,X);
+
+Expected Token: ID           Actual Token: X              
+Expected Token: ASSIGNOP     Actual Token: :=             
+Expected Token: ID           Actual Token: BB             
+Expected Token: MULTOP       Actual Token: *              
+Expected Token: INTLITERAL   Actual Token: -5             
+Expected Token: SEMICOLON    Actual Token: ;              
+
+Statement: X:=BB*-5;
+
+Expected Token: WRITE        Actual Token: WRITE          
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: ID           Actual Token: BB             
+Expected Token: COMMA        Actual Token: ,              
+Expected Token: INTLITERAL   Actual Token: 5              
+Expected Token: COMMA        Actual Token: ,              
+Expected Token: ID           Actual Token: X              
+Expected Token: RPAREN       Actual Token: )              
+Expected Token: SEMICOLON    Actual Token: ;              
+
+Statement: WRITE(BB,5,X);
+
+Expected Token: IF           Actual Token: IF             
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: NOTOP        Actual Token: !              
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: ID           Actual Token: A              
+Expected Token: DIVOP        Actual Token: /              
+Expected Token: INTLITERAL   Actual Token: 2              
+Expected Token: GREATEROP    Actual Token: >              
+Expected Token: INTLITERAL   Actual Token: 7              
+Expected Token: RPAREN       Actual Token: )              
+Expected Token: RPAREN       Actual Token: )              
+Expected Token: THEN         Actual Token: THEN           
+
+Statement: IF(!(A/2>7))THEN
+
+Expected Token: WRITE        Actual Token: WRITE          
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: ID           Actual Token: A              
+Expected Token: RPAREN       Actual Token: )              
+Expected Token: SEMICOLON    Actual Token: ;              
+
+Statement: WRITE(A);
+
+Expected Token: ELSE         Actual Token: ELSE           
+
+Statement: ELSE
+
+Expected Token: ID           Actual Token: A              
+Expected Token: ASSIGNOP     Actual Token: :=             
+Expected Token: INTLITERAL   Actual Token: 7              
+Expected Token: SEMICOLON    Actual Token: ;              
+
+Statement: A:=7;
+
+Expected Token: ENDIF        Actual Token: ENDIF          
+
+Statement: ENDIF
+
+Expected Token: WHILE        Actual Token: WHILE          
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: ID           Actual Token: FRED           
+Expected Token: GREATEROP    Actual Token: >              
+Expected Token: INTLITERAL   Actual Token: 4              
+Expected Token: RPAREN       Actual Token: )              
+
+Statement: WHILE(FRED>4)
+
+Expected Token: IF           Actual Token: IF             
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: ID           Actual Token: T              
+Expected Token: GREATEREQUALOP Actual Token: >=             
+Expected Token: TRUE         Actual Token: TRUE           
+Expected Token: RPAREN       Actual Token: )              
+Expected Token: THEN         Actual Token: THEN           
+
+Statement: IF(T>=TRUE)THEN
+
+Expected Token: WRITE        Actual Token: WRITE          
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: ID           Actual Token: G              
+Expected Token: RPAREN       Actual Token: )              
+Expected Token: SEMICOLON    Actual Token: ;              
+
+Statement: WRITE(G);
+
+Expected Token: ENDIF        Actual Token: ENDIF          
+
+Statement: ENDIF
+
+Expected Token: ENDWHILE     Actual Token: ENDWHILE       
+
+Statement: ENDWHILE
+
+Expected Token: IF           Actual Token: IF             
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: INTLITERAL   Actual Token: 6              
+Expected Token: LESSOP       Actual Token: <              
+Expected Token: ID           Actual Token: O              
+Expected Token: RPAREN       Actual Token: )              
+Expected Token: THEN         Actual Token: THEN           
+
+Statement: IF(6<O)THEN
+
+Expected Token: WRITE        Actual Token: WRITE          
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: ID           Actual Token: O              
+Expected Token: RPAREN       Actual Token: )              
+Expected Token: SEMICOLON    Actual Token: ;              
+
+Statement: WRITE(O);
+
+Expected Token: IF           Actual Token: IF             
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: ID           Actual Token: A              
+Expected Token: LESSEQUALOP  Actual Token: <=             
+Expected Token: FALSE        Actual Token: FALSE          
+Expected Token: RPAREN       Actual Token: )              
+
+Statement: IF(A<=FALSE)
+
+Expected Token: THEN         Actual Token: THEN           
+
+Statement: THEN
+
+Expected Token: IF           Actual Token: IF             
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: ID           Actual Token: X              
+Expected Token: EQUALOP      Actual Token: =              
+Expected Token: NULL         Actual Token: NULL           
+Expected Token: RPAREN       Actual Token: )              
+
+Statement: IF(X=NULL)
+
+Expected Token: THEN         Actual Token: THEN           
+
+Statement: THEN
+
+Expected Token: WRITE        Actual Token: WRITE          
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: ID           Actual Token: X              
+Expected Token: RPAREN       Actual Token: )              
+Expected Token: SEMICOLON    Actual Token: ;              
+
+Statement: WRITE(X);
+
+Expected Token: ENDIF        Actual Token: ENDIF          
+
+Statement: ENDIF
+
+Expected Token: ELSE         Actual Token: ELSE           
+
+Statement: ELSE
+
+Expected Token: IF           Actual Token: IF             
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: ID           Actual Token: A              
+Expected Token: NOTEQUALOP   Actual Token: <>             
+Expected Token: FALSE        Actual Token: FALSE          
+Expected Token: RPAREN       Actual Token: )              
+
+Statement: IF(A<>FALSE)
+
+Expected Token: THEN         Actual Token: THEN           
+
+Statement: THEN
+
+Expected Token: WRITE        Actual Token: WRITE          
+Expected Token: LPAREN       Actual Token: (              
+Expected Token: ID           Actual Token: A              
+Expected Token: RPAREN       Actual Token: )              
+Expected Token: SEMICOLON    Actual Token: ;              
+
+Statement: WRITE(A);
+
+Expected Token: ENDIF        Actual Token: ENDIF          
+
+Statement: ENDIF
+
+Expected Token: ENDIF        Actual Token: ENDIF          
+
+Statement: ENDIF
+
+Expected Token: ENDIF        Actual Token: ENDIF          
+
+Statement: ENDIF
+
+Expected Token: END          Actual Token: END            
+
+Statement: END
+
+Expected Token: EOF          Actual Token: EOF            
+
+Statement: EOF
+

@@ -3,7 +3,7 @@
 #include <wchar.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "terminal.h"
+#include "console.h"
 
 /*
 -------------------
@@ -41,7 +41,6 @@ void Tompiler_DeInit() {
 
 HANDLE handle; 
 
-
 void Enable_PrettyPrint() {
     handle = GetStdHandle(STD_OUTPUT_HANDLE);
     DWORD console_mode;
@@ -52,28 +51,23 @@ void Enable_PrettyPrint() {
 
 void Tompiler_Hello() {
     printf("\n\n");
-    printf(BG_BRT_WHITE);
-    printf(FG_BLUE);
+    CONSOLE_COLOR(FG_BLUE, BG_BRT_WHITE);
     printf("    TOMPILER");
-    printf(FG_BLACK);
+    CONSOLE_COLOR(FG_BLACK, BG_BRT_WHITE);
     printf(" v 0.0.3    ");
-    printf(BG_DEFAULT);
-    printf(FG_DEFAULT);
+    CONSOLE_COLOR_DEFAULT();
     printf("\n");
 }
 
 void Tompiler_Goodbye() {
     printf("\n\n");
-    printf(BG_BRT_WHITE);
-    printf(FG_BLUE);
+    CONSOLE_COLOR(FG_BLUE, BG_BRT_WHITE);
     printf("    TOMPILER");
     printf(FG_BLACK);
     printf(" v 0.0.3    ");
-    printf(BG_BLUE);
-    printf(FG_BRT_YELLOW);
+    CONSOLE_COLOR(FG_BRT_YELLOW, BG_BLUE);
     printf("  Tompiler finished running. ");
-    printf(BG_DEFAULT);
-    printf(FG_DEFAULT);
+    CONSOLE_COLOR_DEFAULT();
     printf("\n\n");
 }
 
