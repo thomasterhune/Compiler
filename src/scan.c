@@ -119,6 +119,14 @@ void Scanner_CopyBuffer(char * destination) {
     destination[i] = '\0';
 }
 
+void Scanner_PrintBuffer(FILE * destination, short print_to_console) {
+    scanner.buffer[scanner.l_buffer] = '\0'; 
+    fprintf(destination, "%s", scanner.buffer);
+    if(print_to_console) {
+        printf("%s", scanner.buffer);
+    } 
+}
+
 #pragma endregion buffer
 
 /*
@@ -188,8 +196,20 @@ void Scanner_SkipAllWhitespaceForNextToken() {
     while(c == ' ' || c == '\t' || c == '\n') {
         c = getc(scanner.in);
     }
-    /* put the last character back in because it was non-ws*/
-    ungetc(c, scanner.in);
+    if(c == '-') {
+        c = getc(scanner.in);
+        if(c == '-') {
+            while(c != '\n' && c != EOF) {
+                c = getc(scanner.in);
+            }
+            Scanner_SkipAllWhitespaceForNextToken();
+        } else {
+            ungetc(c, scanner.in);
+        }
+    } else {
+        /* put the last character back in because it was non-ws*/
+        ungetc(c, scanner.in);
+    }
 }
 
 void Scanner_ScanAndPrint(FILE *input, FILE *output, FILE *listing,  FILE *temp) {
@@ -248,6 +268,10 @@ int Scanner_NextToken() {
 }
 
 short Scanner_Match(int target_token) {
+    int v = fprintf(scanner.out, "\nExpected Token: %12s ", Token_GetName(target_token));
+    if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
+        printf("\nExpected Token: %12s ", Token_GetName(target_token));
+    }
     int token;
     int charsRead = 0;
     short look = 1;
@@ -293,6 +317,11 @@ short Scanner_Match(int target_token) {
             result = 0;
         }
     }
+    fprintf(scanner.out, "Actual Token:");
+    if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
+        printf("Actual Token: ");
+    }
+    Scanner_PrintBuffer(scanner.out, SCANNER_PRINTS_TOKENS_TO_CONSOLE);
     return result;
 }
 

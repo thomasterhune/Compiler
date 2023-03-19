@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "console.h"
+#include "parse.h"
 
 /*
 -------------------
@@ -24,7 +25,12 @@ void Tompiler_Execute(int argc, char* argv[]) {
     terminate = CompFiles_Open(argc, argv);
     if(!terminate) {
         TCompFiles * files = CompFiles_GetFiles();
-        Scanner_ScanAndPrint(files->in, files->out, files->listing, files->temp);
+        Scanner_LoadFiles(files->in, files->out, files->listing, files->temp);
+        /* Print the first line to the listing file. Subsequent calls will be made by Scanner_Match when appropriate. */
+        Scanner_PrintLine();
+        /* ScanAndPrint was for the previous version, for testing the scanner only. */
+        /*Scanner_ScanAndPrint(files->in, files->out, files->listing, files->temp);*/
+        Parse_SystemGoal();
     }
 }
 

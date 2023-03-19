@@ -2,6 +2,7 @@
     "files.associations": {
         "dirent.h": "c",
         "test_assistance_test.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "parser.h": "c"
     }
 }

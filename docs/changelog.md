@@ -1,3 +1,9 @@
+3/18/2023: Karl, Thomas
+- First few parse statements, including Parse_Program, Parse_SystemGoal, StatementList, Statement
+- Ensured some printing to listing file and output file were occurring
+- Fixed comment issue with skipping whitespace
+
+
 3/11/2023: Karl
 - Added rubric, examples to /doc
 - Renamed terminal.h to console.h because terminal has a different meaning in the context of parsing.
