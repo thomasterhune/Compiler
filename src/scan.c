@@ -1,6 +1,7 @@
 #include "dfa.h"
 #include "tokens.h"
 #include "scan.h"
+#include "parse.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -57,6 +58,10 @@ void Scanner_DeInit() {
     free(scanner.buffer);
     scanner.buffer = NULL;
 }
+/* DB method for testing file pos*/
+FILE * Scanner_DB_GetInFile() {
+    return scanner.in;
+}
 
 #pragma endregion lifecycle
 
@@ -95,6 +100,10 @@ void Scanner_bufputc(char c) {
     }
     scanner.buffer[scanner.l_buffer] = c; 
     scanner.l_buffer += 1;
+    if(scanner.l_buffer >= scanner.capacity) {
+        Scanner_expandBuffer();
+    }
+    scanner.buffer[scanner.l_buffer] = '\0';
 }
 
 void Scanner_ReadBackToBuffer(int n_chars) {
@@ -125,6 +134,14 @@ void Scanner_PrintBuffer(FILE * destination, short print_to_console) {
     if(print_to_console) {
         printf("%s", scanner.buffer);
     } 
+}
+
+int * Scanner_GetLBuffPointer() {
+    return &scanner.l_buffer;
+}
+
+char * Scanner_GetBuffer() {
+    return scanner.buffer;
 }
 
 #pragma endregion buffer
@@ -197,13 +214,16 @@ void Scanner_SkipAllWhitespaceForNextToken() {
         c = getc(scanner.in);
     }
     if(c == '-') {
-        c = getc(scanner.in);
-        if(c == '-') {
-            while(c != '\n' && c != EOF) {
-                c = getc(scanner.in);
+        char c2 = getc(scanner.in);
+        if(c2 == '-') {
+            while(c2 != '\n' && c2 != EOF) {
+                c2 = getc(scanner.in);
+                printf("<%c>", c2);
             }
+            ungetc(c2, scanner.in);
             Scanner_SkipAllWhitespaceForNextToken();
         } else {
+            ungetc(c2, scanner.in);
             ungetc(c, scanner.in);
         }
     } else {
@@ -268,9 +288,9 @@ int Scanner_NextToken() {
 }
 
 short Scanner_Match(int target_token) {
-    int v = fprintf(scanner.out, "\nExpected Token: %12s ", Token_GetName(target_token));
+    int v = fprintf(scanner.out, "\nExpected Token: %15s ", Token_GetName(target_token));
     if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
-        printf("\nExpected Token: %12s ", Token_GetName(target_token));
+        printf("\nExpected Token: %s ", Token_GetName(target_token));
     }
     int token;
     int charsRead = 0;
@@ -280,7 +300,6 @@ short Scanner_Match(int target_token) {
     while(look != LH_CLEAR && hitEOF == 0) {
         /* while look is not 'clear to scan' */
         look = Scanner_Lookahead();
-        fflush(stdout);
         switch(look) {
             case LH_NLINE:
                 Scanner_AdvanceLine();
@@ -303,6 +322,10 @@ short Scanner_Match(int target_token) {
         } else {
             result = 0;
         }
+        fprintf(scanner.out, " Actual Token: %15s", Token_GetName(target_token));
+        if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
+            printf(" Actual Token: %s ", Token_GetName(target_token));
+        }
     } else {
         token = GetNextToken(scanner.in, &charsRead);
         Scanner_ReadBackToBuffer(charsRead);
@@ -316,13 +339,19 @@ short Scanner_Match(int target_token) {
         } else {
             result = 0;
         }
+        fprintf(scanner.out, " Actual Token: %15s :: ", Token_GetName(token));
+        if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
+            printf(" Actual Token: %s :: ", Token_GetName(token));
+        }
+        Scanner_PrintBuffer(scanner.out, SCANNER_PRINTS_TOKENS_TO_CONSOLE);
     }
-    fprintf(scanner.out, "Actual Token:");
-    if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
-        printf("Actual Token: ");
+
+
+    if(result && !hitEOF) {
+        Parser_pushToBuffer(scanner.buffer, scanner.l_buffer);
     }
-    Scanner_PrintBuffer(scanner.out, SCANNER_PRINTS_TOKENS_TO_CONSOLE);
-    return result;
+
+    return !result;
 }
 
 #pragma endregion scanning 

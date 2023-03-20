@@ -1,0 +1,49 @@
+begin
+
+while(a > 1)
+    A := 2;
+endwhile 
+
+while (fred > 4)
+    if ( t >= true) then
+        write(G);
+    endif
+endwhile
+
+IF (!(A > 1)) then
+    Write (A);
+else
+    a:=7;
+ENDif
+
+IF (!(A / 2 > 7)) then
+    Write (A);
+else
+    a:=7;
+ENDif
+
+Y := A - BB;    --a comment
+read (A, BB);
+X:= A + BB;
+write (A, BB, X, Y);
+X := A - 5;
+write (A, 5, X);
+X := BB * -5;
+write (BB, 5, X);
+
+if(6 < O) then
+    write(o);
+    if(a <= false)
+        then
+        if(x = null)
+        then
+            write(x);
+        endif
+    else
+        if(a <> false)
+        then
+            write(a);
+        endif
+    endif
+endif
+end

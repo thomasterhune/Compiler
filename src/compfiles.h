@@ -83,7 +83,9 @@ CompFiles lifecycle
     \note Covered by unit tests.
 */
 void CompFiles_Init();
-/*! Closes any open files and returns CompFiles to the default values. Deletes the temp file. */
+/*! 
+    Closes any open files and returns CompFiles to the default values. Deletes the temp file. 
+    */
 void CompFiles_DeInit();
 /*! 
     Generates a temporary file with a unique name. This file will be destroyed when CompFiles_DeInit() is called. 
@@ -256,6 +258,14 @@ CompFiles operations
 
 */
 void CompFiles_CopyInputToOutputs();
+
+
+
+/*!
+    append the temp file to the out file
+
+ */
+void CompFiles_AppendTempToOut();
 
 #pragma endregion operations
 

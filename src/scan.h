@@ -20,7 +20,7 @@ Flags
 */
 
 #ifndef SCANNER_PRINTS_LINES_TO_CONSOLE
-#define SCANNER_PRINTS_LINES_TO_CONSOLE 1
+#define SCANNER_PRINTS_LINES_TO_CONSOLE 0
 #endif
 
 #ifndef SCANNER_PRINTS_TOKENS_TO_CONSOLE
@@ -75,6 +75,8 @@ void Scanner_LoadFiles(FILE * input, FILE * output, FILE * listing, FILE * temp)
 /*! De-initializes scanner values, setting file pointers to NULL ( but not closing files. ) */
 void Scanner_DeInit();
 
+FILE* Scanner_DB_GetInFile();
+
 #pragma endregion lifecycle
 
 /*
@@ -113,6 +115,19 @@ void Scanner_ReadBackToBuffer(int n_chars);
     \param destination The string to copy to. 
 */
 void Scanner_CopyBuffer(char * destination);
+
+/*! 
+    Gets a pointer to the scanner's buffer length.
+
+    \return An int pointer to the scanner's buffer length  
+*/
+int * Scanner_GetLBuffPointer();
+
+/*!
+    Gets the scanner's buffer.
+    \return A char pointer to the scanner's buffer.
+*/
+char * Scanner_GetBuffer();
 
 
 #pragma endregion buffer
@@ -188,7 +203,7 @@ int Scanner_NextToken();
     \todo Checks for newlines and prints to the listing file the line if one is found. 
     \todo Advances column position.
 
-    \returns 1 if token is matched correctly. 0 if the tokens do not match. 
+    \returns 0 if token is matched correctly. 1 if the tokens do not match. 
 
 */
 short Scanner_Match(int target_token);
