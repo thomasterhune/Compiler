@@ -29,10 +29,12 @@ void Tompiler_Execute(int argc, char* argv[]) {
         TCompFiles * files = CompFiles_GetFiles();
         Scanner_LoadFiles(files->in, files->out, files->listing, files->temp);
         Parser_Load(files->out, files->listing);
-        /* Print the first line to the listing file. Subsequent calls to PrintLine are ultimately called by Scanner_Match when appropriate. */
-        Scanner_PrintLine();
-        Parse_SystemGoal();
+        Scanner_PrintLine();         /* Print the first line to the listing file. Subsequent calls to PrintLine are ultimately called by Scanner_Match when appropriate. */
+        short err = Parse_SystemGoal();
+        Scanner_PrintErrorSummary();
+        Parser_PrintErrorSummary();
         CompFiles_AppendTempToOut();
+        Tompiler_PrintResult(err, files->listing);
     }
 }
 
@@ -79,6 +81,30 @@ void Tompiler_Goodbye() {
     printf("\n\n");
 }
 
+void Tompiler_PrintResult(short had_err_in_parse_system_goal, FILE * listing) {
+    printf("\n\n");
+    if(had_err_in_parse_system_goal){
+        CONSOLE_COLOR(FG_BRT_RED, BG_DEFAULT);
+        printf("Failed to compile.");
+        CONSOLE_COLOR_DEFAULT();
+        fprintf(listing, "\n\nFailed to compile.");
+        /* Print red, compilation failed*/
+    }else{
+        int lex_errs = Scanner_GetLexErrCount();
+        int parse_errs = Parser_GetParseErrCount();
+        if(lex_errs > 0 || parse_errs > 0) {
+            CONSOLE_COLOR(FG_BRT_YELLOW, BG_DEFAULT);
+            printf("Compiled with errors.");
+            CONSOLE_COLOR_DEFAULT();
+            fprintf(listing, "\n\nCompiled with errors.");
+        } else {
+            CONSOLE_COLOR(FG_BRT_GREEN, BG_DEFAULT);
+            printf("Compiled with no errors.");
+            CONSOLE_COLOR_DEFAULT();
+            fprintf(listing, "\n\nCompiled with no errors.");
+        }
+    }
+}
 
 
 #pragma endregion printing

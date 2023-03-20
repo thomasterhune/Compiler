@@ -4,6 +4,7 @@
 #include "parse.h"
 #include <string.h>
 #include <stdlib.h>
+#include "console.h"
 
 /*!
     \file scan.c
@@ -218,7 +219,6 @@ void Scanner_SkipAllWhitespaceForNextToken() {
         if(c2 == '-') {
             while(c2 != '\n' && c2 != EOF) {
                 c2 = getc(scanner.in);
-                printf("<%c>", c2);
             }
             ungetc(c2, scanner.in);
             Scanner_SkipAllWhitespaceForNextToken();
@@ -510,10 +510,27 @@ void Scanner_PrintErrorListing() {
 }
 
 void Scanner_PrintErrorSummary() {
-    fprintf(scanner.listing, "\n\n%d Lexical Errors.", scanner.errors);
-    if(SCANNER_PRINTS_LINES_TO_CONSOLE) {
+    if(scanner.errors == 1) {
+        fprintf(scanner.listing, "\n\n%d Lexical Error.", scanner.errors);
+        printf("\n\n%d Lexical Error.", scanner.errors);
+    } else {
+        fprintf(scanner.listing, "\n\n%d Lexical Errors.", scanner.errors);
         printf("\n\n%d Lexical Errors.", scanner.errors);
     }
+}
+
+void Scanner_PrintParseErrorMessage() {
+    fprintf(scanner.listing, "\n      PARSE ERROR! Line %d! See output file for details.\n", scanner.line_no + 1);
+    printf("\n");
+    CONSOLE_COLOR(FG_BRT_RED, BG_BLUE);
+    printf(" PARSE ERROR ");
+    CONSOLE_COLOR(FG_BRT_RED, BG_DEFAULT);
+    printf(" Line: %d", scanner.line_no+1);
+    CONSOLE_COLOR_DEFAULT();
+}
+
+int Scanner_GetLexErrCount(){
+    return scanner.errors;
 }
 
 #pragma endregion printing

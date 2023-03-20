@@ -1,3 +1,14 @@
+3/20/2023: Karl, Thomas
+- Wrote the final printing stuff for compilation result
+
+3/20/2023: Karl
+- ParseError region
+- Appropriate handling of parse and lex errors
+- Pretty printing of errors
+- Limited parse error recovery
+- Full lex error recovery 
+- Error summarys
+
 3/19/2023: Karl, Thomas, Anthony
 - Debugged lexical error printing
 
