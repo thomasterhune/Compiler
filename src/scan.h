@@ -208,6 +208,13 @@ int Scanner_NextToken();
 */
 short Scanner_Match(int target_token);
 
+/*!
+    Skips a lexical error.
+
+    Also prints the error information to the listing file.
+*/
+void Scanner_SkipLexError();
+
 #pragma endregion scanning
 
 /*

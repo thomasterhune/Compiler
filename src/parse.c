@@ -121,15 +121,15 @@ short Parse_Program() {
 
 short Parse_StatementList() {
     printf("\n Parse_StatementList called.");
-    int next;
     short err = Parse_Statement();
+    int next = Scanner_NextToken();
     if(!err) {
-        int next = Scanner_NextToken();
         while( (next == ID || next == READ || 
                 next == WRITE || next == IF || 
-                next == WHILE) && !err) {                
+                next == WHILE || next == ERROR ) && err == 0) {                
             err = Parse_Statement();
             next = Scanner_NextToken();
+            printf("\nParseStatementList while loop: err %d, next %s", err, Token_GetName(next));
         }
     }
     printf("\n Parse_StatementList returned with err: %d", err);
@@ -228,8 +228,8 @@ short Parse_Statement() {
 
             }
             break;
-        case ERROR: /* Handle lexical error */
-            /* TODO: lexical error... technically unreachable to do StatementList logic.... figure this one out */
+        case ERROR:
+            Scanner_Match(ERROR);
             break;
         default:
             err = 1;

@@ -232,6 +232,7 @@ void Scanner_SkipAllWhitespaceForNextToken() {
     }
 }
 
+/* Deprecated */
 void Scanner_ScanAndPrint(FILE *input, FILE *output, FILE *listing,  FILE *temp) {
     scanner.in = input;
     scanner.listing = listing;
@@ -287,6 +288,41 @@ int Scanner_NextToken() {
     return token;
 }
 
+void Scanner_SkipLexError() {
+    /* Skip an error, but print it to the listing file */
+    scanner.errors += 1;
+    scanner.col_no += 1;
+    char problem = scanner.buffer[0]; 
+    fprintf(scanner.listing, "      \t");
+    if(SCANNER_PRINTS_LINES_TO_CONSOLE) {
+        printf("      \t");
+    }
+
+    /* Add spaces to align the caret with the error. */
+    int i = 0;
+    while(i < scanner.col_no) {
+        fputc(' ', scanner.listing);
+        if(SCANNER_PRINTS_LINES_TO_CONSOLE) {
+            putchar(' ');
+        }
+        i++;
+    }
+
+    /* Print the indicator caret. */
+    fputc('^', scanner.listing);
+    if(SCANNER_PRINTS_LINES_TO_CONSOLE) {
+        putchar('^');
+    }
+
+    /* Print the error message. */    
+    fprintf(scanner.listing, "Error. '%c' not recognized at line %d col %d.\n", problem, scanner.line_no, scanner.col_no);
+
+    if(SCANNER_PRINTS_LINES_TO_CONSOLE) {
+        printf("Error. '%c' not recognized at line %d col %d.\n", problem, scanner.line_no, scanner.col_no);
+    }
+
+}
+
 short Scanner_Match(int target_token) {
     int v = fprintf(scanner.out, "\nExpected Token: %15s ", Token_GetName(target_token));
     if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
@@ -329,13 +365,12 @@ short Scanner_Match(int target_token) {
     } else {
         token = GetNextToken(scanner.in, &charsRead);
         Scanner_ReadBackToBuffer(charsRead);
-        if(token == ERROR) {
-            Scanner_PrintErrorListing();
-            scanner.errors += 1;
-        }
         scanner.col_no += charsRead;
         if(token == target_token) {
             result = 1;
+            if(token == ERROR) {
+                Scanner_SkipLexError();
+            }
         } else {
             result = 0;
         }
@@ -344,12 +379,11 @@ short Scanner_Match(int target_token) {
             printf(" Actual Token: %s :: ", Token_GetName(token));
         }
         Scanner_PrintBuffer(scanner.out, SCANNER_PRINTS_TOKENS_TO_CONSOLE);
+        if(result) {
+            Parser_pushToBuffer(scanner.buffer, scanner.l_buffer);
+        }
     }
 
-
-    if(result && !hitEOF) {
-        Parser_pushToBuffer(scanner.buffer, scanner.l_buffer);
-    }
 
     return !result;
 }

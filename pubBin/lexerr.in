@@ -1,0 +1,7 @@
+begin
+
+&if(a < 0) then
+ a := 1;
+endif
+
+end

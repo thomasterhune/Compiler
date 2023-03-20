@@ -1,3 +1,15 @@
+3/19/2023: Karl, Thomas, Anthony
+- Debugged lexical error printing
+
+3/19/2023: Karl, Anthony
+- Debugged parser
+- Debugged SkipWhitespaceforNextToken in scanner
+- Printing statements for parser
+- Init and lifecycle stuff for parser in tompiler
+
+3/19/2023: Karl
+- Wrote parse functions
+
 3/18/2023: Karl, Thomas
 - First few parse statements, including Parse_Program, Parse_SystemGoal, StatementList, Statement
 - Ensured some printing to listing file and output file were occurring
