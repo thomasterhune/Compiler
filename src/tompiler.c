@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "console.h"
 #include "parse.h"
+#include "scan.h"
 
 /*
 -------------------
@@ -18,6 +19,7 @@ void Tompiler_Init() {
     Tompiler_Hello();
     CompFiles_Init();
     Scanner_Init();
+    Parser_Init();
 }
 
 void Tompiler_Execute(int argc, char* argv[]) {
@@ -26,22 +28,22 @@ void Tompiler_Execute(int argc, char* argv[]) {
     if(!terminate) {
         TCompFiles * files = CompFiles_GetFiles();
         Scanner_LoadFiles(files->in, files->out, files->listing, files->temp);
-        /* Print the first line to the listing file. Subsequent calls will be made by Scanner_Match when appropriate. */
+        Parser_Load(files->out, files->listing);
+        /* Print the first line to the listing file. Subsequent calls to PrintLine are ultimately called by Scanner_Match when appropriate. */
         Scanner_PrintLine();
-        /* ScanAndPrint was for the previous version, for testing the scanner only. */
-        /*Scanner_ScanAndPrint(files->in, files->out, files->listing, files->temp);*/
         Parse_SystemGoal();
+        CompFiles_AppendTempToOut();
     }
 }
 
 void Tompiler_DeInit() {
+    Parser_DeInit();
     Scanner_DeInit();
     CompFiles_DeInit();
     Tompiler_Goodbye();
 }
 
 #pragma endregion lifecycle
-
 
 #pragma region printing
 
@@ -76,5 +78,7 @@ void Tompiler_Goodbye() {
     CONSOLE_COLOR_DEFAULT();
     printf("\n\n");
 }
+
+
 
 #pragma endregion printing

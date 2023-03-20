@@ -187,6 +187,17 @@ void CompFiles_CopyInputToOutputs()
     }
 }
 
+
+void CompFiles_AppendTempToOut(){
+    int next_char = 'x';
+    next_char = fgetc(CompFiles.temp);
+    while(next_char != EOF)
+    {
+        fputc(next_char, CompFiles.out);
+        next_char = fgetc(CompFiles.temp);
+    }
+}
+
 #pragma endregion operations
 /*
 -----------------

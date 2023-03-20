@@ -68,7 +68,15 @@ void test_GetNextTokenInBuffer(CuTest * tc) {
     CuAssertIntEquals(tc, END, token);
 
     i = 0;
-    buffer = "  ;,;  = <= >= <\t> -1000 *1000 / 500 !TRUE &\n";
+    buffer = "- - A 10 ;,;  = <= >= <\t> -1000 *1000 / 500 !TRUE &\n";
+    token = GetNextTokenInBuffer(buffer, &i, &charsRead);
+    CuAssertIntEquals(tc, MINUSOP, token);
+    token = GetNextTokenInBuffer(buffer, &i, &charsRead);
+    CuAssertIntEquals(tc, MINUSOP, token);
+    token = GetNextTokenInBuffer(buffer, &i, &charsRead);
+    CuAssertIntEquals(tc, ID, token);
+    token = GetNextTokenInBuffer(buffer, &i, &charsRead);
+    CuAssertIntEquals(tc, INTLITERAL, token);
     token = GetNextTokenInBuffer(buffer, &i, &charsRead);
     CuAssertIntEquals(tc, SEMICOLON, token);
     token = GetNextTokenInBuffer(buffer, &i, &charsRead);
@@ -101,6 +109,26 @@ void test_GetNextTokenInBuffer(CuTest * tc) {
     CuAssertIntEquals(tc, TRUEOP, token);
     token = GetNextTokenInBuffer(buffer, &i, &charsRead);
     CuAssertIntEquals(tc, ERROR, token);
+
+    /* check minus stuff */
+    i = 0;
+    buffer = "-A - A - 99 + - \n";
+    token = GetNextTokenInBuffer(buffer, &i, &charsRead);
+    CuAssertIntEquals_Msg(tc, "Should read minusop", MINUSOP, token);
+    token = GetNextTokenInBuffer(buffer, &i, &charsRead);
+    CuAssertIntEquals_Msg(tc, "Should read id", ID, token);
+    token = GetNextTokenInBuffer(buffer, &i, &charsRead);
+    CuAssertIntEquals_Msg(tc, "Should read minusop", MINUSOP, token);
+    token = GetNextTokenInBuffer(buffer, &i, &charsRead);
+    CuAssertIntEquals_Msg(tc, "Should read id", ID, token);
+    token = GetNextTokenInBuffer(buffer, &i, &charsRead);
+    CuAssertIntEquals_Msg(tc, "Should read minusop", MINUSOP, token);
+    token = GetNextTokenInBuffer(buffer, &i, &charsRead);
+    CuAssertIntEquals_Msg(tc, "Should read intliteral", INTLITERAL, token);
+    token = GetNextTokenInBuffer(buffer, &i, &charsRead);
+    CuAssertIntEquals_Msg(tc, "Should read plusop", PLUSOP, token);
+    token = GetNextTokenInBuffer(buffer, &i, &charsRead);
+    CuAssertIntEquals_Msg(tc, "Should read minusop", MINUSOP, token);
 
 
     /* Check all keywords and identifiers */

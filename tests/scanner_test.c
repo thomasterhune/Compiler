@@ -3,6 +3,7 @@
 #include "stdio.h"
 #include "scan.h"
 #include "tokens.h"
+#include "dfa.h"
 #include "std_swapper.h"
 
 
@@ -45,6 +46,12 @@ void deInitScannerRemoveFiles() {
     remove(tmpInName); remove(tmpOutName); remove(tmpListName); remove(tmpTmpName);
 }
 
+void deInitScannerKeepFiles() {
+    Scanner_DeInit();
+    fclose(in); fclose(out); fclose(list); fclose(tmp);
+    in = NULL; out = NULL; list = NULL; tmp = NULL;
+}
+
 #pragma endregion temp_test_files
 
 #pragma region test_util
@@ -62,8 +69,8 @@ void LookAheadMatch(CuTest *tc, int target_token) {
     CuAssertIntEquals_Msg(tc, out, target_token, token);
 
     match = Scanner_Match(target_token);
-    sprintf(out, "Should match %s", tokval);
-    CuAssertIntEquals_Msg(tc, out, 1, match);
+    sprintf(out, "Should match %s no error", tokval);
+    CuAssertIntEquals_Msg(tc, out, 0, match);
 }
 
 #pragma endregion test_util
@@ -90,7 +97,7 @@ void test1(CuTest *tc) {
     CuAssertStrEquals_Msg(tc, "Buffer should be 'begin'", "begin", buf);
 
     match = Scanner_Match(BEGIN);
-    CuAssertIntEquals_Msg(tc, "Match BEGIN should be true", 1, match);
+    CuAssertIntEquals_Msg(tc, "Match BEGIN should be no error", 0, match);
     Scanner_CopyBuffer(buf);
     CuAssertStrEquals_Msg(tc, "Buffer should be 'begin'", "begin", buf);
 
@@ -100,7 +107,7 @@ void test1(CuTest *tc) {
     CuAssertStrEquals_Msg(tc, "Buffer should be 'end'", "end", buf);
 
     match = Scanner_Match(SCANEOF);
-    CuAssertIntEquals_Msg(tc, "Match scaneof should be false", 0, match);
+    CuAssertIntEquals_Msg(tc, "Match scaneof should be error", 1, match);
     Scanner_CopyBuffer(buf);
     CuAssertStrEquals_Msg(tc, "Buffer should be the same as before, 'end'", "end", buf);
 
@@ -108,7 +115,7 @@ void test1(CuTest *tc) {
     CuAssertIntEquals_Msg(tc, "Lookahead should be SCANEOF", SCANEOF, token);
 
     match = Scanner_Match(SCANEOF);
-    CuAssertIntEquals_Msg(tc, "Match scaneof should be true", 1, match);
+    CuAssertIntEquals_Msg(tc, "Match scaneof should be no error", 0, match);
 
     deInitScannerRemoveFiles();
 }
@@ -131,6 +138,33 @@ void test2(CuTest *tc) {
     StdSwapper_RestoreStdOut(1);
 }
 
+char * in3txt = "Y := A - BB;";
+
+void test3(CuTest *tc) {
+    StdSwapper_SetStdOut("tests/tempstdo.tmp");
+    initFilesAndScannerWithInput(in3txt);
+    LookAheadMatch(tc, ID);
+    LookAheadMatch(tc, ASSIGNOP);
+    LookAheadMatch(tc, ID);
+    LookAheadMatch(tc, MINUSOP);
+    LookAheadMatch(tc, ID);
+    LookAheadMatch(tc, SEMICOLON);
+
+    deInitScannerRemoveFiles();
+    StdSwapper_RestoreStdOut(1);
+}
+
+char * in4txt = "a --comm\nb-c";
+void testSkipWhitespace(CuTest *tc) {
+    StdSwapper_SetStdOut("tests/tempstdo.tmp");
+    initFilesAndScannerWithInput(in4txt);
+
+    /* deleted tests, can come back and rewrite if wanted */
+
+    deInitScannerRemoveFiles();
+    StdSwapper_RestoreStdOut(1);
+}
+
 
 #pragma endregion tests
 
@@ -140,6 +174,8 @@ CuSuite* scannerGetSuite() {
     CuSuite * suite = CuSuiteNew();
     SUITE_ADD_TEST(suite, test1);
     SUITE_ADD_TEST(suite, test2);
+    SUITE_ADD_TEST(suite, test3);
+    SUITE_ADD_TEST(suite, testSkipWhitespace);
 
     return suite;
 }
