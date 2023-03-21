@@ -189,6 +189,7 @@ void CompFiles_CopyInputToOutputs()
 
 
 void CompFiles_AppendTempToOut(){
+    printf("\n\nAppended temp file %s to output file %s", CompFiles.temp_file_name, CompFiles.output_file_name);
     int next_char = 'x';
     next_char = fgetc(CompFiles.temp);
     while(next_char != EOF)

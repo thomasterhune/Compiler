@@ -255,6 +255,22 @@ void Scanner_PrintErrorListing();
 */
 void Scanner_PrintErrorSummary();
 
+/*!
+    Prints that a parse error occurred on the current line and column.
+
+    Prints this to the listing file and the console.
+
+    This doesn't print any information from the parser, just the current line and column number from the Scanner. (Thus why it's a scanner method instead of a parser one. )
+*/
+void Scanner_PrintParseErrorMessage();
+
+/*!
+    gets the number of lexical errors and returns an integer
+
+    \returns integer number of lexical errors
+
+*/
+int Scanner_GetLexErrCount();
 #pragma endregion printing
 
 
