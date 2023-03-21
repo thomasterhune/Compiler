@@ -1,7 +1,7 @@
 #ifndef k_terminal
 #define k_terminal
 
-/*! \file terminal.h
+/*! \file console.h
 	\brief Windows Console Macros
 	
 	Provides macros for using Console Virtual Terminal Sequences
@@ -61,8 +61,6 @@
 #define BG_BRT_MAGENTA "\x1b[105m"
 #define BG_BRT_CYAN "\x1b[106m"
 #define BG_BRT_WHITE "\x1b[107m"
-
-/* Functionalized color setting macros. */
 
 #define CONSOLE_COLOR(FG, BG) printf("%s%s", FG,BG)
 #define CONSOLE_COLOR_DEFAULT() printf("%s%s", FG_DEFAULT, BG_DEFAULT)

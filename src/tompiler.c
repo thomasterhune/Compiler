@@ -1,3 +1,17 @@
+/*!
+    \file tompiler.c
+    \brief Tompiler lifecycle functions
+
+    Definitions for Tompiler functions. These are the lifecycle functions (Init, Execute, DeInit) and some associated pretty-printing functions.
+
+    \authors Tom Terhune, Karl Miller, Anthony Stepich
+    \date March 2023
+*/
+
+/*
+    NOTE: function descriptions are located in the header file instead of the .c file to enable intellisense type hints. 
+*/
+
 #include "tompiler.h"
 #include "windows.h"
 #include <wchar.h>

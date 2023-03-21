@@ -1,8 +1,3 @@
-#include "tokens.h"
-#include <string.h>
-
-#include <stdio.h>
-
 /*!
     \file tokens.c
     \brief Token map and related functions
@@ -13,10 +8,13 @@
     \date February 2023
 
 */
-
 /*
     NOTE: function descriptions are located in the header file instead of the .c file to enable intellisense type hints. 
 */
+
+#include "tokens.h"
+#include <string.h>
+#include <stdio.h>
 
 /*!
     TokensMap maps each token to the corresponding string.

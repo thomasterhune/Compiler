@@ -1,11 +1,3 @@
-#include "dfa.h"
-#include "tokens.h"
-#include "scan.h"
-#include "parse.h"
-#include <string.h>
-#include <stdlib.h>
-#include "console.h"
-
 /*!
     \file scan.c
     \brief Scanner struct and 'methods' definitions.
@@ -18,12 +10,15 @@
 */
 
 /*
-
     NOTE: function descriptions are located in the header file instead of the .c file to enable intellisense type hints. 
-
 */
-
-
+#include "dfa.h"
+#include "tokens.h"
+#include "scan.h"
+#include "parse.h"
+#include <string.h>
+#include <stdlib.h>
+#include "console.h"
 
 /*
 -------------------

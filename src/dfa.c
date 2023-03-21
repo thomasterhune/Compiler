@@ -1,8 +1,3 @@
-#include "tokens.h"
-#include "dfa.h"
-#include <string.h>
-#include <stdio.h>
-
 /*!
     \file dfa.c
     \brief The DFA and related logic definitions.
@@ -17,12 +12,14 @@
     \date February 2023
 
 */
-
 /*
-
     NOTE: function descriptions are located in the header file instead of the .c file to enable intellisense type hints. 
-
 */
+
+#include "tokens.h"
+#include "dfa.h"
+#include <string.h>
+#include <stdio.h>
 
 #pragma region dfaStates
 enum DFA_STATES { /* Enumerated values for the DFA states, to aid readability. */

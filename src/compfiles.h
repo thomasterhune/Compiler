@@ -2,11 +2,6 @@
 #ifndef compfiles_h
 #define compfiles_h
 
-#include <stdio.h>
-#include "file_util.h"
-#include <string.h>
-#include <stdlib.h>
-
 /**
  * \file compfiles.h
  * \brief CompFiles struct and "methods"
@@ -17,6 +12,11 @@
     \date January 2023
 */
 
+
+#include <stdio.h>
+#include "file_util.h"
+#include <string.h>
+#include <stdlib.h>
 
 /*
 -----------------

@@ -1,6 +1,21 @@
 #ifndef parser_h
 #define parser_h
+/*!
+    \file parse.h
+    \brief Parser struct, 'methods' declarations including Parse functions.
 
+    Parse is responsible for validating the syntax of an input file. It reads tokens provided by the scanner and validates that their sequence conforms with the rules of the language.
+
+    Parse_SystemGoal is the entry point, which should be called only after input and output files are loaded into the scanner and parser. It calls for function corresponding to each unique LHS of a production rule.
+
+    If a lexical error is encountered (invalid character), the character is skipped and an error is printed to the listing file. Parsing will continue with the next available character.
+
+    If a syntax error is encountered within a statement, tokens will be skipped until a semicolon or other end-of-statement symbol is found and information about that error will be printed as a trace in the console and the files.
+
+    \authors Karl Miller, Tom Terhune, Anthony Stepich
+    \date March 2023
+
+*/
 #include <stdio.h>
 
 #define PARSER_BUFFER_INITIAL_CAPACITY 50
