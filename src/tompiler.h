@@ -1,44 +1,17 @@
-/*! \file main.c
-  * \brief Program entry point.
-  * 
-  * \authors Anthony Stepich
-  * \authors Tom Terhune 
-  * \authors Karl Miller
-  * 
-  * # Program 1 - fileopen
-  * ## Group 3
-  * ### CSC 460 - Language Translation
-  * 
-  * \mainpage TomPiler 
-  * \version 0.2.5
-  * 
-  * ## Useful Pages
-  * 
-  * - compfiles.h
-  * 
-  * - file_util.h
-  * 
-  * - dfa.h
-  * 
-  * - tokens.h
-  * 
-  * - scan.h
-  * 
-  * - ::TCompFiles
-  * - ::Scanner
-  * 
-  * ## About
-  * 
-  * Created by Group 3 for CSC-460, Language Translations with Dr. Pyzdrowski, at PennWest California. 
-  * 
-  * 
-  */
+#ifndef tompiler_h
+#define tompiler_h
+/*!
+    \file tompiler.h
+    \brief Tompiler lifecycle functions
 
+    Declarations for Tompiler functions. These are the lifecycle functions (Init, Execute, DeInit) and some associated pretty-printing functions.
+
+    \authors Tom Terhune, Karl Miller, Anthony Stepich
+    \date March 2023
+*/
 
 #include "file_util.h"
 #include "compfiles.h"
-#ifndef tompiler_h
-#define tompiler_h
 
 #include "scan.h"
 #include <stdio.h>

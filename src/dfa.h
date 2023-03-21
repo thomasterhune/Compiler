@@ -1,7 +1,5 @@
 #ifndef dfa_h
 #define dfa_h
-
-#include <stdio.h>
 /*!
     \file dfa.h
     \brief The DFA and related logic declarations.
@@ -14,6 +12,8 @@
     \date February 2023
 
 */
+
+#include <stdio.h>
 
 /*!
    Translates a given character into a column index of the state-transition table.

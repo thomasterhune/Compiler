@@ -3,6 +3,10 @@
         "dirent.h": "c",
         "test_assistance_test.h": "c",
         "stdio.h": "c",
-        "parser.h": "c"
+        "parser.h": "c",
+        "compfiles.h": "c",
+        "stdarg.h": "c",
+        "tokens.h": "c",
+        "dfa.h": "c"
     }
 }

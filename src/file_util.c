@@ -1,11 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include "file_util.h"
-#include <windows.h>
 /**
- * \file file_util.h
+ * \file file_util.c
  * \brief Functions to assist with file operations.
  *
  * \authors Karl Miller, Tom Terhune, Anthony Stepich
@@ -14,6 +8,13 @@
 /*
     NOTE: function descriptions are located in the header file instead of the .c file to enable intellisense type hints. 
 */
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include "file_util.h"
+#include <windows.h>
+
 #pragma region fileops
 
 short fileExists(const char *filename)

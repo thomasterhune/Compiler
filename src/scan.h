@@ -1,7 +1,5 @@
 #ifndef scan_h
 #define scan_h
-
-#include <stdio.h>
 /*!
     \file scan.h
     \brief Scanner struct and 'methods' declarations.
@@ -12,6 +10,7 @@
     \date February 2023
 
 */
+#include <stdio.h>
 
 /*
 -------------------

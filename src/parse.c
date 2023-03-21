@@ -1,11 +1,3 @@
-#include "parse.h"
-#include <stdio.h>
-#include "tokens.h"
-#include <string.h>
-#include "scan.h"
-#include "console.h"
-#include "stdarg.h"
-
 /*!
     \file parse.c
     \brief Parser struct, 'methods' definitions including Parse functions.
@@ -20,12 +12,17 @@
 
     \authors Karl Miller, Tom Terhune, Anthony Stepich
     \date March 2023
-
 */
-
 /*
     NOTE: function descriptions are located in the header file instead of the .c file to enable intellisense type hints. 
 */
+#include "parse.h"
+#include <stdio.h>
+#include "tokens.h"
+#include <string.h>
+#include "scan.h"
+#include "console.h"
+#include "stdarg.h"
 
 T_Parser parser;
 

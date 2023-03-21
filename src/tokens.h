@@ -1,8 +1,5 @@
 #ifndef tokens_h
 #define tokens_h
-
-#include <stdlib.h>
-
 /*!
     \file tokens.h
     \brief Token functions declarations.
@@ -15,6 +12,8 @@
     \date February 2023
 
 */
+
+#include <stdlib.h>
 
 enum TOKEN {
     BEGIN=0, END, READ, WRITE, IF, THEN, ELSE, ENDIF, WHILE, ENDWHILE, ID, INTLITERAL, FALSEOP, TRUEOP, NULLOP, LPAREN, RPAREN, SEMICOLON, COMMA, ASSIGNOP, PLUSOP, MINUSOP, MULTOP,DIVOP, NOTOP, LESSOP, LESSEQUALOP, GREATEROP, GREATEREQUALOP, EQUALOP, NOTEQUALOP, SCANEOF, ERROR
