@@ -353,7 +353,7 @@ short Scanner_Match(int target_token) {
         } else {
             result = 0;
         }
-        fprintf(scanner.out, " Actual Token: %15s", Token_GetName(target_token));
+        fprintf(scanner.out, "    Actual Token: %15s", Token_GetName(target_token));
         if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
             printf(" Actual Token: %s ", Token_GetName(target_token));
         }
@@ -369,7 +369,7 @@ short Scanner_Match(int target_token) {
         } else {
             result = 0;
         }
-        fprintf(scanner.out, " Actual Token: %15s :: ", Token_GetName(token));
+        fprintf(scanner.out, "    Actual Token: %15s :: ", Token_GetName(token));
         if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
             printf(" Actual Token: %s :: ", Token_GetName(token));
         }

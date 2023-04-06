@@ -37,7 +37,6 @@ const char *tokensMap[] = {
     [FALSEOP] = "FALSEOP",
     [TRUEOP] = "TRUEOP",
     [NULLOP] = "NULLOP",
-
     [LPAREN] = "LPAREN",
     [RPAREN] = "RPAREN",
     [SEMICOLON] = "SEMICOLON",
@@ -55,7 +54,44 @@ const char *tokensMap[] = {
     [EQUALOP] = "EQUALOP",
     [NOTEQUALOP] = "NOTEQUALOP",
     [SCANEOF] = "SCANEOF",
-    [ERROR] = "ERROR"};
+    [ERROR] = "ERROR"
+};
+
+const char * C_TranslateMap[] = {
+    [BEGIN] = "",
+    [END] = "",
+    [READ] = "scanf",
+    [WRITE] = "printf",
+    [IF] = "if",
+    [THEN] = "",
+    [ELSE] = "else",
+    [ENDIF] = "",
+    [WHILE] = "while",
+    [ENDWHILE] = "",
+    [ID] = "",
+    [INTLITERAL] = "",
+    [FALSEOP] = "0",
+    [TRUEOP] = "1",
+    [NULLOP] = "0",
+    [LPAREN] = "(",
+    [RPAREN] = ")",
+    [SEMICOLON] = ";",
+    [COMMA] = ",",
+    [ASSIGNOP] = "=",
+    [PLUSOP] = "+",
+    [MINUSOP] = "-",
+    [MULTOP] = "*",
+    [DIVOP] = "/",
+    [NOTOP] = "!",
+    [LESSOP] = "<",
+    [LESSEQUALOP] = "<=",
+    [GREATEROP] = ">",
+    [GREATEREQUALOP] = ">=",
+    [EQUALOP] = "==",
+    [NOTEQUALOP] = "!=",
+    [SCANEOF] = "",
+    [ERROR] = ""
+};
 
 const char *Token_GetName(int id)
 {
@@ -74,3 +110,19 @@ const char *Token_GetName(int id)
     return r_value;
 }
 
+
+const char * Token_CTranslate(int id) {
+    /* Get the length of the array to validate id can be used to index the array and prevent oob errors.*/
+    size_t arr_len = sizeof(tokensMap) / sizeof(C_TranslateMap[0]);
+    const char *r_value;
+    if (id < arr_len && id >= 0)
+    {
+        r_value = C_TranslateMap[id];
+    }
+    else
+    {
+        r_value = NULL;
+    }
+
+    return r_value;
+}

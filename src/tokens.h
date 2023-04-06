@@ -30,66 +30,14 @@ enum TOKEN {
 const char * Token_GetName(int id);
 
 /*!
-------------------------------------------------------------------
-    Note: TokenCatch is no longer used. It was used in an earlier version of this program. It may be revived in the future depending on the needs of the parser. 
-------------------------------------------------------------------
+    Translates a token into its C code equivalent.
+
+    Eg, FALSEOP, which is "false" becomes "O".
+
+    \param id The token to translate.
+    \returns The string the token would represent in generated C code.
 */
-#pragma region token_catch
-struct TokenCatch{
-    /* A type corresponding to the TOKEN enum. */
-    short token;
-    /* The character that was found. */
-    char * raw;
-    /* The line number it was found on. */
-    int line_no;
-    /* The column where it started. */
-    int col_no;
+const char * Token_CTranslate(int id);
 
-};
-
-/*!
-    Token_Catch is called when an actual token has been found. It produces a TokenCatch struct which wraps the token type with other associated data, such as the raw text that was found and the line it was found at.
-    \param tokenType A type in enum TOKEN
-    \param raw_text_found A char pointer to the raw text that caused this token to be identified as such.
-    \param line_found_at The line in the file the token was found.
-    \param col_found_at The column at which the token was found. 
-    \returns A new TokenCatch encapsulating the parameter data. 
-*/
-struct TokenCatch* Token_Catch(short tokenType, char* raw_text_found, int line_found_at, int col_found_at);
-
-/*! Token_GetOpName gets a malloced string for assignment to raw representing what must have been found for an operator text given an enumerated operarator token. If its not one of the operators, it returns ':', which is the one case when a valid operator character was a syntactic error.
-
-    \param tokenType The operator token enumerated id
-    \return A malloced string containing the operator, e.g. "<=".
-*/
-char * Token_GetOpRaw(short tokenType);
-
-/*!
-    Token_Catch_Op is called when an op is found. It still produces a TokenCatch but it infers the text that was found based on the token type rather than needing the raw text, since there is not variation in how the operators can be written.  
-    \param tokenType A type in enum TOKEN
-    \param raw_text_found A char pointer to the raw text that caused this token to be identified as such.
-    \param line_found_at The line in the file the token was found.
-    \param col_found_at The column at which the token was found. 
-    \returns A new TokenCatch encapsulating the parameter data. 
-*/
-struct TokenCatch* Token_CatchOp(short tokenType, int line_found_at, int col_found_at);
-
-/*!
-    Token_CatchError is called when an error is found. Whatever character is passed in will become the 'raw' member of a TokenCatch. 
-    \param tokenType A type in enum TOKEN
-    \param raw_text_found A char pointer to the raw text that caused this token to be identified as such.
-    \param line_found_at The line in the file the token was found.
-    \param col_found_at The column at which the token was found. 
-    \returns A pointer to a malloced TokenCatch encapsulating the parameter data. 
-*/
-struct TokenCatch* Token_CatchError(char badChar, int line_found_at, int col_found_at);
-
-/*!
-    Token Destroy deallocates a token by first freeing the internal 'raw' string, then deallocating the token itself. 
-    \param token A token to deallocate.
-*/
-void Token_Destroy(struct TokenCatch* token);
-
-#pragma endregion token_catch
 
 #endif

@@ -1,3 +1,10 @@
+4/6/2023: All group members
+- Added generator.h and generator.c
+- SymbolTable init, de-init, buffer creation and expansion functions
+- SymbolTable lookup, enter, checkID, generate
+- Tokens; C_TranslateMap, Token_CTranslate(int token)
+- generator tests to validate symbol table funcs
+
 3/20/2023: Karl, Thomas
 - Wrote the final printing stuff for compilation result
 
