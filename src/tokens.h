@@ -29,4 +29,15 @@ enum TOKEN {
 */
 const char * Token_GetName(int id);
 
+/*!
+    Translates a token into its C code equivalent.
+
+    Eg, FALSEOP, which is "false" becomes "O".
+
+    \param id The token to translate.
+    \returns The string the token would represent in generated C code.
+*/
+const char * Token_CTranslate(int id);
+
+
 #endif

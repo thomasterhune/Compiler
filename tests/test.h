@@ -7,14 +7,12 @@ CuSuite* CompfilesGetSuite();
 
 CuSuite* fileUtilGetSuite();
 
-CuSuite *scannerUtilGetSuite();
-
 CuSuite* scannerGetSuite();
 
 CuSuite* tokensTestGetSuite();
 
 CuSuite* dfaTestGetSuite();
 
-CuSuite* scannerGetSuite();
+CuSuite* generatorGetSuite();
 
 #endif
