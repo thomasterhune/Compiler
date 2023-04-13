@@ -69,15 +69,17 @@ void SymbolTable_Enter(char *symbol){
     L_SymbolTable+=1;
 }
 
-void SymbolTable_CheckID(char *symbol){
+void SymbolTable_CheckID(char *symbol, FILE * outfile){
     if(!SymbolTable_Lookup(symbol)) {
         SymbolTable_Enter(symbol);
+        fprintf(outfile, "\n\tint %s;", symbol);
     }    
 }
 
 void SymbolTable_Generate(FILE * targetFile ,char * first, char * second , char * third , char * fourth , char * fifth){
-
-    fprintf(targetFile, "%s %s %s %s %s;", first, second, third, fourth, fifth);
+    printf("\nPRINTING TO %d", targetFile);
+    fprintf(targetFile, "\t%s %s %s %s %s;\n", first, second, third, fourth, fifth);
+    fflush(targetFile);
 }
 
 char * tempPrefix = "_temp_";
@@ -99,23 +101,4 @@ char * SymbolTable_GetTemp(){
 
 #pragma endregion Utility
 
-#pragma region action
-
-OP_RECORD Process_Op() {
-}
-
-short Process_Id(){
-
-}
-
-short Process_Literal(short LHS_Expr , short RHS_Expr ){
-
-}
-
-short Gen_Infix(){
-    
-}
-
-
-#pragma endregion action
 

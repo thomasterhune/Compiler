@@ -55,7 +55,7 @@ void CompFiles_GenerateTempFile()
         else
         {
             temp_file_made = 1;
-            CompFiles_LoadTempFile(fopen(temp_name, "w"));
+            CompFiles_LoadTempFile(fopen(temp_name, "w+"));
             CompFiles.temp_file_name = temp_name;
             printf("\n\t- Created temp file %s.\n", temp_name);
         }
@@ -192,6 +192,7 @@ void CompFiles_AppendTempToOut(){
     printf("\n\nAppended temp file %s to output file %s", CompFiles.temp_file_name, CompFiles.output_file_name);
     int next_char = 'x';
     next_char = fgetc(CompFiles.temp);
+    printf("\n  Appending %c to out", next_char);
     while(next_char != EOF)
     {
         fputc(next_char, CompFiles.out);

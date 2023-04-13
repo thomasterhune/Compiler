@@ -17,6 +17,7 @@
 
 */
 #include <stdio.h>
+#include "generator.h"
 
 #define PARSER_BUFFER_INITIAL_CAPACITY 50
 /*
@@ -30,6 +31,10 @@ typedef struct {
     FILE * out;
     /*! The listing file */
     FILE * list;
+    /*! The temp file */
+    FILE *temp;
+    /*! A pointer to the start of the temp file.*/
+    fpos_t tempstart;
     /*! A buffer, for printing completed statements. */
     char * buffer;
     /*! The current capacity of the buffer */
@@ -57,8 +62,9 @@ Lifecycle methods for the parser
 
     \param out The output file
     \param list The listing file
+    \param temp The temp file
 */
-void Parser_Load(FILE *out, FILE *list);
+void Parser_Load(FILE *out, FILE *list, FILE *temp);
 
 /*! 
     Performs any initialization needed by the parser.
@@ -176,7 +182,9 @@ Production rule parse functions
 /*! 
     Called by SystemGoal. Parses the program, then matches a SCANEOF token. 
 
-    Production 1: <program> -> BEGIN <statement list> END
+    Calls the action function start.
+
+    Production 1: <program> -> #start BEGIN <statement list> END
 */
 short Parse_Program();
 
@@ -190,7 +198,7 @@ short Parse_StatementList();
 /*! 
     Called by Program, parses a list of statements
 
-    Production 3: <statement> -> ID := <expression>;
+    Production 3: <statement> -> ID := <expression> #assign;
     Production 4: <statement> -> READ ( <id list> );
     Production 5: <statement> -> WRITE ( <expr list> );
     Production 6: <statement> -> IF ( <condition> )THEN <StatementList> <IFTail>
@@ -210,75 +218,77 @@ short Parse_IfTail();
 /*!
     Parses an ID list, which is 1 or more IDs. It's used with the READ production of Statement.
 
-    Production 10: <id list> -> ID {,<id list> }
+    Production 10: <id list> -> ID #read_id {,<id list> #read_id}
 */
 short Parse_IDList();
 
 /*!
     Parses an expression list, which is 1 or more expressions. It's used with the WRITE production of Statement.
 
-    Production 11: <expr list> -> <expression> {, <expr list>}
+    Production 11: <expr list> -> <expression> {, <expr list> #write_expr}
 */
 short Parse_ExpressionList();
 
 /*!
     Parses an expression, which begins the parse for arithmetic sequences with order-of-operations.
 
-    Production 12: <expression> -> <term> {<add op> <term>}
+    Populates the EXPR_RECORD parameter.
+
+    Production 12: <expression> -> <term> {<add op> <term> #gen_infix}
 */
-short Parse_Expression();
+short Parse_Expression(EXPR_RECORD * expr_rec);
 
 /*!
     Continues the inner expression parse by looking for multiplication symbols.
 
-    Production 13: <term> -> <factor> {<mult op> <factor>}
+    Production 13: <term> -> <factor> {<mult op> <factor> #gen_infix}
 */
-short Parse_Term();
+short Parse_Term(EXPR_RECORD * expr_rec);
 
 /*!
     Processes a factor into a parenthesized expression, negative factor, id, or intliteral.
 
     Production 14: <factor> -> ( <expression> )
     Production 15: <factor> -> - <factor>
-    Production 16: <factor> -> ID
-    Production 17: <factor> -> INTLITERAL
+    Production 16: <factor> -> <ident>
+    Production 17: <factor> -> INTLITERAL #process_literal
 */
-short Parse_Factor();
+short Parse_Factor(EXPR_RECORD * expr_rec);
 
 /*!
     Processes the add op, which can be + or -, because they share the same precedence.
 
-    Production 18: <add op> -> +
-    Production 19: <add op> -> -
+    Production 18: <add op> -> + #process_op
+    Production 19: <add op> -> - #process_op
 */
 short Parse_AddOP();
 
 /*!
     Processes the add op, which can be * or /, because they share the same precedence.
 
-    Production 20: <mult op> -> *
-    Production 21: <mult op> -> /
+    Production 20: <mult op> -> * #process_op
+    Production 21: <mult op> -> / #process_op
 */
-short Parse_MultOP();
+short Parse_MultOP(OP_RECORD * op_record);
 
 /*!
     Begins parsing a condition operation.
 
-    Production 22: <condition> -> <addition> {<rel op> <addition>}
+    Production 22: <condition> -> <addition> {<rel op> <addition> #gen_infix}
 */
 short Parse_Condition();
 
 /*
     Each side of a logical operation may have arithmetic operations, and precedence must be maintained.
 
-    Production 23: <addition> -> <multiplication> {<add op> <multiplication>}
+    Production 23: <addition> -> <multiplication> {<add op> <multiplication> #gen_infix}
 */
 short Parse_Addition();
 
 /*
     Each side of a logical operation may have arithmetic operations, and precedence must be maintained.
 
-    Production 24: <multiplication> -> <unary> { <mult op> <unary>}
+    Production 24: <multiplication> -> <unary> { <mult op> <unary> #gen_infix}
 */
 short Parse_Multiplication();
 
@@ -294,34 +304,116 @@ short Parse_Unary();
 /*
     LPrimary allows nesting of further conditions or final condition values, such as false and true.
 
-    Produciton 28:  <lprimary> -> INTLITERAL
+    Produciton 28:  <lprimary> -> INTLITERAL #process_literal
     Produciton 29:  <lprimary> -> ID
     Produciton 30:  <lprimary  -> ( <condition>)
-    Produciton 31:  <lprimary> -> FALSEOP
-    Produciton 32:  <lprimary> -> TRUEOP
-    Produciton 33:  <lprimary> -> NULLOP
+    Produciton 31:  <lprimary> -> FALSEOP #process_op
+    Produciton 32:  <lprimary> -> TRUEOP #process_op
+    Produciton 33:  <lprimary> -> NULLOP #process_op
 */
 short Parse_LPrimary();
 
 /*
     Relop results in the standard logical operators.
 
-    Produciton 34: <RelOp> -> <
-    Produciton 35: <RelOp> -> <=
-    Produciton 36: <RelOp> -> >
-    Produciton 37: <RelOp> -> >=
-    Produciton 38: <RelOP> -> =
-    Produciton 39: <RelOp> -> <>
+    Produciton 34: <RelOp> -> < #process_op
+    Produciton 35: <RelOp> -> <= #process_op
+    Produciton 36: <RelOp> -> > #process_op
+    Produciton 37: <RelOp> -> >= #process_op
+    Produciton 38: <RelOP> -> = #process_op
+    Produciton 39: <RelOp> -> <> #process_op
 */
 short Parse_RelOP();
 
 /*! 
     Called by main. Begins the parsing process.
 
-    Production 40. <system goal> -> <program> SCANEOF
+    Production 40. <system goal> -> <program> SCANEOF #finish
 */
 short Parse_SystemGoal();
 
+/*!
+
+
+    \param expr_record expression record 
+*/
+short Parse_Ident(EXPR_RECORD *expr_record);
+
 #pragma endregion production_rule_parse_functions
 
+#pragma action_functions
+    /*!
+        initialization of intermediate c code file, symbol table, temp counter, line counter
+
+    */
+    void Parse_ActionStart();
+
+/*!
+    Write descriptive closing to the listing and output files, catenate the c files together
+
+*/
+void Parse_ActionFinish();
+
+/*!
+    will call generate passing the two contents of the expression records along with the ' = '
+    so that a correct C assigment is created
+
+    \param expr_rec expression record
+    
+*/
+void Parse_ActionAssign(EXPR_RECORD *expr_rec1, EXPR_RECORD *expr_rec2);
+
+/*!
+    receive an expression record and generate a scanf statement for the read statement
+
+    \param expr_rec expression record
+
+*/
+void Parse_ActionReadID();
+
+/*!
+    Generates the print statement
+
+*/
+void Parse_ActionWriteExpr();
+
+/*!
+
+      Will return a new OP_RECORD.
+
+      It will malloc a new string as the OP_RECORD's .data element.
+
+      The string will be a copy of the contents of the buffer passed in.
+      \returns  it returns the operation record
+*/
+void Parse_ActionProcessOp(OP_RECORD * op_rec);
+
+/*!
+       process_id
+       generates the code for the ID semantic record
+       it creates an expression record and sets its kind to IDEXPR
+       it sets its string to the contents of the token buffer which is the ID
+       \returns mit then returns the id expression record
+*/
+EXPR_RECORD Parse_ActionProcessID();
+
+/*- 
+ TODO:
+      */
+EXPR_RECORD Parse_ActionProcessLiteral();
+
+/*- #gen_infix
+      - generates the code for the infix semantic record
+      - it will accept two expression records for the left hand side and one for the right hand side and an operation record
+      - it creates third expression record and sets its kind to TEMPEXPR
+      - it sets its string to a new TempID by using gettemp
+      - it generates C code with generate for the assignment of the left expression right expression to the Temp
+      - i.e. Temp5 = X + 7;
+      - \returns it then returns the temp expression record
+      - this process will always have pairs of params condensing down to one new temporary which build a more complex expression
+      */
+
+EXPR_RECORD Parse_ActionGenInfix(EXPR_RECORD * left_side, OP_RECORD *op_record, EXPR_RECORD *right_side);
+
+#pragma endregion action_functions
 #endif

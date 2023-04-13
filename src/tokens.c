@@ -54,7 +54,7 @@ const char *tokensMap[] = {
     [EQUALOP] = "EQUALOP",
     [NOTEQUALOP] = "NOTEQUALOP",
     [SCANEOF] = "SCANEOF",
-    [ERROR] = "ERROR"
+    [LEX_ERROR] = "ERROR"
 };
 
 const char * C_TranslateMap[] = {
@@ -90,7 +90,7 @@ const char * C_TranslateMap[] = {
     [EQUALOP] = "==",
     [NOTEQUALOP] = "!=",
     [SCANEOF] = "",
-    [ERROR] = ""
+    [LEX_ERROR] = ""
 };
 
 const char *Token_GetName(int id)
