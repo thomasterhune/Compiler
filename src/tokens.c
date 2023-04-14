@@ -126,3 +126,12 @@ const char * Token_CTranslate(int id) {
 
     return r_value;
 }
+
+char * Token_CTranslateMalloc(int id) {
+    const char * raw = Token_CTranslate(id);
+    size_t len = strlen(raw)+1;
+    char * mem = malloc(len*sizeof(char));
+    strcpy(mem, raw);
+    mem[len] = '\0';
+    return mem;
+}

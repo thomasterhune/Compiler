@@ -68,7 +68,7 @@ void testToken_GetName(CuTest *tc) {
     CuAssertStrEquals_Msg(tc, "The enum ID doesn't match with the returned string. Did the order of the enums change, and does it still match up with tokensMap in tokens.c?", "NOTEQUALOP", notequalop);
     const char * scaneof = Token_GetName(SCANEOF);
     CuAssertStrEquals_Msg(tc, "The enum ID doesn't match with the returned string. Did the order of the enums change, and does it still match up with tokensMap in tokens.c?", "SCANEOF", scaneof);
-    const char * error = Token_GetName(ERROR);
+    const char * error = Token_GetName(LEX_ERROR);
     CuAssertStrEquals_Msg(tc, "The enum ID doesn't match with the returned string. Did the order of the enums change, and does it still match up with tokensMap in tokens.c?", "ERROR", error);
 }
 

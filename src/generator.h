@@ -8,7 +8,7 @@
 
 #pragma region defines
 
-#define SYMBOL_TABLE_START_CAPACITY 100
+#define SYMBOL_TABLE_START_CAPACITY 50
 
 #pragma endregion defines
 
@@ -125,7 +125,11 @@ char * SymbolTable_GetTemp();
 
 #pragma endregion utility
 
-#pragma region parser_actions
+#pragma region debug
+
+void SymbolTable_DBPrintAll();
+
+#pragma endregion debug
 
 
 #endif

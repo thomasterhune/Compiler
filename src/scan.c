@@ -125,7 +125,7 @@ void Scanner_CopyBuffer(char * destination) {
 }
 
 char * Scanner_GetBufferCopy() {
-    char * copy = malloc(scanner.l_buffer);
+    char * copy = malloc(scanner.l_buffer * sizeof(char));
     int i = 0;
     for(i = 0; i < scanner.l_buffer; i++) {
         copy[i] = scanner.buffer[i];
@@ -365,7 +365,7 @@ short Scanner_Match(int target_token) {
         }
         /*fprintf(scanner.out, "    Actual Token: %15s", Token_GetName(target_token));*/
         if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
-            printf(" Actual Token: %s ", Token_GetName(target_token));
+            /*printf(" Actual Token: %s ", Token_GetName(target_token));*/
         }
     } else {
         token = GetNextToken(scanner.in, &charsRead);
@@ -381,7 +381,7 @@ short Scanner_Match(int target_token) {
         }
         /* fprintf(scanner.out, "    Actual Token: %15s :: ", Token_GetName(token)); */
         if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
-            printf(" Actual Token: %s :: ", Token_GetName(token));
+            /*printf(" Actual Token: %s :: ", Token_GetName(token));*/
         }
         /* Scanner_PrintBuffer(scanner.out, SCANNER_PRINTS_TOKENS_TO_CONSOLE); */
         if(result) {

@@ -242,6 +242,8 @@ short Parse_Expression(EXPR_RECORD * expr_rec);
     Continues the inner expression parse by looking for multiplication symbols.
 
     Production 13: <term> -> <factor> {<mult op> <factor> #gen_infix}
+
+    \param expr_rec Expression record struct
 */
 short Parse_Term(EXPR_RECORD * expr_rec);
 
@@ -252,6 +254,8 @@ short Parse_Term(EXPR_RECORD * expr_rec);
     Production 15: <factor> -> - <factor>
     Production 16: <factor> -> <ident>
     Production 17: <factor> -> INTLITERAL #process_literal
+
+    \param expr_rec Expression record struct
 */
 short Parse_Factor(EXPR_RECORD * expr_rec);
 
@@ -260,6 +264,8 @@ short Parse_Factor(EXPR_RECORD * expr_rec);
 
     Production 18: <add op> -> + #process_op
     Production 19: <add op> -> - #process_op
+
+    \param expr_rec Expression record struct
 */
 short Parse_AddOP();
 
@@ -275,33 +281,41 @@ short Parse_MultOP(OP_RECORD * op_record);
     Begins parsing a condition operation.
 
     Production 22: <condition> -> <addition> {<rel op> <addition> #gen_infix}
-*/
-short Parse_Condition();
 
-/*
+    \param op_record Op Record struct
+*/
+short Parse_Condition(EXPR_RECORD * expr_record);
+
+/*!
     Each side of a logical operation may have arithmetic operations, and precedence must be maintained.
 
     Production 23: <addition> -> <multiplication> {<add op> <multiplication> #gen_infix}
-*/
-short Parse_Addition();
 
-/*
+    \param expr_rec Expression record struct
+*/
+short Parse_Addition(EXPR_RECORD * expr_record);
+
+/*!
     Each side of a logical operation may have arithmetic operations, and precedence must be maintained.
 
     Production 24: <multiplication> -> <unary> { <mult op> <unary> #gen_infix}
-*/
-short Parse_Multiplication();
 
-/*
+    \param expr_rec Expression record struct
+*/
+short Parse_Multiplication(EXPR_RECORD * expr_record);
+
+/*!
     Unary operations may NOT or NEGATE a logical outcome. 
 
     Production 25: <unary> -> ! <unary>
     Production 26: <unary> -> - <unary>
     Production 27: <unary> -> <lprimary>
-*/
-short Parse_Unary();
 
-/*
+    \param expr_rec Expression record struct
+*/
+short Parse_Unary(EXPR_RECORD * expr_record);
+
+/*!
     LPrimary allows nesting of further conditions or final condition values, such as false and true.
 
     Produciton 28:  <lprimary> -> INTLITERAL #process_literal
@@ -310,10 +324,12 @@ short Parse_Unary();
     Produciton 31:  <lprimary> -> FALSEOP #process_op
     Produciton 32:  <lprimary> -> TRUEOP #process_op
     Produciton 33:  <lprimary> -> NULLOP #process_op
-*/
-short Parse_LPrimary();
 
-/*
+    \param expr_rec Expression record struct
+*/
+short Parse_LPrimary(EXPR_RECORD * expr_record);
+
+/*!
     Relop results in the standard logical operators.
 
     Produciton 34: <RelOp> -> < #process_op
@@ -322,13 +338,17 @@ short Parse_LPrimary();
     Produciton 37: <RelOp> -> >= #process_op
     Produciton 38: <RelOP> -> = #process_op
     Produciton 39: <RelOp> -> <> #process_op
+
+    \param expr_rec Expression record struct
 */
-short Parse_RelOP();
+short Parse_RelOP(OP_RECORD * op_record);
 
 /*! 
     Called by main. Begins the parsing process.
 
     Production 40. <system goal> -> <program> SCANEOF #finish
+
+    \param op_record Op Record struct
 */
 short Parse_SystemGoal();
 
@@ -358,24 +378,19 @@ void Parse_ActionFinish();
     will call generate passing the two contents of the expression records along with the ' = '
     so that a correct C assigment is created
 
-    \param expr_rec expression record
+    \param target expression record struct
+    \param source expression record struct
     
 */
-void Parse_ActionAssign(EXPR_RECORD *expr_rec1, EXPR_RECORD *expr_rec2);
+void Parse_ActionAssign(EXPR_RECORD * target, EXPR_RECORD * source);
 
 /*!
-    receive an expression record and generate a scanf statement for the read statement
+    receive an expression record and generate a printf statement for the read statement
 
-    \param expr_rec expression record
-
-*/
-void Parse_ActionReadID();
-
-/*!
-    Generates the print statement
+    \param target expression record
 
 */
-void Parse_ActionWriteExpr();
+void Parse_ActionWriteExpr(EXPR_RECORD * target);
 
 /*!
 
@@ -384,16 +399,16 @@ void Parse_ActionWriteExpr();
       It will malloc a new string as the OP_RECORD's .data element.
 
       The string will be a copy of the contents of the buffer passed in.
-      \returns  it returns the operation record
+      \returns op_rec op record struct
 */
-void Parse_ActionProcessOp(OP_RECORD * op_rec);
+OP_RECORD Parse_ActionProcessOp();
 
 /*!
        process_id
        generates the code for the ID semantic record
        it creates an expression record and sets its kind to IDEXPR
        it sets its string to the contents of the token buffer which is the ID
-       \returns mit then returns the id expression record
+       \returns expression record struct
 */
 EXPR_RECORD Parse_ActionProcessID();
 
@@ -402,7 +417,8 @@ EXPR_RECORD Parse_ActionProcessID();
       */
 EXPR_RECORD Parse_ActionProcessLiteral();
 
-/*- #gen_infix
+/*!
+      - #gen_infix
       - generates the code for the infix semantic record
       - it will accept two expression records for the left hand side and one for the right hand side and an operation record
       - it creates third expression record and sets its kind to TEMPEXPR
@@ -411,9 +427,34 @@ EXPR_RECORD Parse_ActionProcessLiteral();
       - i.e. Temp5 = X + 7;
       - \returns it then returns the temp expression record
       - this process will always have pairs of params condensing down to one new temporary which build a more complex expression
-      */
-
+      \param left_side expression record struct
+      \param op_record  op record struct
+      \param right_side expression record struct
+      
+*/
 EXPR_RECORD Parse_ActionGenInfix(EXPR_RECORD * left_side, OP_RECORD *op_record, EXPR_RECORD *right_side);
+
+/*!
+    generates scanf statement
+
+    \param target expression record struct
+*/
+void Parse_ActionReadID(EXPR_RECORD * target);
+
+/*!
+    Returns an expression record with prepend prepended to the reference name.
+    \param source The expression record to prepend.
+    \param prepend The string to prepend.
+    \returns An expression record of the same type, with the 'reference' field set to prepend+source.
+*/
+EXPR_RECORD Parse_PrependedCopy(EXPR_RECORD * source, char * prepend);
+
+/*!
+    Returns an expression record with the reference value set as the c-style value of the token. For example, 'NULL' will become '0'.
+    \param token the parameter
+    \returns a new expr record with a malloced reference containing the c-style token string
+*/
+EXPR_RECORD Parse_ActionProcessTokenAlias(int token);
 
 #pragma endregion action_functions
 #endif
