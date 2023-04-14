@@ -6,6 +6,8 @@
 
     Parse is responsible for validating the syntax of an input file. It reads tokens provided by the scanner and validates that their sequence conforms with the rules of the language.
 
+    It also calls action routines which generate C code in the temp and output files provided on loud. 
+
     Parse_SystemGoal is the entry point, which should be called only after input and output files are loaded into the scanner and parser. It calls for function corresponding to each unique LHS of a production rule.
 
     If a lexical error is encountered (invalid character), the character is skipped and an error is printed to the listing file. Parsing will continue with the next available character.
@@ -201,8 +203,8 @@ short Parse_StatementList();
     Production 3: <statement> -> ID := <expression> #assign;
     Production 4: <statement> -> READ ( <id list> );
     Production 5: <statement> -> WRITE ( <expr list> );
-    Production 6: <statement> -> IF ( <condition> )THEN <StatementList> <IFTail>
-    Production 9: <statement> -> WHILE ( <condition>)  {<StatementList>} ENDWHILE
+    Production 6: <statement> -> IF ( #if <condition> )THEN <StatementList> <IFTail>
+    Production 9: <statement> -> WHILE ( #while <condition>)  {<StatementList>} ENDWHILE #closebrace
 
 */
 short Parse_Statement();
@@ -210,8 +212,8 @@ short Parse_Statement();
 /*!
     Parses the end of an IF statement, which may be an ELSE or an ENDIF.
 
-    Production 7: <IFTail> -> ELSE <StatementList> ENDIF
-    Production 8: <IFTail> -> ENDIF
+    Production 7: <IFTail> -> ELSE #else <StatementList> ENDIF #closebrace
+    Production 8: <IFTail> -> ENDIF #closebrace
 */
 short Parse_IfTail();
 
@@ -251,8 +253,11 @@ short Parse_Term(EXPR_RECORD * expr_rec);
     Processes a factor into a parenthesized expression, negative factor, id, or intliteral.
 
     Production 14: <factor> -> ( <expression> )
+
     Production 15: <factor> -> - <factor>
+
     Production 16: <factor> -> <ident>
+    
     Production 17: <factor> -> INTLITERAL #process_literal
 
     \param expr_rec Expression record struct
@@ -353,8 +358,10 @@ short Parse_RelOP(OP_RECORD * op_record);
 short Parse_SystemGoal();
 
 /*!
-
-
+    Consumes an identifier; action routine will create symbol table entry.
+    
+    Production 41. <ident> -> ID #process_id
+    
     \param expr_record expression record 
 */
 short Parse_Ident(EXPR_RECORD *expr_record);
@@ -362,11 +369,11 @@ short Parse_Ident(EXPR_RECORD *expr_record);
 #pragma endregion production_rule_parse_functions
 
 #pragma action_functions
-    /*!
-        initialization of intermediate c code file, symbol table, temp counter, line counter
+/*!
+    initialization of intermediate c code file, symbol table, temp counter, line counter
 
-    */
-    void Parse_ActionStart();
+*/
+void Parse_ActionStart();
 
 /*!
     Write descriptive closing to the listing and output files, catenate the c files together
@@ -396,12 +403,11 @@ void Parse_ActionWriteExpr(EXPR_RECORD * target);
 
       Will return a new OP_RECORD.
 
-      It will malloc a new string as the OP_RECORD's .data element.
+      It will utilize the 3 character buffer in the op_record for the string. 
 
-      The string will be a copy of the contents of the buffer passed in.
       \returns op_rec op record struct
 */
-OP_RECORD Parse_ActionProcessOp();
+OP_RECORD Parse_ActionProcessOp(int token);
 
 /*!
        process_id
@@ -412,9 +418,11 @@ OP_RECORD Parse_ActionProcessOp();
 */
 EXPR_RECORD Parse_ActionProcessID();
 
-/*- 
- TODO:
-      */
+/*! 
+    Uses the scanner buffer to generate an expression record for an intliteral.
+
+    \returns An EXPR_RECORD of an intliteral.
+*/
 EXPR_RECORD Parse_ActionProcessLiteral();
 
 /*!
@@ -455,6 +463,34 @@ EXPR_RECORD Parse_PrependedCopy(EXPR_RECORD * source, char * prepend);
     \returns a new expr record with a malloced reference containing the c-style token string
 */
 EXPR_RECORD Parse_ActionProcessTokenAlias(int token);
+
+/*!
+    prints 'if (expression) {' to the temp file
+
+    \param conditional_expression expression record struct
+*/
+void Parse_ActionIf(EXPR_RECORD * conditional_expression);
+
+/*!
+    prints 'while (expression) {' to the temp file
+    
+    \param conditional_expression expression record struct
+*/
+void Parse_ActionWhile(EXPR_RECORD * conditional_expression);
+
+/*!
+    Prints '}' to the temp file
+
+    \param conditional_expression expression record struct
+*/
+void Parse_ActionCloseBrace();
+
+/*! 
+    Prints '} else {' to the temp file.
+
+    \param conditional_expression expression record struct
+*/
+void Parse_ActionElse();
 
 #pragma endregion action_functions
 #endif

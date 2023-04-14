@@ -4,6 +4,31 @@
 #include <stdlib.h>
 #include <math.h>
 
+
+#pragma region expr_helpers
+
+EXPR_RECORD ER_New() {
+    EXPR_RECORD nex;
+    nex.freed = 1;
+    return nex;
+}
+void ER_Free(EXPR_RECORD * expr_record) {
+    if(!(expr_record->freed)) {
+        printf("\n\n\t\t %%%% freeing: %s %%%%\n\n", expr_record->reference);
+        free(expr_record->reference);
+        expr_record->freed = 1;
+    }
+}
+void ER_Populate(EXPR_RECORD * expr_record, char * malloced_string, short expr_type) {
+    ER_Free(expr_record);
+    expr_record->reference = malloced_string;
+    printf("\n\n\t\t %%%% mallocing: %s %%%%\n\n", expr_record->reference);
+    expr_record->freed = 0;
+    expr_record->type = expr_type;
+}
+
+#pragma endregion expr_helpers
+
 #pragma region lifecycle
 
 void SymbolTable_Init() {

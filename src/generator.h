@@ -8,7 +8,7 @@
 
 #pragma region defines
 
-#define SYMBOL_TABLE_START_CAPACITY 50
+#define SYMBOL_TABLE_START_CAPACITY 20
 
 #pragma endregion defines
 
@@ -16,7 +16,7 @@
 
 /*! OP_RECORD.data is a 3 character array; max two for the operation string plus a null terminator. */
 typedef struct {
-   char data[3];
+   char* data;
 } OP_RECORD;
 
 enum EXPR_TYPE {
@@ -34,6 +34,8 @@ typedef struct {
    char * reference;
    /*! An EXPR_TYPE indicating what type the expr record is.*/
    short type;
+   /* Indicates whether the reference memory has been freed or not */
+   short freed;
 } EXPR_RECORD;
 
 /*! An array of strings used in the program. Includes temp and declared IDs. */
@@ -42,6 +44,28 @@ int L_SymbolTable;
 int Cap_SymbolTable;
 
 #pragma endregion typedefs
+
+#pragma region expr_helpers
+
+/*!
+   Gets a new expression record.
+*/
+EXPR_RECORD ER_New();
+
+/*!
+   Frees the expression record's reference parameter, if it hasn't been set.
+*/
+void ER_Free(EXPR_RECORD * expr_record);
+
+/*!
+   Sets the reference parameter of an expression record, and sets the indicator whether it has been freed to false.
+   \param malloced_string The char * to a malloced string to place in the expr_record
+   \param expr_type The type of this expression
+*/
+void ER_Populate(EXPR_RECORD * expr_record, char * malloced_string, short expr_type);
+
+
+#pragma endregion expr_helpers
 
 
 /* Declarations for initializing and de-initializing the symbol table. */

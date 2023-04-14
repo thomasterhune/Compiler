@@ -1,0 +1,52 @@
+# Project: Tompiler
+# Makefile created by Dev-C++ 5.11
+
+CPP      = g++.exe -D__DEBUG__
+CC       = gcc.exe -D__DEBUG__
+WINDRES  = windres.exe
+OBJ      = src/compfiles.o src/file_util.o src/main.o src/dfa.o src/scan.o src/tokens.o src/tompiler.o src/generator.o src/parse.o
+LINKOBJ  = src/compfiles.o src/file_util.o src/main.o src/dfa.o src/scan.o src/tokens.o src/tompiler.o src/generator.o src/parse.o
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib32" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib32" -static-libgcc -m32 -pg -g3
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
+BIN      = Tompiler.exe
+CXXFLAGS = $(CXXINCS) -m32 -pg -g3
+CFLAGS   = $(INCS) -m32 -pg -g3
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+src/compfiles.o: src/compfiles.c
+	$(CC) -c src/compfiles.c -o src/compfiles.o $(CFLAGS)
+
+src/file_util.o: src/file_util.c
+	$(CC) -c src/file_util.c -o src/file_util.o $(CFLAGS)
+
+src/main.o: src/main.c
+	$(CC) -c src/main.c -o src/main.o $(CFLAGS)
+
+src/dfa.o: src/dfa.c
+	$(CC) -c src/dfa.c -o src/dfa.o $(CFLAGS)
+
+src/scan.o: src/scan.c
+	$(CC) -c src/scan.c -o src/scan.o $(CFLAGS)
+
+src/tokens.o: src/tokens.c
+	$(CC) -c src/tokens.c -o src/tokens.o $(CFLAGS)
+
+src/tompiler.o: src/tompiler.c
+	$(CC) -c src/tompiler.c -o src/tompiler.o $(CFLAGS)
+
+src/generator.o: src/generator.c
+	$(CC) -c src/generator.c -o src/generator.o $(CFLAGS)
+
+src/parse.o: src/parse.c
+	$(CC) -c src/parse.c -o src/parse.o $(CFLAGS)

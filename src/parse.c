@@ -320,8 +320,8 @@ short Parse_Statement() {
     int next = Scanner_NextToken();
     int skip_to_on_fail;
 
-    EXPR_RECORD source;
-    EXPR_RECORD target;
+    EXPR_RECORD source = ER_New();
+    EXPR_RECORD target = ER_New();
     
     switch (next) {
         case ID: /* Production 3 */
@@ -329,24 +329,20 @@ short Parse_Statement() {
             err = Parse_Ident(&target);
             if(!err) {
                 err = Scanner_Match(ASSIGNOP);
+                if(!err) {
+                    err = Parse_Expression(&source);
                     if(!err) {
-                        err = Parse_Expression(&source);
-                        if(!err) {
-                            printf("\n  STATEMENT CALLING ACTION ASSIGN ! \n");
-                            Parse_ActionAssign(&target, &source);
-                            err = Scanner_Match(SEMICOLON);
-                            if(err) {
-                                ParseError_MatchFailed(SEMICOLON);
-                            }
-                            free(target.reference);
-                            free(source.reference);
+                        printf("\n  STATEMENT CALLING ACTION ASSIGN ! \n");
+                        Parse_ActionAssign(&target, &source);
+                        err = Scanner_Match(SEMICOLON);
+                        if(err) {
+                            ParseError_MatchFailed(SEMICOLON);
                         }
-                    } else {
-                        ParseError_MatchFailed(ASSIGNOP);
+                    }
+                } else {
+                    ParseError_MatchFailed(ASSIGNOP);
                 }
-                            
             }
-            Parser_printBufferStatementToOutAndClear();
             break;
         case READ: /* Production 4 */
             skip_to_on_fail = SEMICOLON;
@@ -368,7 +364,6 @@ short Parse_Statement() {
             } else {
                 ParseError_MatchFailed(LPAREN);
             }
-            Parser_printBufferStatementToOutAndClear();
             break;
         case WRITE: /* Production 5 */
             skip_to_on_fail = SEMICOLON;
@@ -401,10 +396,9 @@ short Parse_Statement() {
                 if(!err) {
                     err = Scanner_Match(RPAREN);
                     if(!err) {
-                        Parser_printBufferStatementToOutAndClear();
+                        Parse_ActionIf(&source);
                         err = Scanner_Match(THEN);
                         if(!err) {
-                            Parser_printBufferStatementToOutAndClear();
                             err = Parse_StatementList();
                             if(!err) {
                                 err = Parse_IfTail();
@@ -429,25 +423,24 @@ short Parse_Statement() {
                 if(!err) {
                     err = Scanner_Match(RPAREN);
                     if(!err) {
-                        Parser_printBufferStatementToOutAndClear();
+                        Parse_ActionWhile(&source);
                         short ntok = Scanner_NextToken();
                         if(ntok != ENDWHILE) {
                             err = Parse_StatementList();
                             if(!err) {
                                 err = Scanner_Match(ENDWHILE);
                                 if(!err) {
-                                    Parser_printBufferStatementToOutAndClear();
+                                    Parse_ActionCloseBrace();
                                 } else {
                                     ParseError_MatchFailed(ENDWHILE);
                                 }
                             }
                         } else {
                             Scanner_Match(ENDWHILE);
-                            Parser_printBufferStatementToOutAndClear();
+                            Parse_ActionCloseBrace();
                         }
                     } else {
                         ParseError_MatchFailed(RPAREN);
-
                     }
                 }
             } else {
@@ -466,6 +459,8 @@ short Parse_Statement() {
         ParseError_FunctionFailed("Statement");
         err = ParseError_SkipToStatementEnd(skip_to_on_fail);
     }
+    ER_Free(&source);
+    ER_Free(&target);
     printf("\n   Statement returning ::\n");
     return err;
 }
@@ -478,12 +473,12 @@ short Parse_IfTail() {
     switch(next) {
         case ELSE:
             Scanner_Match(ELSE);
-            Parser_printBufferStatementToOutAndClear();
+            Parse_ActionElse();
             err = Parse_StatementList();
             if(!err) {
                 err = Scanner_Match(ENDIF);
                 if(!err) { 
-                    Parser_printBufferStatementToOutAndClear();
+                    Parse_ActionCloseBrace();
                 } else {
                     ParseError_MatchFailed(ENDIF);
                 }
@@ -491,7 +486,7 @@ short Parse_IfTail() {
             break;
         case ENDIF:
             Scanner_Match(ENDIF);
-            Parser_printBufferStatementToOutAndClear();
+            Parse_ActionCloseBrace();
             break;
         case LEX_ERROR:
             Scanner_Match(LEX_ERROR);
@@ -515,12 +510,11 @@ short Parse_IDList() {
     short err = Scanner_Match(ID);
     if(!err) {
         
-        EXPR_RECORD expr;
-        expr.reference = Scanner_GetBufferCopy();
-        expr.type = EXPR_ID;
+        EXPR_RECORD expr = ER_New();
+        ER_Populate(&expr, Scanner_GetBufferCopy(), EXPR_ID);
         SymbolTable_CheckID(expr.reference, parser.out);
         Parse_ActionReadID(&expr);
-        free(expr.reference);
+        ER_Free(&expr);
         
         int next = Scanner_NextToken();
         while(next == COMMA && !err) {
@@ -529,9 +523,11 @@ short Parse_IDList() {
             if(err) {
                 ParseError_MatchFailed(ID);
             } else {
-                expr.reference = Scanner_GetBufferCopy();
+                expr = ER_New();
+                ER_Populate(&expr, Scanner_GetBufferCopy(), EXPR_ID);
                 SymbolTable_CheckID(expr.reference, parser.out);
                 Parse_ActionReadID(&expr);
+                ER_Free(&expr);
             }
             next = Scanner_NextToken();
         }
@@ -548,19 +544,19 @@ short Parse_IDList() {
 /* GOOD */
 short Parse_ExpressionList() {
     printf("\n:: ParseExpressionList called\n");
-    EXPR_RECORD expr;
+    EXPR_RECORD expr = ER_New();
     short err = Parse_Expression(&expr);
     if(!err) {
         Parse_ActionWriteExpr(&expr);
-        free(expr.reference);
+        ER_Free(&expr);
 
         int next = Scanner_NextToken();
         while(next == COMMA && !err) {
             Scanner_Match(COMMA);
+            expr = ER_New();
             err = Parse_Expression(&expr);
             Parse_ActionWriteExpr(&expr);
-            free(expr.reference);
-
+            ER_Free(&expr);
             next = Scanner_NextToken();
         }
     }
@@ -575,8 +571,8 @@ short Parse_ExpressionList() {
 short Parse_Expression(EXPR_RECORD * expr_record) {
     printf("\n:: ParseExpression called\n");
     OP_RECORD op_record;
-    EXPR_RECORD left_operand;
-    EXPR_RECORD right_operand;
+    EXPR_RECORD left_operand = ER_New();
+    EXPR_RECORD right_operand = ER_New();
     short err = Parse_Term(&left_operand);
     if(!err) {
         int next = Scanner_NextToken();
@@ -586,8 +582,7 @@ short Parse_Expression(EXPR_RECORD * expr_record) {
                 err = Parse_Term(&right_operand);
                 if(!err) {
                     *expr_record = Parse_ActionGenInfix(&left_operand, &op_record, &right_operand);
-                    free(left_operand.reference);
-                    free(right_operand.reference);
+                    ER_Free(&left_operand);
                 }
             }
         } else {
@@ -597,14 +592,15 @@ short Parse_Expression(EXPR_RECORD * expr_record) {
     if(err) {
         ParseError_FunctionFailed("Expression");
     }
+    ER_Free(&right_operand);
     printf("\n   ParseExpression returning ::\n");
     return err; 
 }
 
 short Parse_Term(EXPR_RECORD * expr_record) {
     printf("\n:: ParseTerm called\n");
-    EXPR_RECORD left_operand;
-    EXPR_RECORD right_operand;
+    EXPR_RECORD left_operand = ER_New();
+    EXPR_RECORD right_operand = ER_New();
     OP_RECORD op_record;
     short err = Parse_Factor(&left_operand);
     if(!err) {
@@ -615,9 +611,8 @@ short Parse_Term(EXPR_RECORD * expr_record) {
                 err = Parse_Factor(&right_operand);
                 if(!err) {
                     *expr_record = Parse_ActionGenInfix(&left_operand, &op_record, &right_operand);
+                    ER_Free(&left_operand);
                 }
-                free(left_operand.reference);
-                free(right_operand.reference);
             }
         } else {
             *expr_record = left_operand;
@@ -626,6 +621,7 @@ short Parse_Term(EXPR_RECORD * expr_record) {
     if(err) {
         ParseError_FunctionFailed("Term");
     }
+    ER_Free(&right_operand);
     printf("\n   ParseTerm returning ::\n");
     return err; 
 }
@@ -634,22 +630,28 @@ short Parse_Term(EXPR_RECORD * expr_record) {
 
 short Parse_Factor(EXPR_RECORD * expr_record) {
     printf("\n:: ParseFactor called\n");
-    EXPR_RECORD left_operand;
-    EXPR_RECORD right_operand;
-    OP_RECORD op_record;
+    EXPR_RECORD temp_rec = ER_New();
     int next = Scanner_NextToken();
     short err = 0;
     switch(next) {
         case LPAREN:
             Scanner_Match(LPAREN);
-            err = Parse_Expression(expr_record);
+            err = Parse_Expression(&temp_rec);
             if(!err) {
                 err = Scanner_Match(RPAREN);
+                *expr_record = temp_rec;
+            } else {
+                ER_Free(&temp_rec);
             }
             break;
         case MINUSOP:
             Scanner_Match(MINUSOP);
-            err = Parse_Factor(expr_record);
+            temp_rec = Parse_PrependedCopy(expr_record, "-");
+            err = Parse_Factor(&temp_rec);
+            if(!err) {
+                ER_Free(expr_record);
+                *expr_record = temp_rec;
+            }
             break;
         case ID:
             err = Parse_Ident(expr_record);
@@ -679,10 +681,11 @@ short Parse_AddOP(OP_RECORD * op_record) {
     short err = 0;
     if(next == PLUSOP) {
         Scanner_Match(PLUSOP);
-        Parse_ActionProcessOp(op_record);
+        *op_record = Parse_ActionProcessOp(PLUSOP);
+        printf("\n~~~ Parse_AddOP, op_record data: %s", op_record->data);
     } else if(next == MINUSOP) {
         Scanner_Match(MINUSOP);
-        Parse_ActionProcessOp(op_record);
+        *op_record = Parse_ActionProcessOp(MINUSOP);
     } else {
         err = 1;
         ParseError_NextTokenFailed(next, 2, PLUSOP, MINUSOP);
@@ -700,10 +703,10 @@ short Parse_MultOP(OP_RECORD * op_record) {
     short err = 0;
     if(next == MULTOP) {
         Scanner_Match(MULTOP);
-        Parse_ActionProcessOp(op_record);
+        *op_record = Parse_ActionProcessOp(MULTOP);
     } else if(next == DIVOP) {
         Scanner_Match(DIVOP);
-        Parse_ActionProcessOp(op_record);
+        *op_record = Parse_ActionProcessOp(DIVOP);
     } else {
         err = 1;
         ParseError_NextTokenFailed(next, 2, MULTOP, DIVOP);
@@ -719,8 +722,8 @@ short Parse_MultOP(OP_RECORD * op_record) {
 
 short Parse_Condition(EXPR_RECORD * expr_record){
     printf("\n:: ParseCondition called\n");
-    EXPR_RECORD left_operand;
-    EXPR_RECORD right_operand;
+    EXPR_RECORD left_operand = ER_New();
+    EXPR_RECORD right_operand = ER_New();
     OP_RECORD op_record;
     short err = Parse_Addition(&left_operand);
     if(!err) {
@@ -730,8 +733,9 @@ short Parse_Condition(EXPR_RECORD * expr_record){
             if(!err) {
                 err = Parse_Addition(&right_operand);
                 if(!err) {
-                    left_operand = Parse_ActionGenInfix(&left_operand, &op_record, &right_operand);
-                    free(right_operand.reference);
+                    EXPR_RECORD result = Parse_ActionGenInfix(&left_operand, &op_record, &right_operand);
+                    ER_Free(&left_operand);
+                    left_operand = result;
                 }
             }
         }
@@ -740,6 +744,7 @@ short Parse_Condition(EXPR_RECORD * expr_record){
         ParseError_FunctionFailed("Condition");
     } else {
         *expr_record = left_operand;
+        ER_Free(&right_operand);
     }
     printf("\n   ParseCondition returning ::\n");
     return err; 
@@ -747,7 +752,8 @@ short Parse_Condition(EXPR_RECORD * expr_record){
 
 short Parse_Addition(EXPR_RECORD * expr_record) {
     printf("\n:: ParseAddition called\n");
-    EXPR_RECORD left_operand, right_operand;
+    EXPR_RECORD left_operand = ER_New();
+    EXPR_RECORD right_operand = ER_New();
     OP_RECORD op_record;
     short err = Parse_Multiplication(&left_operand);
     if(!err) {
@@ -758,7 +764,6 @@ short Parse_Addition(EXPR_RECORD * expr_record) {
                 err = Parse_Multiplication(&right_operand);
                 if(!err) {
                     left_operand = Parse_ActionGenInfix(&left_operand, &op_record, &right_operand);
-                    free(right_operand.reference);
                 }
             }
         }
@@ -767,6 +772,7 @@ short Parse_Addition(EXPR_RECORD * expr_record) {
          ParseError_FunctionFailed("Addition");
     } else {
         *expr_record = left_operand;
+        ER_Free(&right_operand);
     }
     printf("\n   ParseAddition returning ::\n");
     return err;
@@ -774,7 +780,8 @@ short Parse_Addition(EXPR_RECORD * expr_record) {
 
 short Parse_Multiplication(EXPR_RECORD * expr_record) {
     printf("\n :: ParseMultiplication called\n");
-    EXPR_RECORD left_operand, right_operand;
+    EXPR_RECORD left_operand = ER_New();
+    EXPR_RECORD right_operand = ER_New();
     OP_RECORD op_record;
     short err = Parse_Unary(&left_operand);
     if(!err) {
@@ -785,7 +792,6 @@ short Parse_Multiplication(EXPR_RECORD * expr_record) {
                 err = Parse_Unary(&right_operand);
                 if(!err) {
                     left_operand = Parse_ActionGenInfix(&left_operand, &op_record, &right_operand);
-                    free(right_operand.reference);
                 }
             }
         }
@@ -794,6 +800,7 @@ short Parse_Multiplication(EXPR_RECORD * expr_record) {
         ParseError_FunctionFailed("Multiplication");
     } else {
         *expr_record = left_operand;
+        ER_Free(&right_operand);
     }
     printf("\n   ParseMultiplication returning ::\n");
     return err;
@@ -803,20 +810,20 @@ short Parse_Unary(EXPR_RECORD * expr_record) {
      printf("\n :: ParseUnary called\n");
     short err = 0;
     int next = Scanner_NextToken();
-    EXPR_RECORD copy;
+    EXPR_RECORD copy = ER_New();
     switch(next) {
         case NOTOP:
             Scanner_Match(NOTOP);
             err = Parse_Unary(expr_record);
             copy = Parse_PrependedCopy(expr_record, "!");
-            free(expr_record->reference);
+            ER_Free(expr_record);
             *expr_record = copy;
             break;
         case MINUSOP:
             Scanner_Match(MINUSOP);
             err = Parse_Unary(expr_record);
             copy = Parse_PrependedCopy(expr_record, "-");
-            free(expr_record->reference);
+            ER_Free(expr_record);
             *expr_record = copy;
             break;
         case LEX_ERROR:
@@ -888,32 +895,27 @@ short Parse_RelOP(OP_RECORD * op_record) {
     switch(next) {
         case LESSOP:
             Scanner_Match(LESSOP);
-            *op_record = Parse_ActionProcessOp();
+            *op_record = Parse_ActionProcessOp(LESSOP);
             break;
         case LESSEQUALOP:
             Scanner_Match(LESSEQUALOP);
-            *op_record = Parse_ActionProcessOp();
+            *op_record = Parse_ActionProcessOp(LESSEQUALOP);
             break;
         case GREATEROP:
             Scanner_Match(GREATEROP);
-            *op_record = Parse_ActionProcessOp();
+            *op_record = Parse_ActionProcessOp(GREATEROP);
             break;
         case GREATEREQUALOP:
             Scanner_Match(GREATEREQUALOP);
-            *op_record = Parse_ActionProcessOp();
+            *op_record = Parse_ActionProcessOp(GREATEREQUALOP);
             break;
         case EQUALOP:
             Scanner_Match(EQUALOP);
-            *op_record = Parse_ActionProcessOp();
-            op_record->data[1] = '=';
-            op_record->data[2] = '\0';
+            *op_record = Parse_ActionProcessOp(EQUALOP);
             break;
         case NOTEQUALOP:
             Scanner_Match(NOTEQUALOP);
-            *op_record = Parse_ActionProcessOp();
-            op_record->data[0] = '!';
-            op_record->data[1] = '=';
-            op_record->data[2] = '\0';
+            *op_record = Parse_ActionProcessOp(NOTEQUALOP);
             break;
         case LEX_ERROR:
             Scanner_Match(LEX_ERROR); /* recurse/skip on lexical error */
@@ -990,16 +992,10 @@ void Parse_ActionAssign(EXPR_RECORD * target, EXPR_RECORD * source) {
     printf("\n >> ACTION ASSIGN RETURNING! %s %s", target->reference, source->reference);
 }
 
-OP_RECORD Parse_ActionProcessOp() {
+OP_RECORD Parse_ActionProcessOp(int token) {
     OP_RECORD op_rec;
+    op_rec.data = (char *) Token_CTranslate(token);
     printf("\n >> ACTION PROCESS OP CALLED! ");
-    char * scan_buff = Scanner_GetBuffer();
-    int l_buffer = * Scanner_GetLBuffPointer();
-    int i = 0;
-    for(i = 0; i < l_buffer && i < 3; i++) {
-        op_rec.data[i] = scan_buff[i];
-    }
-    op_rec.data[i] = '\0';
     printf("\n  `-->> op: %s", op_rec.data);
     printf("\n >> ACTION PROCESS OP RETURNING!");
     return op_rec;
@@ -1007,9 +1003,8 @@ OP_RECORD Parse_ActionProcessOp() {
 
 EXPR_RECORD Parse_ActionProcessID() {
     printf("\n >> ACTION PROCESS ID CALLED! ");
-    EXPR_RECORD nexpr;
-    nexpr.type = EXPR_ID;
-    nexpr.reference = Scanner_GetBufferCopy();
+    EXPR_RECORD nexpr = ER_New();
+    ER_Populate(&nexpr, Scanner_GetBufferCopy(), EXPR_ID);
     printf("\n  `-->>  reference: %s", nexpr.reference);
     SymbolTable_CheckID(nexpr.reference, parser.out);
     printf("\n ... returning from action process ID");
@@ -1022,9 +1017,8 @@ EXPR_RECORD Parse_ActionProcessID() {
 
 EXPR_RECORD Parse_ActionGenInfix(EXPR_RECORD * left_side, OP_RECORD *op_record, EXPR_RECORD *right_side) {
     printf("\n >> ACTION GEN INFIX CALLED! ");
-    EXPR_RECORD result;
-    result.type = EXPR_TEMP;
-    result.reference = SymbolTable_GetTemp();
+    EXPR_RECORD result = ER_New();
+    ER_Populate(&result, SymbolTable_GetTemp(), EXPR_TEMP);
     printf("\n >> ACTION GEN INFIX TEMP STRING VAL %s ", result.reference);
     SymbolTable_CheckID(result.reference, parser.out);
     SymbolTable_Generate(parser.temp, result.reference, "=", left_side->reference, op_record->data, right_side->reference);
@@ -1034,18 +1028,16 @@ EXPR_RECORD Parse_ActionGenInfix(EXPR_RECORD * left_side, OP_RECORD *op_record, 
 
 EXPR_RECORD Parse_ActionProcessLiteral() {
     printf("\n >> ACTION LITERAL CALLED! ");
-    EXPR_RECORD exp_rec;
-    exp_rec.type = EXPR_INTLIT;
-    exp_rec.reference = Scanner_GetBufferCopy();
+    EXPR_RECORD exp_rec = ER_New();
+    ER_Populate(&exp_rec, Scanner_GetBufferCopy(), EXPR_INTLIT);
     printf("\n  `-->>  reference: %s", exp_rec.reference);
     printf("\n >> ACTION LITERAL RETURNING! ");
     return exp_rec;
 }
 
 EXPR_RECORD Parse_ActionProcessTokenAlias(int token) {
-    EXPR_RECORD expr_record;
-    expr_record.type = EXPR_INTLIT;
-    expr_record.reference = Token_CTranslateMalloc(token);
+    EXPR_RECORD expr_record = ER_New();
+    ER_Populate(&expr_record, Token_CTranslateMalloc(token), EXPR_INTLIT);
     return expr_record;
 }
 
@@ -1057,19 +1049,35 @@ void Parse_ActionWriteExpr(EXPR_RECORD * target) {
     if(target->type == EXPR_ID) {
         fprintf(parser.temp, "\n\tprintf(\"\\n%s = %%d\", %s);",target->reference, target->reference);
     } else {
-        fprintf(parser.temp, "\n\tprintf(\"\\n%%d\", %s)", target->reference);
+        fprintf(parser.temp, "\n\tprintf(\"\\n%%d\", %s);", target->reference);
     }
 }
 
+void Parse_ActionIf(EXPR_RECORD * conditional_expression) {
+    fprintf(parser.temp, "\n\tif(%s) {", conditional_expression->reference);
+}
+
+void Parse_ActionWhile(EXPR_RECORD * conditional_expression) {
+    fprintf(parser.temp, "\n\twhile(%s) {", conditional_expression->reference);
+
+}
+void Parse_ActionCloseBrace() {
+    fprintf(parser.temp, "\n\t}");
+}
+
+void Parse_ActionElse() {
+    fprintf(parser.temp, "\n\t} else {");
+}
+
 EXPR_RECORD Parse_PrependedCopy(EXPR_RECORD * source, char * prepend) {
-    EXPR_RECORD copy;
+    EXPR_RECORD copy = ER_New();
     size_t len = strlen(source->reference);
     size_t prp_len = strlen(prepend);
-    copy.reference = malloc( (len+prp_len+1)*sizeof(char));
-    strcpy(copy.reference, prepend);
-    strcat(copy.reference, source->reference);
-    copy.reference[len+prp_len] = '\0';
-    copy.type = source->type;
+    char * new_str = malloc( (len+prp_len+1)*sizeof(char));
+    strcpy(new_str, prepend);
+    strcat(new_str, source->reference);
+    new_str[len+prp_len] = '\0';
+    ER_Populate(&copy, new_str, source->type);
     return copy;
 }
 
