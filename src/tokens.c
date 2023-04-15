@@ -54,7 +54,7 @@ const char *tokensMap[] = {
     [EQUALOP] = "EQUALOP",
     [NOTEQUALOP] = "NOTEQUALOP",
     [SCANEOF] = "SCANEOF",
-    [ERROR] = "ERROR"
+    [LEX_ERROR] = "ERROR"
 };
 
 const char * C_TranslateMap[] = {
@@ -90,7 +90,7 @@ const char * C_TranslateMap[] = {
     [EQUALOP] = "==",
     [NOTEQUALOP] = "!=",
     [SCANEOF] = "",
-    [ERROR] = ""
+    [LEX_ERROR] = ""
 };
 
 const char *Token_GetName(int id)
@@ -125,4 +125,13 @@ const char * Token_CTranslate(int id) {
     }
 
     return r_value;
+}
+
+char * Token_CTranslateMalloc(int id) {
+    const char * raw = Token_CTranslate(id);
+    size_t len = strlen(raw)+1;
+    char * mem = malloc(len*sizeof(char));
+    strcpy(mem, raw);
+    mem[len] = '\0';
+    return mem;
 }

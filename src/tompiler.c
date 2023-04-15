@@ -42,12 +42,11 @@ void Tompiler_Execute(int argc, char* argv[]) {
     if(!terminate) {
         TCompFiles * files = CompFiles_GetFiles();
         Scanner_LoadFiles(files->in, files->out, files->listing, files->temp);
-        Parser_Load(files->out, files->listing);
+        Parser_Load(files->out, files->listing, files->temp);
         Scanner_PrintLine();         /* Print the first line to the listing file. Subsequent calls to PrintLine are ultimately called by Scanner_Match when appropriate. */
         short err = Parse_SystemGoal();
         Scanner_PrintErrorSummary();
         Parser_PrintErrorSummary();
-        CompFiles_AppendTempToOut();
         Tompiler_PrintResult(err, files->listing);
     }
 }

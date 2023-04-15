@@ -12,11 +12,35 @@
                 "_UNICODE"
             ],
             "windowsSdkVersion": "10.0.17763.0",
-            "compilerPath": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.34.31933/bin/Hostx64/x64/cl.exe",
+            "compilerPath": "C:\\Code\\c++\\winlibs-i686-posix-dwarf-gcc-12.2.0-llvm-15.0.7-mingw-w64ucrt-10.0.0-r4\\mingw32\\bin\\gcc.exe",
             "cStandard": "c89",
             "cppStandard": "c++17",
             "intelliSenseMode": "${default}",
             "configurationProvider": "ms-vscode.makefile-tools"
+        },
+        {
+            "name": "Mac",
+            "intelliSenseMode": "clang-x64",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/tests/lib"
+            ],
+            "macFrameworkPath": ["/System/Library/Frameworks"],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "forcedInclude": ["${workspaceFolder}/include/config.h"],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "compileCommands": "/path/to/compile_commands.json",
+            "browse": {
+              "path": ["${workspaceFolder}"],
+              "limitSymbolsToIncludedHeaders": true,
+              "databaseFilename": ""
+            }
         }
     ],
     "version": 4

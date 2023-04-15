@@ -11,7 +11,7 @@ void test_ScanFile(CuTest * tc) {
     file = fopen(fn, "r");
     
     int charsRead = 0;
-    int token = ERROR;
+    int token = LEX_ERROR;
     token = GetNextToken(file, &charsRead);
     CuAssertIntEquals(tc, BEGIN, token);
     fgetc(file);
@@ -23,7 +23,7 @@ void test_ScanFile(CuTest * tc) {
     token = GetNextToken(file, &charsRead);
     CuAssertIntEquals(tc, ID, token);
     token = GetNextToken(file, &charsRead);
-    CuAssertIntEquals(tc, ERROR, token);
+    CuAssertIntEquals(tc, LEX_ERROR, token);
     token = GetNextToken(file, &charsRead);
     CuAssertIntEquals(tc, ID, token);
     token = GetNextToken(file, &charsRead);
@@ -51,7 +51,7 @@ void test_GetNextTokenInBuffer(CuTest * tc) {
     token = GetNextTokenInBuffer(buffer, &i, &charsRead);
     CuAssertIntEquals(tc, PLUSOP, token);
     token = GetNextTokenInBuffer(buffer, &i, &charsRead);
-    CuAssertIntEquals(tc, ERROR, token);
+    CuAssertIntEquals(tc, LEX_ERROR, token);
     token = GetNextTokenInBuffer(buffer, &i, &charsRead);
     CuAssertIntEquals(tc, INTLITERAL, token);
     token = GetNextTokenInBuffer(buffer, &i, &charsRead);
@@ -108,7 +108,7 @@ void test_GetNextTokenInBuffer(CuTest * tc) {
     token = GetNextTokenInBuffer(buffer, &i, &charsRead);
     CuAssertIntEquals(tc, TRUEOP, token);
     token = GetNextTokenInBuffer(buffer, &i, &charsRead);
-    CuAssertIntEquals(tc, ERROR, token);
+    CuAssertIntEquals(tc, LEX_ERROR, token);
 
     /* check minus stuff */
     i = 0;

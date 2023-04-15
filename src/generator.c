@@ -4,6 +4,31 @@
 #include <stdlib.h>
 #include <math.h>
 
+
+#pragma region expr_helpers
+
+EXPR_RECORD ER_New() {
+    EXPR_RECORD nex;
+    nex.freed = 1;
+    return nex;
+}
+void ER_Free(EXPR_RECORD * expr_record) {
+    if(!(expr_record->freed)) {
+        printf("\n\n\t\t %%%% freeing: %s %%%%\n\n", expr_record->reference);
+        free(expr_record->reference);
+        expr_record->freed = 1;
+    }
+}
+void ER_Populate(EXPR_RECORD * expr_record, char * malloced_string, short expr_type) {
+    ER_Free(expr_record);
+    expr_record->reference = malloced_string;
+    printf("\n\n\t\t %%%% mallocing: %s %%%%\n\n", expr_record->reference);
+    expr_record->freed = 0;
+    expr_record->type = expr_type;
+}
+
+#pragma endregion expr_helpers
+
 #pragma region lifecycle
 
 void SymbolTable_Init() {
@@ -50,47 +75,61 @@ void SymbolTable_TestExpand() {
 short SymbolTable_Lookup(char *symbol) {
     short exists = 0;
     short index = 0;
+
     
 
     while(!exists && index < L_SymbolTable){
+        fflush(stdout);
         if(strcmp(SymbolTable[index], symbol) == 0){
             exists = 1;
         }
         index++;
     }
 
+    SymbolTable_DBPrintAll();
+
     return exists;
 }
 
 void SymbolTable_Enter(char *symbol){
     SymbolTable_TestExpand();
-    SymbolTable[L_SymbolTable] = malloc(sizeof(char) * strlen(symbol));
-    strcpy(SymbolTable[L_SymbolTable], symbol);
-    L_SymbolTable+=1;
+    int l_symbol = strlen(symbol);
+    char * new_symbol = malloc( (l_symbol+1) * sizeof(char) );
+    int i = 0;
+    for(i = 0; i < l_symbol; i++) {
+        new_symbol[i] = symbol[i];
+    }
+    new_symbol[i] = '\0';
+    SymbolTable[L_SymbolTable] = new_symbol;
+    L_SymbolTable ++;
 }
 
-void SymbolTable_CheckID(char *symbol){
+void SymbolTable_CheckID(char *symbol, FILE * outfile){
     if(!SymbolTable_Lookup(symbol)) {
         SymbolTable_Enter(symbol);
-    }    
+        fprintf(outfile, "\n\tint %s;", symbol);
+    }   
 }
 
 void SymbolTable_Generate(FILE * targetFile ,char * first, char * second , char * third , char * fourth , char * fifth){
-
-    fprintf(targetFile, "%s %s %s %s %s;", first, second, third, fourth, fifth);
+    printf("\nPRINTING TO %d", targetFile);
+    fprintf(targetFile, "\n\t%s %s %s %s %s;", first, second, third, fourth, fifth);
+    printf("\n\t  GEN :  %s %s %s %s %s\n\n", first, second, third, fourth, fifth);
+    fflush(targetFile);
 }
 
 char * tempPrefix = "_temp_";
 
 char * SymbolTable_GetTemp(){
     static int tempnum = 1;
-    int len = (int) log10( (double) tempnum) + 1;
-    char *numstring = malloc(len * sizeof(char) + 1);
-    char *tempstring = malloc((len + strlen(tempPrefix)) * sizeof(char) + 1);
-    
+    int numstring_len = (int) log10( (double) tempnum) + 1;
+    char *numstring = malloc( numstring_len * sizeof(char));
+    int full_len = strlen(tempPrefix) + numstring_len + 1;
+    char *tempstring = malloc(full_len * sizeof(char));
     itoa(tempnum, numstring, 10);
     strcpy(tempstring, tempPrefix);
     strcat(tempstring, numstring);
+    tempstring[full_len] = '\0';
     tempnum++;
     free(numstring);
     
@@ -99,23 +138,16 @@ char * SymbolTable_GetTemp(){
 
 #pragma endregion Utility
 
-#pragma region action
 
-OP_RECORD Process_Op() {
+#pragma region Debug
+
+void SymbolTable_DBPrintAll() {
+    int i = 0;
+    printf("\n SymbolTable: { ");
+    for(i = 0; i < L_SymbolTable; i++) {
+        printf("%s, ", SymbolTable[i]);
+    }
+    printf("}\n");
 }
 
-short Process_Id(){
-
-}
-
-short Process_Literal(short LHS_Expr , short RHS_Expr ){
-
-}
-
-short Gen_Infix(){
-    
-}
-
-
-#pragma endregion action
-
+#pragma endregion Debug

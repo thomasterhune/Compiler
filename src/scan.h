@@ -128,6 +128,12 @@ int * Scanner_GetLBuffPointer();
 */
 char * Scanner_GetBuffer();
 
+/*!
+    Mallocs a new string to be a copy of the scanner's buffer.
+    \return A char pointer to the newly mallocced string.
+*/
+char * Scanner_GetBufferCopy();
+
 
 #pragma endregion buffer
 

@@ -124,6 +124,16 @@ void Scanner_CopyBuffer(char * destination) {
     destination[i] = '\0';
 }
 
+char * Scanner_GetBufferCopy() {
+    char * copy = malloc(scanner.l_buffer * sizeof(char));
+    int i = 0;
+    for(i = 0; i < scanner.l_buffer; i++) {
+        copy[i] = scanner.buffer[i];
+    }
+    copy[i] = '\0';
+    return copy;
+}
+
 void Scanner_PrintBuffer(FILE * destination, short print_to_console) {
     scanner.buffer[scanner.l_buffer] = '\0'; 
     fprintf(destination, "%s", scanner.buffer);
@@ -257,7 +267,7 @@ void Scanner_ScanAndPrint(FILE *input, FILE *output, FILE *listing,  FILE *temp)
                 Scanner_PrintTokenFront(token);
                 Scanner_ReadBackToBuffer(charsRead);
                 Scanner_PrintBufferToOutputFile();
-                if(token == ERROR) {
+                if(token == LEX_ERROR) {
                     Scanner_PrintErrorListing();
                     scanner.errors += 1;
                 }
@@ -319,9 +329,9 @@ void Scanner_SkipLexError() {
 }
 
 short Scanner_Match(int target_token) {
-    int v = fprintf(scanner.out, "\nExpected Token: %15s ", Token_GetName(target_token));
+    /* int v = fprintf(scanner.out, "\nExpected Token: %15s ", Token_GetName(target_token)); */
     if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
-        printf("\nExpected Token: %s ", Token_GetName(target_token));
+        /*printf("\nExpected Token: %s ", Token_GetName(target_token));*/
     }
     int token;
     int charsRead = 0;
@@ -353,9 +363,9 @@ short Scanner_Match(int target_token) {
         } else {
             result = 0;
         }
-        fprintf(scanner.out, "    Actual Token: %15s", Token_GetName(target_token));
+        /*fprintf(scanner.out, "    Actual Token: %15s", Token_GetName(target_token));*/
         if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
-            printf(" Actual Token: %s ", Token_GetName(target_token));
+            /*printf(" Actual Token: %s ", Token_GetName(target_token));*/
         }
     } else {
         token = GetNextToken(scanner.in, &charsRead);
@@ -363,17 +373,17 @@ short Scanner_Match(int target_token) {
         scanner.col_no += charsRead;
         if(token == target_token) {
             result = 1;
-            if(token == ERROR) {
+            if(token == LEX_ERROR) {
                 Scanner_SkipLexError();
             }
         } else {
             result = 0;
         }
-        fprintf(scanner.out, "    Actual Token: %15s :: ", Token_GetName(token));
+        /* fprintf(scanner.out, "    Actual Token: %15s :: ", Token_GetName(token)); */
         if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
-            printf(" Actual Token: %s :: ", Token_GetName(token));
+            /*printf(" Actual Token: %s :: ", Token_GetName(token));*/
         }
-        Scanner_PrintBuffer(scanner.out, SCANNER_PRINTS_TOKENS_TO_CONSOLE);
+        /* Scanner_PrintBuffer(scanner.out, SCANNER_PRINTS_TOKENS_TO_CONSOLE); */
         if(result) {
             Parser_pushToBuffer(scanner.buffer, scanner.l_buffer);
         }
@@ -437,7 +447,7 @@ void Scanner_BackprintIdentifier(int nchars) {
         if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
             putchar(c);
         }
-        fputc(c, scanner.out);
+        /* fputc(c, scanner.out); */
         i++;
     }
 }
@@ -450,7 +460,7 @@ void Scanner_PrintBufferToOutputFile() {
         if(c == '\n') {
             printf("<< newline at %d of %d>>>", i , scanner.l_buffer);
         }
-        fputc(c, scanner.out);
+        /* fputc(c, scanner.out); */
         if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
             putchar(c);
         }
@@ -459,7 +469,7 @@ void Scanner_PrintBufferToOutputFile() {
 }
 
 void Scanner_PrintTokenFront(int token) {
-    fprintf(scanner.out, "\ntoken number:  %d\ttoken type:  %12s \t actual token:  ", token, Token_GetName(token));
+    /* fprintf(scanner.out, "\ntoken number:  %d\ttoken type:  %12s \t actual token:  ", token, Token_GetName(token)); */
     if(SCANNER_PRINTS_TOKENS_TO_CONSOLE) {
         printf("\ntoken number: %4d  token type:  %12s   actual token:  ", token, Token_GetName(token));
     }

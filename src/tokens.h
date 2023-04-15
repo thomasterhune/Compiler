@@ -16,7 +16,7 @@
 #include <stdlib.h>
 
 enum TOKEN {
-    BEGIN=0, END, READ, WRITE, IF, THEN, ELSE, ENDIF, WHILE, ENDWHILE, ID, INTLITERAL, FALSEOP, TRUEOP, NULLOP, LPAREN, RPAREN, SEMICOLON, COMMA, ASSIGNOP, PLUSOP, MINUSOP, MULTOP,DIVOP, NOTOP, LESSOP, LESSEQUALOP, GREATEROP, GREATEREQUALOP, EQUALOP, NOTEQUALOP, SCANEOF, ERROR
+    BEGIN=0, END, READ, WRITE, IF, THEN, ELSE, ENDIF, WHILE, ENDWHILE, ID, INTLITERAL, FALSEOP, TRUEOP, NULLOP, LPAREN, RPAREN, SEMICOLON, COMMA, ASSIGNOP, PLUSOP, MINUSOP, MULTOP,DIVOP, NOTOP, LESSOP, LESSEQUALOP, GREATEROP, GREATEREQUALOP, EQUALOP, NOTEQUALOP, SCANEOF, LEX_ERROR
 };
 
 /*! Token_GetName gets a character string representing a token. 
@@ -38,6 +38,15 @@ const char * Token_GetName(int id);
     \returns The string the token would represent in generated C code.
 */
 const char * Token_CTranslate(int id);
+/*!
+    Translates a token into its C code equivalent.
+
+    Eg, FALSEOP, which is "false" becomes "O".
+
+    \param id The token to translate.
+    \returns A malloced string the token would represent in generated C code.
+*/
+char * Token_CTranslateMalloc(int id);
 
 
 #endif

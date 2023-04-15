@@ -6,6 +6,8 @@
 
     Parse is responsible for validating the syntax of an input file. It reads tokens provided by the scanner and validates that their sequence conforms with the rules of the language.
 
+    It also calls action routines which generate C code in the temp and output files provided on loud. 
+
     Parse_SystemGoal is the entry point, which should be called only after input and output files are loaded into the scanner and parser. It calls for function corresponding to each unique LHS of a production rule.
 
     If a lexical error is encountered (invalid character), the character is skipped and an error is printed to the listing file. Parsing will continue with the next available character.
@@ -17,6 +19,7 @@
 
 */
 #include <stdio.h>
+#include "generator.h"
 
 #define PARSER_BUFFER_INITIAL_CAPACITY 50
 /*
@@ -30,6 +33,10 @@ typedef struct {
     FILE * out;
     /*! The listing file */
     FILE * list;
+    /*! The temp file */
+    FILE *temp;
+    /*! A pointer to the start of the temp file.*/
+    fpos_t tempstart;
     /*! A buffer, for printing completed statements. */
     char * buffer;
     /*! The current capacity of the buffer */
@@ -57,8 +64,9 @@ Lifecycle methods for the parser
 
     \param out The output file
     \param list The listing file
+    \param temp The temp file
 */
-void Parser_Load(FILE *out, FILE *list);
+void Parser_Load(FILE *out, FILE *list, FILE *temp);
 
 /*! 
     Performs any initialization needed by the parser.
@@ -176,7 +184,9 @@ Production rule parse functions
 /*! 
     Called by SystemGoal. Parses the program, then matches a SCANEOF token. 
 
-    Production 1: <program> -> BEGIN <statement list> END
+    Calls the action function start.
+
+    Production 1: <program> -> #start BEGIN <statement list> END
 */
 short Parse_Program();
 
@@ -190,11 +200,11 @@ short Parse_StatementList();
 /*! 
     Called by Program, parses a list of statements
 
-    Production 3: <statement> -> ID := <expression>;
+    Production 3: <statement> -> ID := <expression> #assign;
     Production 4: <statement> -> READ ( <id list> );
     Production 5: <statement> -> WRITE ( <expr list> );
-    Production 6: <statement> -> IF ( <condition> )THEN <StatementList> <IFTail>
-    Production 9: <statement> -> WHILE ( <condition>)  {<StatementList>} ENDWHILE
+    Production 6: <statement> -> IF ( #if <condition> )THEN <StatementList> <IFTail>
+    Production 9: <statement> -> WHILE ( #while <condition>)  {<StatementList>} ENDWHILE #closebrace
 
 */
 short Parse_Statement();
@@ -202,126 +212,285 @@ short Parse_Statement();
 /*!
     Parses the end of an IF statement, which may be an ELSE or an ENDIF.
 
-    Production 7: <IFTail> -> ELSE <StatementList> ENDIF
-    Production 8: <IFTail> -> ENDIF
+    Production 7: <IFTail> -> ELSE #else <StatementList> ENDIF #closebrace
+    Production 8: <IFTail> -> ENDIF #closebrace
 */
 short Parse_IfTail();
 
 /*!
     Parses an ID list, which is 1 or more IDs. It's used with the READ production of Statement.
 
-    Production 10: <id list> -> ID {,<id list> }
+    Production 10: <id list> -> ID #read_id {,<id list> #read_id}
 */
 short Parse_IDList();
 
 /*!
     Parses an expression list, which is 1 or more expressions. It's used with the WRITE production of Statement.
 
-    Production 11: <expr list> -> <expression> {, <expr list>}
+    Production 11: <expr list> -> <expression> {, <expr list> #write_expr}
 */
 short Parse_ExpressionList();
 
 /*!
     Parses an expression, which begins the parse for arithmetic sequences with order-of-operations.
 
-    Production 12: <expression> -> <term> {<add op> <term>}
+    Populates the EXPR_RECORD parameter.
+
+    Production 12: <expression> -> <term> {<add op> <term> #gen_infix}
 */
-short Parse_Expression();
+short Parse_Expression(EXPR_RECORD * expr_rec);
 
 /*!
     Continues the inner expression parse by looking for multiplication symbols.
 
-    Production 13: <term> -> <factor> {<mult op> <factor>}
+    Production 13: <term> -> <factor> {<mult op> <factor> #gen_infix}
+
+    \param expr_rec Expression record struct
 */
-short Parse_Term();
+short Parse_Term(EXPR_RECORD * expr_rec);
 
 /*!
     Processes a factor into a parenthesized expression, negative factor, id, or intliteral.
 
     Production 14: <factor> -> ( <expression> )
+
     Production 15: <factor> -> - <factor>
-    Production 16: <factor> -> ID
-    Production 17: <factor> -> INTLITERAL
+
+    Production 16: <factor> -> <ident>
+    
+    Production 17: <factor> -> INTLITERAL #process_literal
+
+    \param expr_rec Expression record struct
 */
-short Parse_Factor();
+short Parse_Factor(EXPR_RECORD * expr_rec);
 
 /*!
     Processes the add op, which can be + or -, because they share the same precedence.
 
-    Production 18: <add op> -> +
-    Production 19: <add op> -> -
+    Production 18: <add op> -> + #process_op
+    Production 19: <add op> -> - #process_op
+
+    \param expr_rec Expression record struct
 */
 short Parse_AddOP();
 
 /*!
     Processes the add op, which can be * or /, because they share the same precedence.
 
-    Production 20: <mult op> -> *
-    Production 21: <mult op> -> /
+    Production 20: <mult op> -> * #process_op
+    Production 21: <mult op> -> / #process_op
 */
-short Parse_MultOP();
+short Parse_MultOP(OP_RECORD * op_record);
 
 /*!
     Begins parsing a condition operation.
 
-    Production 22: <condition> -> <addition> {<rel op> <addition>}
-*/
-short Parse_Condition();
+    Production 22: <condition> -> <addition> {<rel op> <addition> #gen_infix}
 
-/*
+    \param op_record Op Record struct
+*/
+short Parse_Condition(EXPR_RECORD * expr_record);
+
+/*!
     Each side of a logical operation may have arithmetic operations, and precedence must be maintained.
 
-    Production 23: <addition> -> <multiplication> {<add op> <multiplication>}
-*/
-short Parse_Addition();
+    Production 23: <addition> -> <multiplication> {<add op> <multiplication> #gen_infix}
 
-/*
+    \param expr_rec Expression record struct
+*/
+short Parse_Addition(EXPR_RECORD * expr_record);
+
+/*!
     Each side of a logical operation may have arithmetic operations, and precedence must be maintained.
 
-    Production 24: <multiplication> -> <unary> { <mult op> <unary>}
-*/
-short Parse_Multiplication();
+    Production 24: <multiplication> -> <unary> { <mult op> <unary> #gen_infix}
 
-/*
+    \param expr_rec Expression record struct
+*/
+short Parse_Multiplication(EXPR_RECORD * expr_record);
+
+/*!
     Unary operations may NOT or NEGATE a logical outcome. 
 
     Production 25: <unary> -> ! <unary>
     Production 26: <unary> -> - <unary>
     Production 27: <unary> -> <lprimary>
-*/
-short Parse_Unary();
 
-/*
+    \param expr_rec Expression record struct
+*/
+short Parse_Unary(EXPR_RECORD * expr_record);
+
+/*!
     LPrimary allows nesting of further conditions or final condition values, such as false and true.
 
-    Produciton 28:  <lprimary> -> INTLITERAL
+    Produciton 28:  <lprimary> -> INTLITERAL #process_literal
     Produciton 29:  <lprimary> -> ID
     Produciton 30:  <lprimary  -> ( <condition>)
-    Produciton 31:  <lprimary> -> FALSEOP
-    Produciton 32:  <lprimary> -> TRUEOP
-    Produciton 33:  <lprimary> -> NULLOP
-*/
-short Parse_LPrimary();
+    Produciton 31:  <lprimary> -> FALSEOP #process_op
+    Produciton 32:  <lprimary> -> TRUEOP #process_op
+    Produciton 33:  <lprimary> -> NULLOP #process_op
 
-/*
+    \param expr_rec Expression record struct
+*/
+short Parse_LPrimary(EXPR_RECORD * expr_record);
+
+/*!
     Relop results in the standard logical operators.
 
-    Produciton 34: <RelOp> -> <
-    Produciton 35: <RelOp> -> <=
-    Produciton 36: <RelOp> -> >
-    Produciton 37: <RelOp> -> >=
-    Produciton 38: <RelOP> -> =
-    Produciton 39: <RelOp> -> <>
+    Produciton 34: <RelOp> -> < #process_op
+    Produciton 35: <RelOp> -> <= #process_op
+    Produciton 36: <RelOp> -> > #process_op
+    Produciton 37: <RelOp> -> >= #process_op
+    Produciton 38: <RelOP> -> = #process_op
+    Produciton 39: <RelOp> -> <> #process_op
+
+    \param expr_rec Expression record struct
 */
-short Parse_RelOP();
+short Parse_RelOP(OP_RECORD * op_record);
 
 /*! 
     Called by main. Begins the parsing process.
 
-    Production 40. <system goal> -> <program> SCANEOF
+    Production 40. <system goal> -> <program> SCANEOF #finish
+
+    \param op_record Op Record struct
 */
 short Parse_SystemGoal();
 
+/*!
+    Consumes an identifier; action routine will create symbol table entry.
+    
+    Production 41. <ident> -> ID #process_id
+    
+    \param expr_record expression record 
+*/
+short Parse_Ident(EXPR_RECORD *expr_record);
+
 #pragma endregion production_rule_parse_functions
 
+#pragma action_functions
+/*!
+    initialization of intermediate c code file, symbol table, temp counter, line counter
+
+*/
+void Parse_ActionStart();
+
+/*!
+    Write descriptive closing to the listing and output files, catenate the c files together
+
+*/
+void Parse_ActionFinish();
+
+/*!
+    will call generate passing the two contents of the expression records along with the ' = '
+    so that a correct C assigment is created
+
+    \param target expression record struct
+    \param source expression record struct
+    
+*/
+void Parse_ActionAssign(EXPR_RECORD * target, EXPR_RECORD * source);
+
+/*!
+    receive an expression record and generate a printf statement for the read statement
+
+    \param target expression record
+
+*/
+void Parse_ActionWriteExpr(EXPR_RECORD * target);
+
+/*!
+
+      Will return a new OP_RECORD.
+
+      It will utilize the 3 character buffer in the op_record for the string. 
+
+      \returns op_rec op record struct
+*/
+OP_RECORD Parse_ActionProcessOp(int token);
+
+/*!
+       process_id
+       generates the code for the ID semantic record
+       it creates an expression record and sets its kind to IDEXPR
+       it sets its string to the contents of the token buffer which is the ID
+       \returns expression record struct
+*/
+EXPR_RECORD Parse_ActionProcessID();
+
+/*! 
+    Uses the scanner buffer to generate an expression record for an intliteral.
+
+    \returns An EXPR_RECORD of an intliteral.
+*/
+EXPR_RECORD Parse_ActionProcessLiteral();
+
+/*!
+      - #gen_infix
+      - generates the code for the infix semantic record
+      - it will accept two expression records for the left hand side and one for the right hand side and an operation record
+      - it creates third expression record and sets its kind to TEMPEXPR
+      - it sets its string to a new TempID by using gettemp
+      - it generates C code with generate for the assignment of the left expression right expression to the Temp
+      - i.e. Temp5 = X + 7;
+      - \returns it then returns the temp expression record
+      - this process will always have pairs of params condensing down to one new temporary which build a more complex expression
+      \param left_side expression record struct
+      \param op_record  op record struct
+      \param right_side expression record struct
+      
+*/
+EXPR_RECORD Parse_ActionGenInfix(EXPR_RECORD * left_side, OP_RECORD *op_record, EXPR_RECORD *right_side);
+
+/*!
+    generates scanf statement
+
+    \param target expression record struct
+*/
+void Parse_ActionReadID(EXPR_RECORD * target);
+
+/*!
+    Returns an expression record with prepend prepended to the reference name.
+    \param source The expression record to prepend.
+    \param prepend The string to prepend.
+    \returns An expression record of the same type, with the 'reference' field set to prepend+source.
+*/
+EXPR_RECORD Parse_PrependedCopy(EXPR_RECORD * source, char * prepend);
+
+/*!
+    Returns an expression record with the reference value set as the c-style value of the token. For example, 'NULL' will become '0'.
+    \param token the parameter
+    \returns a new expr record with a malloced reference containing the c-style token string
+*/
+EXPR_RECORD Parse_ActionProcessTokenAlias(int token);
+
+/*!
+    prints 'if (expression) {' to the temp file
+
+    \param conditional_expression expression record struct
+*/
+void Parse_ActionIf(EXPR_RECORD * conditional_expression);
+
+/*!
+    prints 'while (expression) {' to the temp file
+    
+    \param conditional_expression expression record struct
+*/
+void Parse_ActionWhile(EXPR_RECORD * conditional_expression);
+
+/*!
+    Prints '}' to the temp file
+
+    \param conditional_expression expression record struct
+*/
+void Parse_ActionCloseBrace();
+
+/*! 
+    Prints '} else {' to the temp file.
+
+    \param conditional_expression expression record struct
+*/
+void Parse_ActionElse();
+
+#pragma endregion action_functions
 #endif
