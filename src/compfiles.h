@@ -84,8 +84,12 @@ CompFiles lifecycle
 void CompFiles_Init();
 /*! 
     Closes any open files and returns CompFiles to the default values. Deletes the temp file. 
+
+    If there were no errors in compilation, it will ask about compiling before the reference to the filename is removed.
+
+    \param compilation_error Indicates whether there were errors in compilation.
     */
-void CompFiles_DeInit();
+void CompFiles_DeInit(short compilation_error);
 /*! 
     Generates a temporary file with a unique name. This file will be destroyed when CompFiles_DeInit() is called. 
 

@@ -36,25 +36,27 @@ void Tompiler_Init() {
     Parser_Init();
 }
 
+short compilation_err;
+
 void Tompiler_Execute(int argc, char* argv[]) {
     short terminate;
     terminate = CompFiles_Open(argc, argv);
     if(!terminate) {
         TCompFiles * files = CompFiles_GetFiles();
         Scanner_LoadFiles(files->in, files->out, files->listing, files->temp);
-        Parser_Load(files->out, files->listing, files->temp);
+        Parser_Load(files->out, files->listing, files->temp, files->output_file_name);
         Scanner_PrintLine();         /* Print the first line to the listing file. Subsequent calls to PrintLine are ultimately called by Scanner_Match when appropriate. */
-        short err = Parse_SystemGoal();
+        compilation_err = Parse_SystemGoal();
         Scanner_PrintErrorSummary();
         Parser_PrintErrorSummary();
-        Tompiler_PrintResult(err, files->listing);
+        Tompiler_PrintResult(compilation_err, files->listing);
     }
 }
 
 void Tompiler_DeInit() {
     Parser_DeInit();
     Scanner_DeInit();
-    CompFiles_DeInit();
+    CompFiles_DeInit(compilation_err); /* Will ask about invoking compiler before removed if there were no errors */
     Tompiler_Goodbye();
 }
 
@@ -77,7 +79,7 @@ void Tompiler_Hello() {
     CONSOLE_COLOR(FG_BLUE, BG_BRT_WHITE);
     printf("    TOMPILER");
     CONSOLE_COLOR(FG_BLACK, BG_BRT_WHITE);
-    printf(" v 0.0.3    ");
+    printf(" v 1.0.0    ");
     CONSOLE_COLOR_DEFAULT();
     printf("\n");
 }
@@ -87,7 +89,7 @@ void Tompiler_Goodbye() {
     CONSOLE_COLOR(FG_BLUE, BG_BRT_WHITE);
     printf("    TOMPILER");
     printf(FG_BLACK);
-    printf(" v 0.0.3    ");
+    printf(" v 1.0.0    ");
     CONSOLE_COLOR(FG_BRT_YELLOW, BG_BLUE);
     printf("  Tompiler finished running. ");
     CONSOLE_COLOR_DEFAULT();

@@ -20,6 +20,7 @@
 */
 #include <stdio.h>
 #include "generator.h"
+#include "file_util.h"
 
 #define PARSER_BUFFER_INITIAL_CAPACITY 50
 /*
@@ -31,6 +32,8 @@ Typedef for the parser struct
 typedef struct {
     /*! The output file */
     FILE * out;
+    /*! The output filename */
+    char * outfilename;
     /*! The listing file */
     FILE * list;
     /*! The temp file */
@@ -65,8 +68,9 @@ Lifecycle methods for the parser
     \param out The output file
     \param list The listing file
     \param temp The temp file
+    \param outfilename An output file name 
 */
-void Parser_Load(FILE *out, FILE *list, FILE *temp);
+void Parser_Load(FILE *out, FILE *list, FILE *temp, char * outfilename);
 
 /*! 
     Performs any initialization needed by the parser.
