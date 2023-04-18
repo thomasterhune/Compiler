@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "console.h"
+
 
 #pragma region expr_helpers
 
@@ -164,25 +166,133 @@ void SymbolTable_DBPrintAll() {
 #pragma region compile
 
 void askAboutCompilation(char * outfilename) {
+    short to_run = 0;
+
     short to_compile = promptCompile(outfilename);
+
+    char * built_executable; 
+
+    if(to_compile) {
+        built_executable = compile(outfilename);
+    }
+    if(built_executable != NULL) {
+        short to_run = promptRun();
+        if(to_run) {
+            run(built_executable);
+        }
+        free(built_executable);
+    }
 }
 
 /*! Prompts the user if they would like to compile. */
 short promptCompile(char * outfilename) {
     short wants_compile = 0;
-    printf("\n\nYour C code was generated. Would you like to compile it now? y/n ");
+    printf("\n\nYour C code was generated. Would you like to compile the binary now? y/n ");
     char select = getchar();
-    printf("\nYou selected: %d", select);
-
+    if(select == 10) { select == 'n'; }
+    while(select != 'n' && select != 'y' && select != 'N' && select != 'Y') {
+        printf("\nI didn't understand. Would you like to compile the binary now? y/n");
+        select = getchar();
+        if(select == 10) { select = 'n'; }
+    }
+    if(select == 'n') {
+        printf("\nYou elected not to compile the binary.");
+    } else {
+        printf("\nYou elected to compile the program.");
+        wants_compile = 1;
+    }
+    return wants_compile;
 }
 
-int compile(char * outfilename) {
-    return 0;
+char * getTempExecutable() {
+    int testnum = 0;
+    char * temp_name = malloc(20 * sizeof(char));
+    short temp_file_exists = 1;
+    while(temp_file_exists) {
+        free(temp_name);
+        temp_name = malloc(20 * sizeof(char));
+        sprintf(temp_name, "out%d", testnum);
+        temp_file_exists = fileExists(temp_name);
+        testnum++;
+    }
+    return temp_name;
 }
 
-/*! Prompts the user if they would like to run the program. */
+char * compile(char * outfilename) {
+    char * path = generateAbsolutePath(outfilename);
+    char * outname = getTempExecutable();
+    size_t size = strlen(path) + strlen(outname) + strlen("gcc -x c -o  \"\"") + 1;
+    char * command = malloc(size * sizeof(char));
+    sprintf(command, "gcc -x c -o %s \"%s\"", outname, path);
+    printf("\n\n");
+    CONSOLE_COLOR(FG_BRT_MAGENTA, BG_DEFAULT);
+    printf("\t%s", command);
+    CONSOLE_COLOR_DEFAULT();
+    printf("\n");
+    int error = system(command);
+    if(error) {
+        CONSOLE_COLOR(FG_BRT_RED, BG_DEFAULT);
+        printf("\nFailed to compile with error code: %d", error);
+        printf("\n%s", strerror(error));
+        printf("\nEnsure gcc is on your %%PATH%%.");
+        CONSOLE_COLOR_DEFAULT();
+        free(outname);
+        outname = NULL;
+    } else {
+        CONSOLE_COLOR(FG_BRT_GREEN, BG_DEFAULT);
+        printf("\nCompiled %s.exe succesfully.", outname);
+        CONSOLE_COLOR_DEFAULT();
+    }
+    free(command);
+    free(path);
+    return outname;
+}
+
 short promptRun() {
+    short wants_compile = 0;
+    printf("\n\nYour .exe file was generated. Would you like to run the binary now? ");
+    CONSOLE_COLOR(FG_BRT_YELLOW, BG_DEFAULT);
+    printf("\nWarning: This may result in dangerous behavior such as infinite loops! ");
+    CONSOLE_COLOR_DEFAULT();
+    printf("y/n? ");
+    char select;
+    select = getchar();
+    select = getchar();
+    if(select == 10 || select == '\n') { 
+        select = 'n'; 
+    }
+    while(select != 'n' && select != 'y' && select != 'N' && select != 'Y') {
+        printf("\nI didn't understand. Would you like to run the binary now? y/n");
+        select = getchar();
+        if(select == 10) { select = 'n'; }
+    }
+    if(select == 'n') {
+        printf("\nYou elected not to run the binary.");
+    } else {
+        printf("\nYou elected to run the binary.");
+        wants_compile = 1;
+    }
+    return wants_compile;
+}
 
+void run(char * exename) {
+    printf("\n\n");
+    CONSOLE_COLOR(FG_BRT_MAGENTA, BG_DEFAULT);
+    printf("\t%s", exename);
+    CONSOLE_COLOR_DEFAULT();
+    printf("\n");
+    printf("\n====== output ======\n");
+    int error = system(exename);
+    printf("\n\n====================\n");
+    if(error) {
+        CONSOLE_COLOR(FG_BRT_RED, BG_DEFAULT);
+        printf("\nFailed to run with error code: %d", error);
+        printf("\n%s", strerror(error));
+        CONSOLE_COLOR_DEFAULT();
+    } else {
+        CONSOLE_COLOR(FG_BRT_GREEN, BG_DEFAULT);
+        printf("\nRan %s.exe succesfully.", exename);
+    }
 }
 
 #pragma endregion compile

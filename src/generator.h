@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "tokens.h"
+#include "file_util.h"
 
 #pragma region defines
 
@@ -160,14 +161,21 @@ void SymbolTable_DBPrintAll();
 /*! Asks the user about compilation and running. */
 void askAboutCompilation(char * outfilename);
 
+/*! Gets an available name for the output file. */
+char * getTempExecutable();
+
 /*! Prompts the user if they would like to compile. */
 short promptCompile(char * outfilename);
 
 /*! Compiles the program. */
-int compile(char * outfilename);
+char * compile(char * outfilename);
 
-/*! Prompts the user if they would like to run the program. */
+/*! Asks user if they want to run their binary */
 short promptRun();
+
+/*! Runs the binary they made. */
+void run(char * exename);
+
 
 #pragma endregion compile
 

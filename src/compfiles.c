@@ -1,4 +1,5 @@
 #include "compfiles.h"
+#include "generator.h"
 
 /**
  * \file compfiles.c
@@ -62,7 +63,7 @@ void CompFiles_GenerateTempFile()
     }
 }
 
-void CompFiles_DeInit()
+void CompFiles_DeInit(short compilation_error)
 {
     if (CompFiles.in != NULL)
     {
@@ -89,10 +90,6 @@ void CompFiles_DeInit()
     {
         free(CompFiles.input_file_name);
     }
-    if (CompFiles.output_file_name != NULL)
-    {
-        free(CompFiles.output_file_name);
-    }
     if (CompFiles.temp_file_name != NULL)
     {
         free(CompFiles.temp_file_name);
@@ -100,6 +97,13 @@ void CompFiles_DeInit()
     if (CompFiles.listing_file_name != NULL)
     {
         free(CompFiles.listing_file_name);
+    }
+    if (CompFiles.output_file_name != NULL)
+    {
+        if(!compilation_error) {
+            askAboutCompilation(CompFiles.output_file_name);
+        }
+        free(CompFiles.output_file_name);
     }
     CompFiles_Init();
 }

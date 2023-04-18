@@ -28,7 +28,7 @@ void test_promptInputFilename(CuTest *tc) {
     CuAssertIntEquals_Msg(tc, "Our string should be the result of the user input.", CompFiles.terminate_requested, 1);
 
     StdSwapper_DeInit();
-    CompFiles_DeInit();
+    CompFiles_DeInit(1);
 
 }
 
@@ -47,7 +47,7 @@ void test_promptOutputFilename(CuTest *tc) {
     CuAssertStrEquals_Msg(tc, "should be testext.out", "testext.out", test_result);
     StdSwapper_RestoreAllStd();
     StdSwapper_DeInit();
-    CompFiles_DeInit();
+    CompFiles_DeInit(1);
 }
 
 /*

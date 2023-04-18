@@ -1,3 +1,8 @@
+4/18/2023: Karl
+- Runs gcc after compiling after prompt
+- versioned up
+- grammar issue; emailed pzydrowski, changed grammar effectively in our program
+
 4/6/2023: All group members
 - Added generator.h and generator.c
 - SymbolTable init, de-init, buffer creation and expansion functions
