@@ -42,7 +42,7 @@ void Tompiler_Execute(int argc, char* argv[]) {
     if(!terminate) {
         TCompFiles * files = CompFiles_GetFiles();
         Scanner_LoadFiles(files->in, files->out, files->listing, files->temp);
-        Parser_Load(files->out, files->listing, files->temp);
+        Parser_Load(files->out, files->listing, files->temp, files->output_file_name);
         Scanner_PrintLine();         /* Print the first line to the listing file. Subsequent calls to PrintLine are ultimately called by Scanner_Match when appropriate. */
         short err = Parse_SystemGoal();
         Scanner_PrintErrorSummary();
@@ -87,7 +87,7 @@ void Tompiler_Goodbye() {
     CONSOLE_COLOR(FG_BLUE, BG_BRT_WHITE);
     printf("    TOMPILER");
     printf(FG_BLACK);
-    printf(" v 0.0.3    ");
+    printf(" v 1.0.0    ");
     CONSOLE_COLOR(FG_BRT_YELLOW, BG_BLUE);
     printf("  Tompiler finished running. ");
     CONSOLE_COLOR_DEFAULT();

@@ -155,5 +155,21 @@ void SymbolTable_DBPrintAll();
 
 #pragma endregion debug
 
+#pragma region compile
+
+/*! Asks the user about compilation and running. */
+void askAboutCompilation(char * outfilename);
+
+/*! Prompts the user if they would like to compile. */
+short promptCompile(char * outfilename);
+
+/*! Compiles the program. */
+int compile(char * outfilename);
+
+/*! Prompts the user if they would like to run the program. */
+short promptRun();
+
+#pragma endregion compile
+
 
 #endif

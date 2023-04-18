@@ -14,7 +14,9 @@ EXPR_RECORD ER_New() {
 }
 void ER_Free(EXPR_RECORD * expr_record) {
     if(!(expr_record->freed)) {
+        #ifdef DEBUG_PRINT
         printf("\n\n\t\t %%%% freeing: %s %%%%\n\n", expr_record->reference);
+        #endif
         free(expr_record->reference);
         expr_record->freed = 1;
     }
@@ -22,7 +24,9 @@ void ER_Free(EXPR_RECORD * expr_record) {
 void ER_Populate(EXPR_RECORD * expr_record, char * malloced_string, short expr_type) {
     ER_Free(expr_record);
     expr_record->reference = malloced_string;
+    #ifdef DEBUG_PRINT
     printf("\n\n\t\t %%%% mallocing: %s %%%%\n\n", expr_record->reference);
+    #endif
     expr_record->freed = 0;
     expr_record->type = expr_type;
 }
@@ -112,9 +116,12 @@ void SymbolTable_CheckID(char *symbol, FILE * outfile){
 }
 
 void SymbolTable_Generate(FILE * targetFile ,char * first, char * second , char * third , char * fourth , char * fifth){
-    printf("\nPRINTING TO %d", targetFile);
     fprintf(targetFile, "\n\t%s %s %s %s %s;", first, second, third, fourth, fifth);
+
+    #ifdef DEBUG_PRINT
     printf("\n\t  GEN :  %s %s %s %s %s\n\n", first, second, third, fourth, fifth);
+    #endif 
+    
     fflush(targetFile);
 }
 
@@ -142,12 +149,40 @@ char * SymbolTable_GetTemp(){
 #pragma region Debug
 
 void SymbolTable_DBPrintAll() {
+    #ifdef DEBUG_PRINT
     int i = 0;
     printf("\n SymbolTable: { ");
     for(i = 0; i < L_SymbolTable; i++) {
         printf("%s, ", SymbolTable[i]);
     }
     printf("}\n");
+    #endif 
 }
 
 #pragma endregion Debug
+
+#pragma region compile
+
+void askAboutCompilation(char * outfilename) {
+    short to_compile = promptCompile(outfilename);
+}
+
+/*! Prompts the user if they would like to compile. */
+short promptCompile(char * outfilename) {
+    short wants_compile = 0;
+    printf("\n\nYour C code was generated. Would you like to compile it now? y/n ");
+    char select = getchar();
+    printf("\nYou selected: %d", select);
+
+}
+
+int compile(char * outfilename) {
+    return 0;
+}
+
+/*! Prompts the user if they would like to run the program. */
+short promptRun() {
+
+}
+
+#pragma endregion compile

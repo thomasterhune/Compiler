@@ -326,8 +326,8 @@ short CompFiles_AcquireValidatedOutputFile(const char *filename)
         file_extension_parse = filenameHasExtension(tempfilename);
         if (file_extension_parse == FILENAME_HAS_NO_PERIOD)
         {
-            printf("\nYour output file has no extension. Defaulting to .out.");
-            char *tnewfile = addExtension(tempfilename, "out");
+            printf("\nYour output file has no extension. Defaulting to .c.");
+            char *tnewfile = addExtension(tempfilename, "c");
             free(tempfilename);
             tempfilename = tnewfile;
         }

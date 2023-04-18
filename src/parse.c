@@ -27,6 +27,17 @@
 
 T_Parser parser;
 
+
+/** Uncomment the following line for debug printing. */
+/* #define DEBUG_PRINT */
+
+/** Debug print a string, only if in debug mode. */
+void DPrint(const char * val) {
+    #ifdef DEBUG_PRINT
+    printf(val);
+    #endif 
+}
+
 /*
 --------------------------------
 Lifecycle methods for the parser
@@ -34,10 +45,11 @@ Lifecycle methods for the parser
 */
 #pragma region lifecycle
 
-void Parser_Load(FILE *out, FILE *list, FILE *temp) {
+void Parser_Load(FILE *out, FILE *list, FILE *temp, char * outfileName) {
     parser.out = out;
     parser.list = list;
     parser.temp = temp;
+    parser.outfilename = outfileName;
     fgetpos(temp, &(parser.tempstart));
     fflush(temp);
 }
@@ -57,6 +69,7 @@ void Parser_DeInit() {
     }
     parser.buffer = NULL;
     parser.temp = NULL;
+    parser.outfilename = NULL;
     SymbolTable_DeInit();
 }
 
@@ -253,7 +266,7 @@ Production rule parse functions
 #pragma region production_rule_parse_functions
 
 short Parse_SystemGoal() {
-    printf(":: SystemGoal called\n");
+    DPrint(":: SystemGoal called\n");
     short err = Parse_Program();
     if (!err) {
         err = Scanner_Match(SCANEOF);
@@ -266,11 +279,13 @@ short Parse_SystemGoal() {
     if(err) {
         ParseError_FunctionFailed("SystemGoal");
     }
+    DPrint("x: SystemGoal returning\n");
     return err; 
 }
 
 /* GOOD */
 short Parse_Program() {
+    DPrint(":: Program called\n");
     Parse_ActionStart();
     short err = Scanner_Match(BEGIN);
     if(!err) {
@@ -290,12 +305,13 @@ short Parse_Program() {
     if(err) {
         ParseError_FunctionFailed("Program");
     }
+    DPrint("x: Program returning\n");
     return err;
 }
 
 /* GOOD */
 short Parse_StatementList() {
-    printf("\n :: StatementList called\n");
+    DPrint("\n:: StatementList called\n");
     short err = Parse_Statement();
     int next = Scanner_NextToken();
     if(!err) {
@@ -309,13 +325,13 @@ short Parse_StatementList() {
     if(err) {
         ParseError_FunctionFailed("StatementList");
     }
-    printf("\n   StatementList returning ::\n");
+    DPrint("\nx: StatementList returning\n");
     return err;
 }
 
 /* ID, Read good, need if, while, lex error */
 short Parse_Statement() {
-    printf("\n :: Statement called\n");
+    DPrint("\n:: Statement called\n");
     short err = 0;
     int next = Scanner_NextToken();
     int skip_to_on_fail;
@@ -332,7 +348,6 @@ short Parse_Statement() {
                 if(!err) {
                     err = Parse_Expression(&source);
                     if(!err) {
-                        printf("\n  STATEMENT CALLING ACTION ASSIGN ! \n");
                         Parse_ActionAssign(&target, &source);
                         err = Scanner_Match(SEMICOLON);
                         if(err) {
@@ -461,13 +476,13 @@ short Parse_Statement() {
     }
     ER_Free(&source);
     ER_Free(&target);
-    printf("\n   Statement returning ::\n");
+    DPrint("x: Statement returning\n");
     return err;
 }
 
 /* NOT STARTED */
 short Parse_IfTail() {
-    printf(":: IfTail called\n");
+    DPrint(":: IfTail called\n");
     int next = Scanner_NextToken();
     short err; 
     switch(next) {
@@ -499,13 +514,13 @@ short Parse_IfTail() {
     if(err) {
         ParseError_FunctionFailed("IfTail");
     }
-    printf("\n   IfTail returning ::\n");
+    DPrint("x: IfTail returning\n");
     return err; 
 }
 
 /* GOOD */
 short Parse_IDList() {
-    printf(":: ParseIDList called\n");
+    DPrint(":: ParseIDList called\n");
     int next;
     short err = Scanner_Match(ID);
     if(!err) {
@@ -537,13 +552,13 @@ short Parse_IDList() {
     if(err) {
         ParseError_FunctionFailed("IDList");
     }
-    printf("\n   ParseIDList returning ::\n");
+    DPrint("x: ParseIDList returning \n");
     return err;
 } 
 
 /* GOOD */
 short Parse_ExpressionList() {
-    printf("\n:: ParseExpressionList called\n");
+    DPrint(":: ParseExpressionList called\n");
     EXPR_RECORD expr = ER_New();
     short err = Parse_Expression(&expr);
     if(!err) {
@@ -563,13 +578,13 @@ short Parse_ExpressionList() {
     if(err) {
         ParseError_FunctionFailed("ExpressionList");
     }
-    printf("\n   ParseExpressionList returning ::\n");
+    DPrint("x: ParseExpressionList returning\n");
     return err;
 }
 
 /* Probably Good */
 short Parse_Expression(EXPR_RECORD * expr_record) {
-    printf("\n:: ParseExpression called\n");
+    DPrint("\n:: ParseExpression called\n");
     OP_RECORD op_record;
     EXPR_RECORD left_operand = ER_New();
     EXPR_RECORD right_operand = ER_New();
@@ -579,7 +594,7 @@ short Parse_Expression(EXPR_RECORD * expr_record) {
         if(next == PLUSOP || next == MINUSOP) {
             err = Parse_AddOP(&op_record);
             if(!err) {
-                err = Parse_Term(&right_operand);
+                err = Parse_Expression(&right_operand);
                 if(!err) {
                     *expr_record = Parse_ActionGenInfix(&left_operand, &op_record, &right_operand);
                     ER_Free(&left_operand);
@@ -593,22 +608,22 @@ short Parse_Expression(EXPR_RECORD * expr_record) {
         ParseError_FunctionFailed("Expression");
     }
     ER_Free(&right_operand);
-    printf("\n   ParseExpression returning ::\n");
+    DPrint("::\n   ParseExpression returning \n");
     return err; 
 }
 
 short Parse_Term(EXPR_RECORD * expr_record) {
-    printf("\n:: ParseTerm called\n");
+    DPrint("\n:: ParseTerm called\n");
+    OP_RECORD op_record;
     EXPR_RECORD left_operand = ER_New();
     EXPR_RECORD right_operand = ER_New();
-    OP_RECORD op_record;
     short err = Parse_Factor(&left_operand);
     if(!err) {
         int next = Scanner_NextToken();
         if(next == MULTOP || next == DIVOP) {
             err = Parse_MultOP(&op_record);
             if(!err) {
-                err = Parse_Factor(&right_operand);
+                err = Parse_Term(&right_operand);
                 if(!err) {
                     *expr_record = Parse_ActionGenInfix(&left_operand, &op_record, &right_operand);
                     ER_Free(&left_operand);
@@ -622,14 +637,14 @@ short Parse_Term(EXPR_RECORD * expr_record) {
         ParseError_FunctionFailed("Term");
     }
     ER_Free(&right_operand);
-    printf("\n   ParseTerm returning ::\n");
+    DPrint("::\n   ParseTerm returning \n");
     return err; 
 }
 
 /* NOT DONE - only case ID done */
 
 short Parse_Factor(EXPR_RECORD * expr_record) {
-    printf("\n:: ParseFactor called\n");
+    DPrint("\n:: ParseFactor called\n");
     EXPR_RECORD temp_rec = ER_New();
     int next = Scanner_NextToken();
     short err = 0;
@@ -671,18 +686,17 @@ short Parse_Factor(EXPR_RECORD * expr_record) {
     if(err) {
         ParseError_FunctionFailed("Factor");
     }
-    printf("\n   ParseFactor returning ::\n");
+    DPrint("::\n   ParseFactor returning \n");
     return err; 
 }
 
 short Parse_AddOP(OP_RECORD * op_record) {
-    printf("\n:: AddOp called\n");
+    DPrint("\n:: AddOp called\n");
     int next = Scanner_NextToken();
     short err = 0;
     if(next == PLUSOP) {
         Scanner_Match(PLUSOP);
         *op_record = Parse_ActionProcessOp(PLUSOP);
-        printf("\n~~~ Parse_AddOP, op_record data: %s", op_record->data);
     } else if(next == MINUSOP) {
         Scanner_Match(MINUSOP);
         *op_record = Parse_ActionProcessOp(MINUSOP);
@@ -693,12 +707,12 @@ short Parse_AddOP(OP_RECORD * op_record) {
     if(err) {
         ParseError_FunctionFailed("AddOP");
     }
-    printf("\n   AddOp returning ::\n");
+    DPrint("::\n   AddOp returning \n");
     return err; 
 }
 
 short Parse_MultOP(OP_RECORD * op_record) {
-    printf("\n:: ParseMultOp called\n");
+    DPrint("\n:: ParseMultOp called\n");
     int next = Scanner_NextToken();
     short err = 0;
     if(next == MULTOP) {
@@ -714,14 +728,14 @@ short Parse_MultOP(OP_RECORD * op_record) {
     if(err) {
         ParseError_FunctionFailed("MultOP");
     }
-    printf("\n   ParseMultOp returning ::\n");
+    DPrint("::\n   ParseMultOp returning \n");
     return err; 
 }
 
 /* In progress */
 
 short Parse_Condition(EXPR_RECORD * expr_record){
-    printf("\n:: ParseCondition called\n");
+    DPrint("\n:: ParseCondition called\n");
     EXPR_RECORD left_operand = ER_New();
     EXPR_RECORD right_operand = ER_New();
     OP_RECORD op_record;
@@ -746,12 +760,12 @@ short Parse_Condition(EXPR_RECORD * expr_record){
         *expr_record = left_operand;
         ER_Free(&right_operand);
     }
-    printf("\n   ParseCondition returning ::\n");
+    DPrint("::\n   ParseCondition returning \n");
     return err; 
 }
 
 short Parse_Addition(EXPR_RECORD * expr_record) {
-    printf("\n:: ParseAddition called\n");
+    DPrint("\n:: ParseAddition called\n");
     EXPR_RECORD left_operand = ER_New();
     EXPR_RECORD right_operand = ER_New();
     OP_RECORD op_record;
@@ -774,12 +788,12 @@ short Parse_Addition(EXPR_RECORD * expr_record) {
         *expr_record = left_operand;
         ER_Free(&right_operand);
     }
-    printf("\n   ParseAddition returning ::\n");
+    DPrint("::\n   ParseAddition returning \n");
     return err;
 }
 
 short Parse_Multiplication(EXPR_RECORD * expr_record) {
-    printf("\n :: ParseMultiplication called\n");
+    DPrint("\n :: ParseMultiplication called\n");
     EXPR_RECORD left_operand = ER_New();
     EXPR_RECORD right_operand = ER_New();
     OP_RECORD op_record;
@@ -802,12 +816,12 @@ short Parse_Multiplication(EXPR_RECORD * expr_record) {
         *expr_record = left_operand;
         ER_Free(&right_operand);
     }
-    printf("\n   ParseMultiplication returning ::\n");
+    DPrint("::\n   ParseMultiplication returning \n");
     return err;
 }
 
 short Parse_Unary(EXPR_RECORD * expr_record) {
-     printf("\n :: ParseUnary called\n");
+     DPrint("\n :: ParseUnary called\n");
     short err = 0;
     int next = Scanner_NextToken();
     EXPR_RECORD copy = ER_New();
@@ -836,12 +850,12 @@ short Parse_Unary(EXPR_RECORD * expr_record) {
     if(err) {
         ParseError_FunctionFailed("Unary");
     }
-    printf("\n   ParseUnary returning ::\n");
+    DPrint("::\n   ParseUnary returning \n");
     return err; 
 }
 
 short Parse_LPrimary(EXPR_RECORD * expr_record) {
-     printf("\n :: ParseLPprimary called\n");
+     DPrint("\n :: ParseLPprimary called\n");
     short err = 0;
     int next = Scanner_NextToken();
     switch(next) {
@@ -884,12 +898,12 @@ short Parse_LPrimary(EXPR_RECORD * expr_record) {
     if(err) {
         ParseError_FunctionFailed("LPrimary");
     }
-    printf("\n   ParseLPprimary returning ::\n");
+    DPrint("::\n   ParseLPprimary returning \n");
     return err;
 }
 
 short Parse_RelOP(OP_RECORD * op_record) {
-    printf("\n :: ParseRelOp called\n");
+    DPrint("\n :: ParseRelOp called\n");
     short err = 0;
     int next = Scanner_NextToken();
     switch(next) {
@@ -929,12 +943,12 @@ short Parse_RelOP(OP_RECORD * op_record) {
     if(err) {
         ParseError_FunctionFailed("RelOP");
     }
-    printf("\n   ParseRelOp returning ::\n");
+    DPrint("::\n   ParseRelOp returning \n");
     return err;
 }
 
 short Parse_Ident(EXPR_RECORD * expr_record) {
-    printf("\n :: ParseIdent called\n");
+    DPrint("\n :: ParseIdent called\n");
     short err = 0;
     int next = Scanner_NextToken();
     if(next == ID) {
@@ -947,7 +961,7 @@ short Parse_Ident(EXPR_RECORD * expr_record) {
     if(err) {
         ParseError_FunctionFailed("Ident");
     }
-    printf("\n   ParseIdent returning ::\n");
+    DPrint("::\n   ParseIdent returning \n");
     return err;
 }
 #pragma endregion production_rule_parse_functions
@@ -955,7 +969,7 @@ short Parse_Ident(EXPR_RECORD * expr_record) {
 #pragma region action_functions
 
 void Parse_ActionStart() {
-    printf("\n >> ACTION START CALLED! ");
+    DPrint("\n >> ACTION START CALLED! ");
     time_t rawtime;
     struct tm *info;
     time(&rawtime);
@@ -963,18 +977,23 @@ void Parse_ActionStart() {
 
 
     fprintf(parser.out, "#include <stdio.h>\n\n");
-    fprintf(parser.out, "/*%s*/\n\n", asctime(info));
+    char * fullpath = generateAbsolutePath(parser.outfilename);
+    fprintf(parser.out, "/*\n%s\nfile: %s\n*/\n\n", asctime(info), fullpath);
+    free(fullpath);
     fprintf(parser.out, "int main(int argc, char ** argv) {\n");
 }
 
 void Parse_ActionFinish() {
-    printf("\n >> ACTION FINISH CALLED! ");
+    DPrint("\n >> ACTION FINISH CALLED! ");
     /*concatenate files together*/
     
     int  c;
     fsetpos(parser.temp, &(parser.tempstart));
     c = fgetc(parser.temp);
+
+    #ifdef DEBUG_PRINT
     printf(" \n%d <-- next char #", c);
+    #endif 
     
     while(c != EOF)
     {
@@ -986,52 +1005,72 @@ void Parse_ActionFinish() {
 }
 
 void Parse_ActionAssign(EXPR_RECORD * target, EXPR_RECORD * source) {
+    #ifdef DEBUG_PRINT
     printf("\n >> ACTION ASSIGN CALLED! %s %s", target->reference, source->reference);
+    #endif 
+
     SymbolTable_Generate(parser.temp, target->reference, " = ", source->reference, "", "");
-    fflush(stdout);
+
+    #ifdef DEBUG_PRINT
     printf("\n >> ACTION ASSIGN RETURNING! %s %s", target->reference, source->reference);
+    #endif 
 }
 
 OP_RECORD Parse_ActionProcessOp(int token) {
     OP_RECORD op_rec;
     op_rec.data = (char *) Token_CTranslate(token);
+
+    #ifdef DEBUG_PRINT
     printf("\n >> ACTION PROCESS OP CALLED! ");
     printf("\n  `-->> op: %s", op_rec.data);
     printf("\n >> ACTION PROCESS OP RETURNING!");
+    #endif 
+
     return op_rec;
 }
 
 EXPR_RECORD Parse_ActionProcessID() {
-    printf("\n >> ACTION PROCESS ID CALLED! ");
+    DPrint("\n >> ACTION PROCESS ID CALLED! ");
     EXPR_RECORD nexpr = ER_New();
     ER_Populate(&nexpr, Scanner_GetBufferCopy(), EXPR_ID);
+
+    #ifdef DEBUG_PRINT
     printf("\n  `-->>  reference: %s", nexpr.reference);
+    #endif 
+
     SymbolTable_CheckID(nexpr.reference, parser.out);
-    printf("\n ... returning from action process ID");
 
     SymbolTable_DBPrintAll();
     fflush(stdout);
-    printf("\n >> ACTION PROCESS ID RETURNING! ");
+    DPrint("\n >> ACTION PROCESS ID RETURNING! ");
     return nexpr;
 }
 
 EXPR_RECORD Parse_ActionGenInfix(EXPR_RECORD * left_side, OP_RECORD *op_record, EXPR_RECORD *right_side) {
-    printf("\n >> ACTION GEN INFIX CALLED! ");
+    DPrint("\n >> ACTION GEN INFIX CALLED! ");
     EXPR_RECORD result = ER_New();
     ER_Populate(&result, SymbolTable_GetTemp(), EXPR_TEMP);
+
+    #ifdef DEBUG_PRINT
     printf("\n >> ACTION GEN INFIX TEMP STRING VAL %s ", result.reference);
+    #endif 
+
     SymbolTable_CheckID(result.reference, parser.out);
     SymbolTable_Generate(parser.temp, result.reference, "=", left_side->reference, op_record->data, right_side->reference);
-    printf("\n >> ACTION GEN INFIX RETURNING! ");
+    DPrint("\n >> ACTION GEN INFIX RETURNING! ");
     return result;
 }
 
 EXPR_RECORD Parse_ActionProcessLiteral() {
-    printf("\n >> ACTION LITERAL CALLED! ");
+    DPrint("\n >> ACTION LITERAL CALLED! ");
     EXPR_RECORD exp_rec = ER_New();
     ER_Populate(&exp_rec, Scanner_GetBufferCopy(), EXPR_INTLIT);
+
+    #ifdef DEBUG_PRINT
     printf("\n  `-->>  reference: %s", exp_rec.reference);
     printf("\n >> ACTION LITERAL RETURNING! ");
+    #endif 
+
     return exp_rec;
 }
 
