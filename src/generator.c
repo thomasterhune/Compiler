@@ -168,16 +168,16 @@ void SymbolTable_DBPrintAll() {
 void askAboutCompilation(char * outfilename) {
     short to_run = 0;
 
-    short to_compile = promptCompile(outfilename);
+    short wants_compile = promptCompile(outfilename);
 
-    char * built_executable; 
+    char * built_executable = NULL; 
 
-    if(to_compile) {
+    if(wants_compile) {
         built_executable = compile(outfilename);
     }
     if(built_executable != NULL) {
         short to_run = promptRun();
-        if(to_run) {
+        if(to_run == 1) {
             run(built_executable);
         }
         free(built_executable);
@@ -188,15 +188,19 @@ void askAboutCompilation(char * outfilename) {
 short promptCompile(char * outfilename) {
     short wants_compile = 0;
     printf("\n\nYour C code was generated. Would you like to compile the binary now? y/n ");
-    char select = getchar();
-    if(select == 10) { select == 'n'; }
+    fflush(stdin);
+    char select;
+    fflush(stdin);
+    scanf("%c", &select);
+    if(select == 10 || select == '\n') { select = 'y'; }
     while(select != 'n' && select != 'y' && select != 'N' && select != 'Y') {
         printf("\nI didn't understand. Would you like to compile the binary now? y/n");
-        select = getchar();
-        if(select == 10) { select = 'n'; }
+        scanf("%c", &select);
+        if(select == 10) { select = 'y'; }
     }
     if(select == 'n') {
         printf("\nYou elected not to compile the binary.");
+        wants_compile = 0;
     } else {
         printf("\nYou elected to compile the program.");
         wants_compile = 1;
@@ -256,18 +260,19 @@ short promptRun() {
     CONSOLE_COLOR_DEFAULT();
     printf("y/n? ");
     char select;
-    select = getchar();
-    select = getchar();
+    fflush(stdin);
+    scanf("%c", &select);
     if(select == 10 || select == '\n') { 
         select = 'n'; 
     }
     while(select != 'n' && select != 'y' && select != 'N' && select != 'Y') {
         printf("\nI didn't understand. Would you like to run the binary now? y/n");
-        select = getchar();
+        scanf("%c", &select);
         if(select == 10) { select = 'n'; }
     }
     if(select == 'n') {
         printf("\nYou elected not to run the binary.");
+        wants_compile = 0;
     } else {
         printf("\nYou elected to run the binary.");
         wants_compile = 1;

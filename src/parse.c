@@ -591,23 +591,25 @@ short Parse_Expression(EXPR_RECORD * expr_record) {
     short err = Parse_Term(&left_operand);
     if(!err) {
         int next = Scanner_NextToken();
-        if(next == PLUSOP || next == MINUSOP) {
+        while(next == PLUSOP || next == MINUSOP && !err) {
             err = Parse_AddOP(&op_record);
             if(!err) {
-                err = Parse_Expression(&right_operand);
+                err = Parse_Term(&right_operand);
                 if(!err) {
                     *expr_record = Parse_ActionGenInfix(&left_operand, &op_record, &right_operand);
                     ER_Free(&left_operand);
+                    ER_Free(&right_operand);
+                    left_operand = *expr_record;
                 }
             }
-        } else {
-            *expr_record = left_operand;
+            next = Scanner_NextToken();
         }
     }
     if(err) {
         ParseError_FunctionFailed("Expression");
+    } else {
+        *expr_record = left_operand;
     }
-    ER_Free(&right_operand);
     DPrint("::\n   ParseExpression returning \n");
     return err; 
 }
@@ -620,23 +622,25 @@ short Parse_Term(EXPR_RECORD * expr_record) {
     short err = Parse_Factor(&left_operand);
     if(!err) {
         int next = Scanner_NextToken();
-        if(next == MULTOP || next == DIVOP) {
+        while(next == MULTOP || next == DIVOP && !err) {
             err = Parse_MultOP(&op_record);
             if(!err) {
-                err = Parse_Term(&right_operand);
+                err = Parse_Factor(&right_operand);
                 if(!err) {
                     *expr_record = Parse_ActionGenInfix(&left_operand, &op_record, &right_operand);
                     ER_Free(&left_operand);
+                    ER_Free(&right_operand);
+                    left_operand = *expr_record;
                 }
             }
-        } else {
-            *expr_record = left_operand;
+            next = Scanner_NextToken();
         }
     }
     if(err) {
         ParseError_FunctionFailed("Term");
+    } else {
+        *expr_record = left_operand;
     }
-    ER_Free(&right_operand);
     DPrint("::\n   ParseTerm returning \n");
     return err; 
 }
@@ -742,16 +746,18 @@ short Parse_Condition(EXPR_RECORD * expr_record){
     short err = Parse_Addition(&left_operand);
     if(!err) {
         int next = Scanner_NextToken();
-        if(next == LESSOP || next == LESSEQUALOP || next == GREATEROP || next == GREATEREQUALOP || next == EQUALOP || next == NOTEQUALOP) {
+        while(next == LESSOP || next == LESSEQUALOP || next == GREATEROP || next == GREATEREQUALOP || next == EQUALOP || next == NOTEQUALOP && !err) {
             err = Parse_RelOP(&op_record);
             if(!err) {
                 err = Parse_Addition(&right_operand);
                 if(!err) {
                     EXPR_RECORD result = Parse_ActionGenInfix(&left_operand, &op_record, &right_operand);
                     ER_Free(&left_operand);
+                    ER_Free(&right_operand);
                     left_operand = result;
                 }
             }
+            next = Scanner_NextToken();
         }
     }
     if(err) {
@@ -772,14 +778,17 @@ short Parse_Addition(EXPR_RECORD * expr_record) {
     short err = Parse_Multiplication(&left_operand);
     if(!err) {
         int next = Scanner_NextToken();
-        if(next == PLUSOP || next == MINUSOP) {
+        while(next == PLUSOP || next == MINUSOP && !err) {
             err = Parse_AddOP(&op_record);
             if(!err) {
                 err = Parse_Multiplication(&right_operand);
                 if(!err) {
-                    left_operand = Parse_ActionGenInfix(&left_operand, &op_record, &right_operand);
+                    *expr_record = Parse_ActionGenInfix(&left_operand, &op_record, &right_operand);
+                    ER_Free(&left_operand);
+                    left_operand = *expr_record;
                 }
             }
+            next = Scanner_NextToken();
         }
     }
     if(err) {
@@ -800,14 +809,18 @@ short Parse_Multiplication(EXPR_RECORD * expr_record) {
     short err = Parse_Unary(&left_operand);
     if(!err) {
         int next = Scanner_NextToken();
-        if(next == MULTOP || next == DIVOP) {
+        while(next == MULTOP || next == DIVOP) {
             err = Parse_MultOP(&op_record);
             if(!err) {
                 err = Parse_Unary(&right_operand);
                 if(!err) {
                     left_operand = Parse_ActionGenInfix(&left_operand, &op_record, &right_operand);
+                    *expr_record = left_operand;
+                    ER_Free(&left_operand);
+                    left_operand = *expr_record;
                 }
             }
+            next = Scanner_NextToken();
         }
     }
     if(err) {
@@ -821,7 +834,7 @@ short Parse_Multiplication(EXPR_RECORD * expr_record) {
 }
 
 short Parse_Unary(EXPR_RECORD * expr_record) {
-     DPrint("\n :: ParseUnary called\n");
+    DPrint("\n :: ParseUnary called\n");
     short err = 0;
     int next = Scanner_NextToken();
     EXPR_RECORD copy = ER_New();

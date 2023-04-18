@@ -1,4 +1,8 @@
 4/18/2023: Karl
+- looping backus naur form
+- grammar wasn't an issue; I was just misunderstanding EBNF
+
+4/17/2023: Karl
 - Runs gcc after compiling after prompt
 - versioned up
 - grammar issue; emailed pzydrowski, changed grammar effectively in our program
